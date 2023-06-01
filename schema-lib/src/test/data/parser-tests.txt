@@ -1,0 +1,406 @@
+address match "[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}"
+id = 10
+id != 10
+id < 10
+id <= 10
+id > 10
+id >= 10
+id IN [10,10]
+id NOT_IN [10,10]
+type_id = 204
+type_id != 204
+type_id < 204
+type_id <= 204
+type_id > 204
+type_id >= 204
+type_id IN [204,204]
+type_id NOT_IN [204,204]
+device_uid = "43da-f34ac43-234abb"
+device_uid != "43da-f34ac43-234abb"
+device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+device_name = "my-device-24131"
+device_name != "my-device-24131"
+device_name IN ["my-device-24131","my-device-24131"]
+device_name NOT_IN ["my-device-24131","my-device-24131"]
+user_id = 56
+user_id != 56
+user_id < 56
+user_id <= 56
+user_id > 56
+user_id >= 56
+user_id IN [56,56]
+user_id NOT_IN [56,56]
+device_ip like "23.54.10"
+device_ip in "23.54.10.0/24"
+device_ip match "23.54.10.?"
+!(device_ip like "23.54.10") or user_id < 56
+device_ip = "23.54.10.227"
+device_ip != "23.54.10.227"
+device_ip IN ["23.54.10.227","23.54.10.227"]
+device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+device_user = "Joe"
+device_user != "Joe"
+device_user IN ["Joe","Joe"]
+device_user NOT_IN ["Joe","Joe"]
+severity_id = 5
+severity_id != 5
+severity_id < 5
+severity_id <= 5
+severity_id > 5
+severity_id >= 5
+severity_id IN [5,5]
+severity_id NOT_IN [5,5]
+user_name = "admin"
+user_name != "admin"
+user_name IN ["admin","admin"]
+user_name NOT_IN ["admin","admin"]
+id = 10 AND type_id = 204
+id = 10 AND type_id != 204
+id = 10 AND type_id < 204
+id = 10 AND type_id <= 204
+id = 10 AND type_id > 204
+id = 10 AND type_id >= 204
+id = 10 AND type_id IN [204,204]
+id = 10 AND type_id NOT_IN [204,204]
+id = 10 AND device_uid = "43da-f34ac43-234abb"
+id = 10 AND device_uid != "43da-f34ac43-234abb"
+id = 10 AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id = 10 AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id = 10 AND device_name = "my-device-24131"
+id = 10 AND device_name != "my-device-24131"
+id = 10 AND device_name IN ["my-device-24131","my-device-24131"]
+id = 10 AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+id = 10 AND user_id = 56
+id = 10 AND user_id != 56
+id = 10 AND user_id < 56
+id = 10 AND user_id <= 56
+id = 10 AND user_id > 56
+id = 10 AND user_id >= 56
+id = 10 AND user_id IN [56,56]
+id = 10 AND user_id NOT_IN [56,56]
+id = 10 AND device_ip = "23.54.10.227"
+id = 10 AND device_ip != "23.54.10.227"
+id = 10 AND device_ip IN ["23.54.10.227","23.54.10.227"]
+id = 10 AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+id = 10 AND device_user = "Joe"
+id = 10 AND device_user != "Joe"
+id = 10 AND device_user IN ["Joe","Joe"]
+id = 10 AND device_user NOT_IN ["Joe","Joe"]
+id = 10 AND severity_id = 5
+id = 10 AND severity_id != 5
+id = 10 AND severity_id < 5
+id = 10 AND severity_id <= 5
+id = 10 AND severity_id > 5
+id = 10 AND severity_id >= 5
+id = 10 AND severity_id IN [5,5]
+id = 10 AND severity_id NOT_IN [5,5]
+id = 10 AND user_name = "admin"
+id = 10 AND user_name != "admin"
+id = 10 AND user_name IN ["admin","admin"]
+id = 10 AND user_name NOT_IN ["admin","admin"]
+id != 10 AND type_id != 204
+id != 10 AND type_id < 204
+id != 10 AND type_id <= 204
+id != 10 AND type_id > 204
+id != 10 AND type_id >= 204
+id != 10 AND type_id IN [204,204]
+id != 10 AND type_id NOT_IN [204,204]
+id != 10 AND device_uid != "43da-f34ac43-234abb"
+id != 10 AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id != 10 AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id != 10 AND device_name != "my-device-24131"
+id != 10 AND device_name IN ["my-device-24131","my-device-24131"]
+id != 10 AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+id != 10 AND user_id != 56
+id != 10 AND user_id < 56
+id != 10 AND user_id <= 56
+id != 10 AND user_id > 56
+id != 10 AND user_id >= 56
+id != 10 AND user_id IN [56,56]
+id != 10 AND user_id NOT_IN [56,56]
+id != 10 AND device_ip != "23.54.10.227"
+id != 10 AND device_ip IN ["23.54.10.227","23.54.10.227"]
+id != 10 AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+id != 10 AND device_user != "Joe"
+id != 10 AND device_user IN ["Joe","Joe"]
+id != 10 AND device_user NOT_IN ["Joe","Joe"]
+id != 10 AND severity_id != 5
+id != 10 AND severity_id < 5
+id != 10 AND severity_id <= 5
+id != 10 AND severity_id > 5
+id != 10 AND severity_id >= 5
+id != 10 AND severity_id IN [5,5]
+id != 10 AND severity_id NOT_IN [5,5]
+id != 10 AND user_name != "admin"
+id != 10 AND user_name IN ["admin","admin"]
+id != 10 AND user_name NOT_IN ["admin","admin"]
+id < 10 AND type_id < 204
+id < 10 AND type_id <= 204
+id < 10 AND type_id > 204
+id < 10 AND type_id >= 204
+id < 10 AND type_id IN [204,204]
+id < 10 AND type_id NOT_IN [204,204]
+id < 10 AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id < 10 AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id < 10 AND device_name IN ["my-device-24131","my-device-24131"]
+id < 10 AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+id < 10 AND user_id < 56
+id < 10 AND user_id <= 56
+id < 10 AND user_id > 56
+id < 10 AND user_id >= 56
+id < 10 AND user_id IN [56,56]
+id < 10 AND user_id NOT_IN [56,56]
+id < 10 AND device_ip IN ["23.54.10.227","23.54.10.227"]
+id < 10 AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+id < 10 AND device_user IN ["Joe","Joe"]
+id < 10 AND device_user NOT_IN ["Joe","Joe"]
+id < 10 AND severity_id < 5
+id < 10 AND severity_id <= 5
+id < 10 AND severity_id > 5
+id < 10 AND severity_id >= 5
+id < 10 AND severity_id IN [5,5]
+id < 10 AND severity_id NOT_IN [5,5]
+id < 10 AND user_name IN ["admin","admin"]
+id < 10 AND user_name NOT_IN ["admin","admin"]
+id <= 10 AND type_id <= 204
+id <= 10 AND type_id > 204
+id <= 10 AND type_id >= 204
+id <= 10 AND type_id IN [204,204]
+id <= 10 AND type_id NOT_IN [204,204]
+id <= 10 AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id <= 10 AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id <= 10 AND device_name IN ["my-device-24131","my-device-24131"]
+id <= 10 AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+id <= 10 AND user_id <= 56
+id <= 10 AND user_id > 56
+id <= 10 AND user_id >= 56
+id <= 10 AND user_id IN [56,56]
+id <= 10 AND user_id NOT_IN [56,56]
+id <= 10 AND device_ip IN ["23.54.10.227","23.54.10.227"]
+id <= 10 AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+id <= 10 AND device_user IN ["Joe","Joe"]
+id <= 10 AND device_user NOT_IN ["Joe","Joe"]
+id <= 10 AND severity_id <= 5
+id <= 10 AND severity_id > 5
+id <= 10 AND severity_id >= 5
+id <= 10 AND severity_id IN [5,5]
+id <= 10 AND severity_id NOT_IN [5,5]
+id <= 10 AND user_name IN ["admin","admin"]
+id <= 10 AND user_name NOT_IN ["admin","admin"]
+id > 10 AND type_id > 204
+id > 10 AND type_id >= 204
+id > 10 AND type_id IN [204,204]
+id > 10 AND type_id NOT_IN [204,204]
+id > 10 AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id > 10 AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id > 10 AND device_name IN ["my-device-24131","my-device-24131"]
+id > 10 AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+id > 10 AND user_id > 56
+id > 10 AND user_id >= 56
+id > 10 AND user_id IN [56,56]
+id > 10 AND user_id NOT_IN [56,56]
+id > 10 AND device_ip IN ["23.54.10.227","23.54.10.227"]
+id > 10 AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+id > 10 AND device_user IN ["Joe","Joe"]
+id > 10 AND device_user NOT_IN ["Joe","Joe"]
+id > 10 AND severity_id > 5
+id > 10 AND severity_id >= 5
+id > 10 AND severity_id IN [5,5]
+id > 10 AND severity_id NOT_IN [5,5]
+id > 10 AND user_name IN ["admin","admin"]
+id > 10 AND user_name NOT_IN ["admin","admin"]
+id >= 10 AND type_id >= 204
+id >= 10 AND type_id IN [204,204]
+id >= 10 AND type_id NOT_IN [204,204]
+id >= 10 AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id >= 10 AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id >= 10 AND device_name IN ["my-device-24131","my-device-24131"]
+id >= 10 AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+id >= 10 AND user_id >= 56
+id >= 10 AND user_id IN [56,56]
+id >= 10 AND user_id NOT_IN [56,56]
+id >= 10 AND device_ip IN ["23.54.10.227","23.54.10.227"]
+id >= 10 AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+id >= 10 AND device_user IN ["Joe","Joe"]
+id >= 10 AND device_user NOT_IN ["Joe","Joe"]
+id >= 10 AND severity_id >= 5
+id >= 10 AND severity_id IN [5,5]
+id >= 10 AND severity_id NOT_IN [5,5]
+id >= 10 AND user_name IN ["admin","admin"]
+id >= 10 AND user_name NOT_IN ["admin","admin"]
+id IN [10,10] AND type_id IN [204,204]
+id IN [10,10] AND type_id NOT_IN [204,204]
+id IN [10,10] AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id IN [10,10] AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id IN [10,10] AND device_name IN ["my-device-24131","my-device-24131"]
+id IN [10,10] AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+id IN [10,10] AND user_id IN [56,56]
+id IN [10,10] AND user_id NOT_IN [56,56]
+id IN [10,10] AND device_ip IN ["23.54.10.227","23.54.10.227"]
+id IN [10,10] AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+id IN [10,10] AND device_user IN ["Joe","Joe"]
+id IN [10,10] AND device_user NOT_IN ["Joe","Joe"]
+id IN [10,10] AND severity_id IN [5,5]
+id IN [10,10] AND severity_id NOT_IN [5,5]
+id IN [10,10] AND user_name IN ["admin","admin"]
+id IN [10,10] AND user_name NOT_IN ["admin","admin"]
+id NOT_IN [10,10] AND type_id NOT_IN [204,204]
+id NOT_IN [10,10] AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+id NOT_IN [10,10] AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+id NOT_IN [10,10] AND user_id NOT_IN [56,56]
+id NOT_IN [10,10] AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+id NOT_IN [10,10] AND device_user NOT_IN ["Joe","Joe"]
+id NOT_IN [10,10] AND severity_id NOT_IN [5,5]
+id NOT_IN [10,10] AND user_name NOT_IN ["admin","admin"]
+type_id = 204 AND device_uid = "43da-f34ac43-234abb"
+type_id = 204 AND device_uid != "43da-f34ac43-234abb"
+type_id = 204 AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id = 204 AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id = 204 AND device_name = "my-device-24131"
+type_id = 204 AND device_name != "my-device-24131"
+type_id = 204 AND device_name IN ["my-device-24131","my-device-24131"]
+type_id = 204 AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+type_id = 204 AND user_id = 56
+type_id = 204 AND user_id != 56
+type_id = 204 AND user_id < 56
+type_id = 204 AND user_id <= 56
+type_id = 204 AND user_id > 56
+type_id = 204 AND user_id >= 56
+type_id = 204 AND user_id IN [56,56]
+type_id = 204 AND user_id NOT_IN [56,56]
+type_id = 204 AND device_ip = "23.54.10.227"
+type_id = 204 AND device_ip != "23.54.10.227"
+type_id = 204 AND device_ip IN ["23.54.10.227","23.54.10.227"]
+type_id = 204 AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+type_id = 204 AND device_user = "Joe"
+type_id = 204 AND device_user != "Joe"
+type_id = 204 AND device_user IN ["Joe","Joe"]
+type_id = 204 AND device_user NOT_IN ["Joe","Joe"]
+type_id = 204 AND severity_id = 5
+type_id = 204 AND severity_id != 5
+type_id = 204 AND severity_id < 5
+type_id = 204 AND severity_id <= 5
+type_id = 204 AND severity_id > 5
+type_id = 204 AND severity_id >= 5
+type_id = 204 AND severity_id IN [5,5]
+type_id = 204 AND severity_id NOT_IN [5,5]
+type_id = 204 AND user_name = "admin"
+type_id = 204 AND user_name != "admin"
+type_id = 204 AND user_name IN ["admin","admin"]
+type_id = 204 AND user_name NOT_IN ["admin","admin"]
+type_id != 204 AND device_uid != "43da-f34ac43-234abb"
+type_id != 204 AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id != 204 AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id != 204 AND device_name != "my-device-24131"
+type_id != 204 AND device_name IN ["my-device-24131","my-device-24131"]
+type_id != 204 AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+type_id != 204 AND user_id != 56
+type_id != 204 AND user_id < 56
+type_id != 204 AND user_id <= 56
+type_id != 204 AND user_id > 56
+type_id != 204 AND user_id >= 56
+type_id != 204 AND user_id IN [56,56]
+type_id != 204 AND user_id NOT_IN [56,56]
+type_id != 204 AND device_ip != "23.54.10.227"
+type_id != 204 AND device_ip IN ["23.54.10.227","23.54.10.227"]
+type_id != 204 AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+type_id != 204 AND device_user != "Joe"
+type_id != 204 AND device_user IN ["Joe","Joe"]
+type_id != 204 AND device_user NOT_IN ["Joe","Joe"]
+type_id != 204 AND severity_id != 5
+type_id != 204 AND severity_id < 5
+type_id != 204 AND severity_id <= 5
+type_id != 204 AND severity_id > 5
+type_id != 204 AND severity_id >= 5
+type_id != 204 AND severity_id IN [5,5]
+type_id != 204 AND severity_id NOT_IN [5,5]
+type_id != 204 AND user_name != "admin"
+type_id != 204 AND user_name IN ["admin","admin"]
+type_id != 204 AND user_name NOT_IN ["admin","admin"]
+type_id < 204 AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id < 204 AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id < 204 AND device_name IN ["my-device-24131","my-device-24131"]
+type_id < 204 AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+type_id < 204 AND user_id < 56
+type_id < 204 AND user_id <= 56
+type_id < 204 AND user_id > 56
+type_id < 204 AND user_id >= 56
+type_id < 204 AND user_id IN [56,56]
+type_id < 204 AND user_id NOT_IN [56,56]
+type_id < 204 AND device_ip IN ["23.54.10.227","23.54.10.227"]
+type_id < 204 AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+type_id < 204 AND device_user IN ["Joe","Joe"]
+type_id < 204 AND device_user NOT_IN ["Joe","Joe"]
+type_id < 204 AND severity_id < 5
+type_id < 204 AND severity_id <= 5
+type_id < 204 AND severity_id > 5
+type_id < 204 AND severity_id >= 5
+type_id < 204 AND severity_id IN [5,5]
+type_id < 204 AND severity_id NOT_IN [5,5]
+type_id < 204 AND user_name IN ["admin","admin"]
+type_id < 204 AND user_name NOT_IN ["admin","admin"]
+type_id <= 204 AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id <= 204 AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id <= 204 AND device_name IN ["my-device-24131","my-device-24131"]
+type_id <= 204 AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+type_id <= 204 AND user_id <= 56
+type_id <= 204 AND user_id > 56
+type_id <= 204 AND user_id >= 56
+type_id <= 204 AND user_id IN [56,56]
+type_id <= 204 AND user_id NOT_IN [56,56]
+type_id <= 204 AND device_ip IN ["23.54.10.227","23.54.10.227"]
+type_id <= 204 AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+type_id <= 204 AND device_user IN ["Joe","Joe"]
+type_id <= 204 AND device_user NOT_IN ["Joe","Joe"]
+type_id <= 204 AND severity_id <= 5
+type_id <= 204 AND severity_id > 5
+type_id <= 204 AND severity_id >= 5
+type_id <= 204 AND severity_id IN [5,5]
+type_id <= 204 AND severity_id NOT_IN [5,5]
+type_id <= 204 AND user_name IN ["admin","admin"]
+type_id <= 204 AND user_name NOT_IN ["admin","admin"]
+type_id > 204 AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id > 204 AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id > 204 AND device_name IN ["my-device-24131","my-device-24131"]
+type_id > 204 AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+type_id > 204 AND user_id > 56
+type_id > 204 AND user_id >= 56
+type_id > 204 AND user_id IN [56,56]
+type_id > 204 AND user_id NOT_IN [56,56]
+type_id > 204 AND device_ip IN ["23.54.10.227","23.54.10.227"]
+type_id > 204 AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+type_id > 204 AND device_user IN ["Joe","Joe"]
+type_id > 204 AND device_user NOT_IN ["Joe","Joe"]
+type_id > 204 AND severity_id > 5
+type_id > 204 AND severity_id >= 5
+type_id > 204 AND severity_id IN [5,5]
+type_id > 204 AND severity_id NOT_IN [5,5]
+type_id > 204 AND user_name IN ["admin","admin"]
+type_id > 204 AND user_name NOT_IN ["admin","admin"]
+type_id >= 204 AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id >= 204 AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id >= 204 AND device_name IN ["my-device-24131","my-device-24131"]
+type_id >= 204 AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+type_id >= 204 AND user_id >= 56
+type_id >= 204 AND user_id IN [56,56]
+type_id >= 204 AND user_id NOT_IN [56,56]
+type_id >= 204 AND device_ip IN ["23.54.10.227","23.54.10.227"]
+type_id >= 204 AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+type_id >= 204 AND device_user IN ["Joe","Joe"]
+type_id >= 204 AND device_user NOT_IN ["Joe","Joe"]
+type_id >= 204 AND severity_id >= 5
+type_id >= 204 AND severity_id IN [5,5]
+type_id >= 204 AND severity_id NOT_IN [5,5]
+type_id >= 204 AND user_name IN ["admin","admin"]
+type_id >= 204 AND user_name NOT_IN ["admin","admin"]
+type_id IN [204,204] AND device_uid IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id IN [204,204] AND device_uid NOT_IN ["43da-f34ac43-234abb","43da-f34ac43-234abb"]
+type_id IN [204,204] AND device_name IN ["my-device-24131","my-device-24131"]
+type_id IN [204,204] AND device_name NOT_IN ["my-device-24131","my-device-24131"]
+type_id IN [204,204] AND user_id IN [56,56]
+type_id IN [204,204] AND user_id NOT_IN [56,56]
+type_id IN [204,204] AND device_ip IN ["23.54.10.227","23.54.10.227"]
+type_id IN [204,204] AND device_ip NOT_IN ["23.54.10.227","23.54.10.227"]
+type_id IN [204,204] AND device_user IN ["Joe","Joe"]
+type_id IN [204,204] AND device_user NOT_IN ["Joe","Joe"]

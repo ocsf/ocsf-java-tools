@@ -23,6 +23,8 @@ import io.ocsf.schema.util.FMap;
 import io.ocsf.schema.util.Maps;
 import io.ocsf.schema.transformers.Transformers;
 import io.ocsf.schema.util.Parser;
+import io.ocsf.schema.util.Strings;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -35,7 +37,7 @@ public class EventProcessorTest extends Tests
   // create a very simple "parser"
   private final Parser parser = text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
 
-  private final Transformers transformers = new Transformers("");
+  private final Transformers transformers = new Transformers(Strings.EMPTY);
 
   @Before
   public void setUp() throws Exception

@@ -16,6 +16,7 @@
 
 package io.ocsf.schema.transformers;
 
+import io.ocsf.schema.util.FMap;
 import io.ocsf.schema.util.Strings;
 
 public final class FileUtil
@@ -23,6 +24,30 @@ public final class FileUtil
   static final String[] EMPTY_PATH = new String[]{null, null};
 
   private FileUtil() {}
+
+  public static Object toFile(final Object value, final int typeId)
+  {
+    final String               path = value.toString().trim();
+    final FMap<String, Object> file = FMap.b();
+
+    if (path.isEmpty())
+    {
+      file.p("name", path)
+        .p("path", path)
+        .p("type_id", typeId);
+    }
+    else
+    {
+      final String[] parts = parseFilePath(path);
+
+      file.o("parent_folder", parts[0])
+        .p("name", parts[1])
+        .p("path", path)
+        .p("type_id", typeId);
+    }
+
+    return file;
+  }
 
   /**
    * Extracts the file and directory name from the given path name.

@@ -99,7 +99,7 @@ public final class Json
     if (map != null)
       return mapToString(0, map, new StringBuilder(capacity(map.size()))).toString();
 
-    return "";
+    return Strings.EMPTY;
   }
 
   private static StringBuilder objectToString(final Object value, final StringBuilder buf)

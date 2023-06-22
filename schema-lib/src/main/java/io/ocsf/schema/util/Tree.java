@@ -89,7 +89,7 @@ public final class Tree
       return sb.toString();
     }
 
-    return "";
+    return Strings.EMPTY;
   }
 
   @Override

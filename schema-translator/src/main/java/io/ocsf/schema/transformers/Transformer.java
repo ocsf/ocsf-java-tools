@@ -23,6 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.*;
@@ -329,12 +330,6 @@ public final class Transformer
         return p.test(data) ? Transformer.apply(compiled, translator.parse(data)) :
           translator.parse(data);
       }
-
-      @Override
-      public boolean hasPredicate()
-      {
-        return true;
-      }
     };
   }
 
@@ -383,12 +378,6 @@ public final class Transformer
       {
         return p.test(data) ? Transformer.apply(compiled, translator.parse(data), translated) :
           translator.parse(data);
-      }
-
-      @Override
-      public boolean hasPredicate()
-      {
-        return true;
       }
     };
   }
@@ -757,7 +746,8 @@ public final class Transformer
 
         if (value != null)
         {
-          final Object id = values.get(value.toString().toLowerCase(Maps.LOCALE));
+          final String strValue = value.toString();
+          final Object id       = values.get(strValue.toLowerCase(Maps.LOCALE));
           if (id != null)
           {
             Maps.putIn(translated, key, id, overwrite);
@@ -765,7 +755,7 @@ public final class Transformer
           else if (other != null)
           {
             Maps.putIn(translated, key, Event.OTHER_ID, overwrite);
-            Maps.putIn(translated, other, value, overwrite);
+            Maps.putIn(translated, other, strValue, overwrite);
           }
         }
         else if (defValue != null)
@@ -835,7 +825,10 @@ public final class Transformer
         return iso8601Time(o);
 
       case "path":
-        return toFile(o, 1); // default file type id: 1 = file
+        return FileUtil.toFile(o, 1); // default file type id: 1 = file
+
+      case "url":
+        return url(o);
 
       case "anonymize":
         return encode(o);
@@ -850,7 +843,7 @@ public final class Transformer
           {
             try
             {
-              return toFile(o, Integer.parseInt(parts[1].trim()));
+              return FileUtil.toFile(o, Integer.parseInt(parts[1].trim()));
             }
             catch (final NumberFormatException ex)
             {
@@ -865,28 +858,17 @@ public final class Transformer
     }
   }
 
-  static Object toFile(final Object o, final int typeId)
+  private static Object url(final Object o)
   {
-    final String               path = o.toString().trim();
-    final FMap<String, Object> file = FMap.b();
-
-    if (path.isEmpty())
+    try
     {
-      file.p("name", path)
-        .p("path", path)
-        .p("type_id", typeId);
+      return URLUtil.toUrl(o.toString());
     }
-    else
+    catch (final MalformedURLException e)
     {
-      final String[] parts = FileUtil.parseFilePath(path);
-
-      file.o("parent_folder", parts[0])
-        .p("name", parts[1])
-        .p("path", path)
-        .p("type_id", typeId);
+      logger.warn("Invalid URL string: {}. Error: {}", o, e.getMessage());
+      return FMap.<String, Object>b().p(URLUtil.Text, o.toString());
     }
-
-    return file;
   }
 
   static Object toArray(final Object value, final boolean is_array)

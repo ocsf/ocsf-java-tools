@@ -480,4 +480,52 @@ public final class TransformerTest extends TestCase
     Assert.assertEquals(2, data.size());
   }
 
+  public void testUrlText() throws IOException
+  {
+    final Map<String, Object> data = Json5Parser.to("{'text': 'https://example.io/tmp/test.html?p1=hello&p2=world'}");
+    final Map<String, Object> translated = Transformer
+      .fromString("{rules:[{text:{@move: {name: 'url', type: 'url'}}}]}")
+      .apply(data);
+    Assert.assertNotNull(translated);
+
+    final Map<String, Object> url = Maps.typecast(translated.get("url"));
+    Assert.assertNotNull(url);
+
+    Assert.assertEquals("https", url.get(URLUtil.Scheme));
+    Assert.assertEquals("example.io", url.get(URLUtil.Hostname));
+    Assert.assertEquals("/tmp/test.html", url.get(URLUtil.Path));
+    Assert.assertEquals("p1=hello&p2=world", url.get(URLUtil.Query));
+    Assert.assertEquals(443, url.get(URLUtil.Port));
+  }
+
+
+  public void testBadUrlText() throws IOException
+  {
+    final Map<String, Object> data = Json5Parser.to("{'text': 'htts:/example.io/tmp/test.html?p1=hello&p2=world'}");
+    final Map<String, Object> translated = Transformer
+      .fromString("{rules:[{text:{@move: {name: 'url', type: 'url'}}}]}")
+      .apply(data);
+    Assert.assertNotNull(translated);
+
+    final Map<String, Object> url = Maps.typecast(translated.get("url"));
+    Assert.assertNotNull(url);
+
+    Assert.assertEquals("htts:/example.io/tmp/test.html?p1=hello&p2=world", url.get(URLUtil.Text));
+  }
+
+  public void testEmptyUrlText() throws IOException
+  {
+    final Map<String, Object> data = Json5Parser.to("{'text': ' '}");
+    final Map<String, Object> translated = Transformer
+      .fromString("{rules:[{text:{@move: {name: 'url', type: 'url'}}}]}")
+      .apply(data);
+    Assert.assertNotNull(translated);
+
+    final Map<String, Object> url = Maps.typecast(translated.get("url"));
+    Assert.assertNotNull(url);
+
+    Assert.assertEquals("", url.get(URLUtil.Text));
+    Assert.assertEquals("", url.get(URLUtil.Scheme));
+    Assert.assertEquals("", url.get(URLUtil.Hostname));
+  }
 }

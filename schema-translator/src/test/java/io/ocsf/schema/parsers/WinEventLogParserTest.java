@@ -187,8 +187,9 @@ public class WinEventLogParserTest
 
     final Map<String, Object> event = parser.parse(Event);
 
-    Assert.assertEquals(16, event.size());
+    Assert.assertEquals(17, event.size());
     Assert.assertEquals("Informational", Maps.getIn(event, "Context", "Severity"));
+    Assert.assertEquals("", Maps.get(event, "User Data"));
 
 //    System.out.println(Json.format(event));
   }

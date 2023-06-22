@@ -22,6 +22,8 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Map;
 
+import io.ocsf.schema.util.Json;
+
 public class WinMultiLineParserTest
 {
   @Test
@@ -99,4 +101,35 @@ public class WinMultiLineParserTest
 //    System.out.println(Json.format(event));
   }
 
+  @Test
+  public void parseMissingValueTest()
+  {
+    final String Event = "09/11/2020 02:54:50 PM\n" +
+      "LogName=Security\n" +
+      "SourceName=Microsoft Windows security auditing.\n" +
+      "EventCode=4776\n" +
+      "EventType=0\n" +
+      "Type=Information\n" +
+      "ComputerName=##Computer_Name##\n" +
+      "TaskCategory=Credential Validation\n" +
+      "OpCode=Info\n" +
+      "RecordNumber=##Record_Number##\n" +
+      "Keywords=Audit Success\n" +
+      "Message=The computer attempted to validate the credentials for an account.\n" +
+      "\n" +
+      "Authentication Package:        MICROSOFT_AUTHENTICATION_PACKAGE_V1_0\n" +
+      "Logon Account:\n" + // missing an account name!
+      "Source Workstation:        W238-SMITP\n" +
+      "Error Code:        0x0";
+
+    final Map<String, Object> event = new WinMultiLineParser(Event).parse();
+
+    Assert.assertNotNull(event);
+    System.out.println(Json.format(event));
+
+    Assert.assertEquals(16, event.size());
+    Assert.assertEquals("Security", event.get("LogName"));
+    Assert.assertEquals("W238-SMITP", event.get("Source Workstation"));
+    Assert.assertEquals("", event.get("Logon Account"));
+  }
 }

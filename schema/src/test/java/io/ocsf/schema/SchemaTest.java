@@ -142,6 +142,56 @@ public class SchemaTest
   }
 
   @Test
+  public void enrichEmbeddedObjects()
+  {
+    final FMap<String, Object> data = FMap.<String, Object>b()
+      .p(Dictionary.CLASS_ID, TEST_CLASS_ID)
+      .p(Dictionary.ACTIVITY_ID, 1)
+      .p("device", FMap.<String, Object>b()
+        .p("hostname", FMap.<String, Object>b()
+          .p("name", "Laptop")
+          .p("type_id", -1))
+        .p("type_id", 3) // Laptop
+      );
+
+    final Map<String, Object> enriched = schema.enrich(data);
+
+    Assert.assertEquals(data.size() + 4, enriched.size());
+    Assert.assertNotNull(enriched.get(Dictionary.CLASS_NAME));
+    Assert.assertNotNull(enriched.get(Dictionary.ACTIVITY_NAME));
+    Assert.assertNotNull(enriched.get(Dictionary.TYPE_UID));
+    Assert.assertNotNull(enriched.get(Dictionary.TYPE_NAME));
+
+    Assert.assertEquals("Laptop", Maps.getIn(enriched, "device.type"));
+  }
+
+  @Test
+  public void enrichEmbeddedObject0()
+  {
+    final FMap<String, Object> data = FMap.<String, Object>b()
+      .p(Dictionary.CLASS_ID, TEST_CLASS_ID)
+      .p(Dictionary.ACTIVITY_ID, 1)
+      .p("device", FMap.<String, Object>b()
+        .p("image", FMap.<String, Object>b()
+          .p("name", FMap.<String, Object>b()
+            .p("name", "Laptop")
+            .p("type_id", -1))
+        .p("type_id", -1))
+      .p("type_id", 3) // Laptop
+      );
+
+    final Map<String, Object> enriched = schema.enrich(data);
+
+    Assert.assertEquals(data.size() + 4, enriched.size());
+    Assert.assertNotNull(enriched.get(Dictionary.CLASS_NAME));
+    Assert.assertNotNull(enriched.get(Dictionary.ACTIVITY_NAME));
+    Assert.assertNotNull(enriched.get(Dictionary.TYPE_UID));
+    Assert.assertNotNull(enriched.get(Dictionary.TYPE_NAME));
+
+    Assert.assertEquals("Laptop", Maps.getIn(enriched, "device.type"));
+  }
+
+  @Test
   public void invalidObjectAttribute()
   {
     final FMap<String, Object> data = FMap.<String, Object>b()

@@ -1,4 +1,3 @@
-# OCSF Schema Translator
+# OCSF Schema Tools
 
-This repo contains common code needed for translating events to the Open Cybersecurity Schema
-Framework.
+This repo contains code for translating existing events to the OCSF Schema.

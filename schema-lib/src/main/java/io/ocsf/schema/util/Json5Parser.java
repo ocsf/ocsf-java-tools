@@ -90,7 +90,7 @@ public final class Json5Parser
   {
     if (text == null) return null;
 
-    if (text.isEmpty()) return "";
+    if (text.isEmpty()) return text;
 
     return new Json5Parser(text.toCharArray()).parse();
   }
@@ -99,7 +99,7 @@ public final class Json5Parser
   {
     if (bytes == null) return null;
 
-    if (bytes.length == 0) return "";
+    if (bytes.length == 0) return Strings.EMPTY;
 
     return new Json5Parser(
         new String(bytes, StandardCharsets.UTF_8).toCharArray()).parse();

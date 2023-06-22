@@ -26,6 +26,8 @@ import java.text.RuleBasedCollator;
  */
 public final class Strings
 {
+  public static final String EMPTY = "";
+
   private static final int mask = 0xFFFF0000; // Collator.PRIMARY
 
   private static final RuleBasedCollator collator = (RuleBasedCollator) Collator.getInstance();

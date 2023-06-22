@@ -115,7 +115,7 @@ public final class WinMultiLineParser
       final int len = namePos - dataPos;
       if (len > 0)
       {
-          multiLineValue(event, last, new String(buf, dataPos, len));
+        multiLineValue(event, last, new String(buf, dataPos, len));
       }
     }
 
@@ -179,21 +179,21 @@ public final class WinMultiLineParser
 
     if (pos >= buf.length)
     {
-      return null;
+      return Strings.EMPTY;
     }
 
     // check for nested values
     if (buf[pos] == LF)
     {
       ++pos;
-      return null;
+      return pos < buf.length && isSpaceChar(buf[pos]) ? null : Strings.EMPTY;
     }
 
     // check for nested values
     if (buf[pos] == CR)
     {
       pos += 2;
-      return null;
+      return pos < buf.length && isSpaceChar(buf[pos]) ? null : Strings.EMPTY;
     }
 
     final int start = pos;
@@ -248,7 +248,7 @@ public final class WinMultiLineParser
           if (pos < buf.length)
           {
             final int next = buf[pos];
-            if (next == SPC || next == TAB)
+            if (isSpaceChar(next))
             {
               final int i = skipSpace(buf, pos, buf.length);
               if (buf[i] > SPC)
@@ -270,7 +270,7 @@ public final class WinMultiLineParser
       if (pos < buf.length)
       {
         final int next = buf[pos];
-        if (next == SPC || next == TAB)
+        if (isSpaceChar(next))
         {
           final int i = skipSpace(buf, pos, buf.length);
           if (buf[i] >= 'A')
@@ -290,23 +290,24 @@ public final class WinMultiLineParser
     // check for empty values
     if (pos >= buf.length)
     {
-      return "";
+      return Strings.EMPTY;
     }
     if (buf[pos] == LF)
     {
       ++pos;
-      return "";
+      return Strings.EMPTY;
     }
     if (buf[pos] == CR)
     {
       pos += 2;
-      return "";
+      return Strings.EMPTY;
     }
 
     return readLine();
   }
 
-  private static void multiLineValue(final Map<String, Object> event, final String name, final String text)
+  private static void multiLineValue(final Map<String, Object> event, final String name,
+    final String text)
   {
     final Object last = event.get(name);
     if (last instanceof String)
@@ -333,7 +334,8 @@ public final class WinMultiLineParser
   }
 
   /*
-   * Skip comments and whitespaces, returns the position of the next line or 'len' if end of the buffer is reached.
+   * Skip comments and whitespaces, returns the position of the next line or 'len' if end of the
+   * buffer is reached.
    */
   private static final int skip(final char[] buf, final int pos, final int len)
   {
@@ -360,7 +362,7 @@ public final class WinMultiLineParser
   private static final int skipSpace(final char[] buf, final int pos, final int len)
   {
     for (int i = pos; i < len; ++i)
-      if (buf[i] != SPC && buf[i] != TAB)
+      if (!isSpaceChar(buf[i]))
         return i;
 
     return len;
@@ -382,15 +384,20 @@ public final class WinMultiLineParser
     return new String(buf, start, i - start);
   }
 
+  private static final boolean isSpaceChar(final int ch)
+  {
+    return ch == SPC || ch == TAB;
+  }
+
   private static final char[] LegalChars = {
-      0, 0, 0, 0, 0, 0, 0, 0, 0, TAB, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      SPC, 0, 0, 0, 0, 0, 0, 0, '(', ')', 0, 0, 0, '-', 0, 0,
-      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 0, 0, 0, 0, 0, 0,
-      0, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-      'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 0, 0, 0, 0, '_',
-      0, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-      'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 0, 0, 0, 0, 0};
+    0, 0, 0, 0, 0, 0, 0, 0, 0, TAB, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    SPC, 0, 0, 0, 0, 0, 0, 0, '(', ')', 0, 0, 0, '-', 0, 0,
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 0, 0, 0, 0, 0, 0,
+    0, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+    'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 0, 0, 0, 0, '_',
+    0, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+    'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 0, 0, 0, 0, 0};
 
   private static final boolean isLegalChar(final int ch)
   {

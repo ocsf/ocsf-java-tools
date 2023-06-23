@@ -17,8 +17,8 @@
 package io.ocsf.schema;
 
 
-import io.ocsf.schema.util.FMap;
-import io.ocsf.schema.util.Maps;
+import io.ocsf.utils.FMap;
+import io.ocsf.utils.Maps;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.ocsf.schema.util.Files.readJson;
+import static io.ocsf.utils.Files.readJson;
 
 /**
  * A helper class to enrich event data using the schema.

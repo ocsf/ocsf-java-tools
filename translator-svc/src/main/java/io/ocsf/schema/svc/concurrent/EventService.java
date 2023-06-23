@@ -24,7 +24,7 @@ import io.ocsf.schema.config.ConfigParsers;
 import io.ocsf.schema.config.ConfigTransformers;
 import io.ocsf.schema.svc.EventDemuxer;
 import io.ocsf.schema.transformers.Transformers;
-import io.ocsf.schema.util.Parser;
+import io.ocsf.utils.Parser;
 
 import java.io.IOException;
 

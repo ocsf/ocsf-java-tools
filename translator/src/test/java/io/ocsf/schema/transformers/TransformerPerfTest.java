@@ -16,8 +16,8 @@
 
 package io.ocsf.schema.transformers;
 
-import io.ocsf.schema.util.Files;
-import io.ocsf.schema.util.ParserException;
+import io.ocsf.utils.Files;
+import io.ocsf.utils.ParserException;
 
 import java.io.IOException;
 import java.nio.file.Paths;

@@ -17,7 +17,7 @@
 package io.ocsf.schema.cli;
 
 
-import io.ocsf.schema.util.Strings;
+import io.ocsf.utils.Strings;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -17,9 +17,9 @@
 package io.ocsf.schema.cli;
 
 import io.ocsf.schema.Event;
-import io.ocsf.schema.util.Maps;
-import io.ocsf.schema.util.Parser;
-import io.ocsf.schema.util.Strings;
+import io.ocsf.utils.Maps;
+import io.ocsf.utils.Parser;
+import io.ocsf.utils.Strings;
 import io.ocsf.schema.RawEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

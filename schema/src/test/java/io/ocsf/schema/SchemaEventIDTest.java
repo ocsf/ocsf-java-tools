@@ -16,7 +16,7 @@
 
 package io.ocsf.schema;
 
-import io.ocsf.schema.util.FMap;
+import io.ocsf.utils.FMap;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

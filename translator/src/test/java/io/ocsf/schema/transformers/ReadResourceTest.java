@@ -16,7 +16,7 @@
 
 package io.ocsf.schema.transformers;
 
-import io.ocsf.schema.util.Files;
+import io.ocsf.utils.Files;
 import junit.framework.TestCase;
 import org.junit.Assert;
 

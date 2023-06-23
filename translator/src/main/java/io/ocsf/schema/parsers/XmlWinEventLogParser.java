@@ -16,8 +16,8 @@
 
 package io.ocsf.schema.parsers;
 
-import io.ocsf.schema.util.Maps;
-import io.ocsf.schema.util.Parser;
+import io.ocsf.utils.Maps;
+import io.ocsf.utils.Parser;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;

@@ -19,11 +19,11 @@ package io.ocsf.schema.svc;
 import io.ocsf.schema.Event;
 import io.ocsf.schema.RawEvent;
 import io.ocsf.schema.Tests;
-import io.ocsf.schema.util.FMap;
-import io.ocsf.schema.util.Maps;
+import io.ocsf.utils.FMap;
+import io.ocsf.utils.Maps;
 import io.ocsf.schema.transformers.Transformers;
-import io.ocsf.schema.util.Parser;
-import io.ocsf.schema.util.Strings;
+import io.ocsf.utils.Parser;
+import io.ocsf.utils.Strings;
 
 import org.junit.After;
 import org.junit.Assert;

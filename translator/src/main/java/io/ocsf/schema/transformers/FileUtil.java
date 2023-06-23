@@ -16,8 +16,8 @@
 
 package io.ocsf.schema.transformers;
 
-import io.ocsf.schema.util.FMap;
-import io.ocsf.schema.util.Strings;
+import io.ocsf.utils.FMap;
+import io.ocsf.utils.Strings;
 
 public final class FileUtil
 {

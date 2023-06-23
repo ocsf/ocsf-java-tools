@@ -18,7 +18,7 @@ package io.ocsf.schema.config;
 
 import io.ocsf.schema.concurrent.MutableProcessorList;
 import io.ocsf.schema.concurrent.ProcessorList;
-import io.ocsf.schema.util.Maps;
+import io.ocsf.utils.Maps;
 import io.ocsf.schema.transformers.Transformers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -119,12 +119,12 @@ public final class ConfigTransformers
     }
 
     final Path   rulePath = home.resolveSibling(path);
-    final Object rule     = io.ocsf.schema.util.Files.readJson(rulePath);
+    final Object rule     = io.ocsf.utils.Files.readJson(rulePath);
 
     // the rule file contains a single JSON object
     if (rule instanceof Map<?, ?>)
     {
-      transformers.addRule(getRuleName(path), io.ocsf.schema.util.Files::readJson, Maps.typecast(rule));
+      transformers.addRule(getRuleName(path), io.ocsf.utils.Files::readJson, Maps.typecast(rule));
     }
   }
 
@@ -150,7 +150,7 @@ public final class ConfigTransformers
     final Path file = path.resolve(SOURCE_TYPE_FILE);
     if (Files.isRegularFile(file))
     {
-      final Map<String, String> data = io.ocsf.schema.util.Files.readJson(file);
+      final Map<String, String> data = io.ocsf.utils.Files.readJson(file);
 
       return data.get("type");
     }

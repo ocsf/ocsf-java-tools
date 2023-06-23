@@ -20,9 +20,9 @@ import io.ocsf.schema.RawEvent;
 import io.ocsf.schema.Schema;
 import io.ocsf.schema.svc.EventService;
 import io.ocsf.schema.svc.TranslatorException;
-import io.ocsf.schema.util.FMap;
-import io.ocsf.schema.util.Json5Parser;
-import io.ocsf.schema.util.Maps;
+import io.ocsf.utils.FMap;
+import io.ocsf.utils.Json5Parser;
+import io.ocsf.utils.Maps;
 
 import java.io.IOException;
 import java.nio.file.Files;

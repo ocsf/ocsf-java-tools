@@ -16,7 +16,7 @@
 
 package io.ocsf.schema.config;
 
-import io.ocsf.schema.util.Maps;
+import io.ocsf.utils.Maps;
 
 import java.util.Map;
 

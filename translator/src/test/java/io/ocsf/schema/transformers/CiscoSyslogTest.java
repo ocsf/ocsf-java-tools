@@ -17,7 +17,7 @@
 package io.ocsf.schema.transformers;
 
 import io.ocsf.schema.parsers.CiscoSyslogParser;
-import io.ocsf.schema.util.Maps;
+import io.ocsf.utils.Maps;
 import org.junit.Assert;
 import org.junit.Test;
 

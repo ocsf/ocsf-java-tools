@@ -16,8 +16,8 @@
 
 package io.ocsf.schema.cli;
 
-import io.ocsf.schema.util.Json5Parser;
-import io.ocsf.schema.util.Strings;
+import io.ocsf.utils.Json5Parser;
+import io.ocsf.utils.Strings;
 
 import java.io.IOException;
 import java.net.URI;

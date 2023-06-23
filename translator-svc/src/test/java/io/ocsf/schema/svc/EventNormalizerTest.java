@@ -18,7 +18,7 @@ package io.ocsf.schema.svc;
 
 import io.ocsf.schema.Event;
 import io.ocsf.schema.Tests;
-import io.ocsf.schema.util.FMap;
+import io.ocsf.utils.FMap;
 import io.ocsf.schema.transformers.Transformers;
 import org.junit.After;
 import org.junit.AfterClass;

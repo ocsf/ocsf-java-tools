@@ -20,10 +20,10 @@ import io.ocsf.schema.Event;
 import io.ocsf.schema.cli.CommandLineParser.Argument;
 import io.ocsf.schema.Schema;
 import io.ocsf.schema.transformers.Transformer;
-import io.ocsf.schema.util.Files;
-import io.ocsf.schema.util.Json;
-import io.ocsf.schema.util.Parser;
-import io.ocsf.schema.util.ParserException;
+import io.ocsf.utils.Files;
+import io.ocsf.utils.Json;
+import io.ocsf.utils.Parser;
+import io.ocsf.utils.ParserException;
 import io.ocsf.schema.parsers.*;
 
 import java.io.File;

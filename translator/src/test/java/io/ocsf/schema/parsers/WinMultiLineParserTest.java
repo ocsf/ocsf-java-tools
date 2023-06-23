@@ -22,7 +22,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Map;
 
-import io.ocsf.schema.util.Json;
+import io.ocsf.utils.Json;
 
 public class WinMultiLineParserTest
 {

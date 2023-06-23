@@ -16,9 +16,9 @@
 
 package io.ocsf.schema.transformers;
 
-import io.ocsf.schema.util.Json5Parser;
-import io.ocsf.schema.util.Maps;
-import io.ocsf.schema.util.ParserException;
+import io.ocsf.utils.Json5Parser;
+import io.ocsf.utils.Maps;
+import io.ocsf.utils.ParserException;
 import junit.framework.TestCase;
 import org.junit.Assert;
 

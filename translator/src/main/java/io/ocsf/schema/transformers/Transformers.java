@@ -17,9 +17,9 @@
 package io.ocsf.schema.transformers;
 
 import io.ocsf.schema.Event;
-import io.ocsf.schema.util.Files;
-import io.ocsf.schema.util.Maps;
-import io.ocsf.schema.util.ParserException;
+import io.ocsf.utils.Files;
+import io.ocsf.utils.Maps;
+import io.ocsf.utils.ParserException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

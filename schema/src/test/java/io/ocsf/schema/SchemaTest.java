@@ -16,8 +16,8 @@
 
 package io.ocsf.schema;
 
-import io.ocsf.schema.util.FMap;
-import io.ocsf.schema.util.Maps;
+import io.ocsf.utils.FMap;
+import io.ocsf.utils.Maps;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -16,9 +16,9 @@
 
 package io.ocsf.schema.parsers;
 
-import io.ocsf.schema.util.Json;
-import io.ocsf.schema.util.Parser;
-import io.ocsf.schema.util.RegexParser;
+import io.ocsf.utils.Json;
+import io.ocsf.utils.Parser;
+import io.ocsf.utils.RegexParser;
 import org.junit.Assert;
 import org.junit.Test;
 

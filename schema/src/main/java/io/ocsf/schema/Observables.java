@@ -16,7 +16,7 @@
 
 package io.ocsf.schema;
 
-import io.ocsf.schema.util.Maps;
+import io.ocsf.utils.Maps;
 
 import java.util.ArrayList;
 import java.util.HashMap;

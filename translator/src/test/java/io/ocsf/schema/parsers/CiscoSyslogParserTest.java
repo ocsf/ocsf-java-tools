@@ -16,8 +16,8 @@
 
 package io.ocsf.schema.parsers;
 
-import io.ocsf.schema.util.Json;
-import io.ocsf.schema.util.Syslog;
+import io.ocsf.utils.Json;
+import io.ocsf.utils.Syslog;
 import org.junit.Assert;
 import org.junit.Test;
 

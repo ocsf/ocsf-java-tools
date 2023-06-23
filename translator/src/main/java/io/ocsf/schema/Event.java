@@ -16,8 +16,8 @@
 
 package io.ocsf.schema;
 
-import io.ocsf.schema.util.Json;
-import io.ocsf.schema.util.Maps;
+import io.ocsf.utils.Json;
+import io.ocsf.utils.Maps;
 
 import java.util.Collections;
 import java.util.Map;

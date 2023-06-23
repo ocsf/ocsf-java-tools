@@ -16,7 +16,7 @@
 
 package io.ocsf.schema.parsers;
 
-import io.ocsf.schema.util.Maps;
+import io.ocsf.utils.Maps;
 import org.junit.Assert;
 import org.junit.Test;
 

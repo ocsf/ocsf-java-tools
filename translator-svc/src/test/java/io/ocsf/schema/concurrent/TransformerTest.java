@@ -18,7 +18,7 @@ package io.ocsf.schema.concurrent;
 
 import io.ocsf.schema.Event;
 import io.ocsf.schema.Tests;
-import io.ocsf.schema.util.FMap;
+import io.ocsf.utils.FMap;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;

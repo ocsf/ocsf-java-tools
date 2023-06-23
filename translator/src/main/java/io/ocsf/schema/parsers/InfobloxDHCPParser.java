@@ -16,9 +16,9 @@
 
 package io.ocsf.schema.parsers;
 
-import io.ocsf.schema.util.Parser;
-import io.ocsf.schema.util.PatternParser;
-import io.ocsf.schema.util.Syslog;
+import io.ocsf.utils.Parser;
+import io.ocsf.utils.PatternParser;
+import io.ocsf.utils.Syslog;
 
 import java.util.Map;
 

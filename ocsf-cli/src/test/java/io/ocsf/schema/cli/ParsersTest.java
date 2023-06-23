@@ -16,9 +16,9 @@
 
 package io.ocsf.schema.cli;
 
-import io.ocsf.schema.util.Files;
-import io.ocsf.schema.util.Json;
-import io.ocsf.schema.util.ParserException;
+import io.ocsf.utils.Files;
+import io.ocsf.utils.Json;
+import io.ocsf.utils.ParserException;
 import io.ocsf.schema.parsers.*;
 
 import java.io.File;

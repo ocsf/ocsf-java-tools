@@ -1,0 +1,19 @@
+// Define Java conventions for OCSF organization.
+plugins {
+    id 'java'
+}
+
+// Projects should use Maven Central for external dependencies
+// This could be the organization's private repository
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}
+
+// Enable deprecation messages when compiling Java code
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << "-Xlint:deprecation"
+}

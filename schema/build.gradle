@@ -1,0 +1,20 @@
+plugins {
+    id "de.undercouch.download" version "5.2.1"
+    id 'io-ocsf.library-conventions'
+}
+
+dependencies {
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.20.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.20.0'
+    implementation project(':utils')
+}
+
+def schemaFileName = 'schema-' + artifactVersion + '.tar.gz'
+
+tasks.register('downloadSchema', Download) {
+    src 'https://schema.ocsf.io/export/schema?extensions='
+    dest new File(buildDir, "schema.json")
+}
+
+tasks.test.dependsOn downloadSchema
+

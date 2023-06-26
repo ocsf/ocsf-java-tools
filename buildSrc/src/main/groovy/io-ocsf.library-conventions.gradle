@@ -1,0 +1,25 @@
+// Define Java Library conventions for OCSF organization.
+// Projects need to use the organization's Java conventions and publish using Maven Publish
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'io-ocsf.java-conventions'
+}
+
+// Projects have the 'io.ocsf' group by convention
+group = 'io.ocsf'
+
+// TODO:
+// publishing {
+//     publications {
+//         library(MavenPublication) {
+//             from components.java
+//         }
+//     }
+//     repositories {
+//         maven {
+//             name "myOrgPrivateRepo"
+//             url 'build/my-repo'
+//         }
+//     }
+// }

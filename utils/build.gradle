@@ -1,0 +1,6 @@
+plugins {
+    id 'io-ocsf.library-conventions'
+}
+
+dependencies {
+}

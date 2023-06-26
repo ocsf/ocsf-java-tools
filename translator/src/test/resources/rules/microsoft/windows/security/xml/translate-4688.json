@@ -1,0 +1,135 @@
+{
+  "desc": "Translates Windows 4688 (A new process has been created).",
+  "when": "EventID = '4688'",
+
+  "rules": [
+    {
+      "include": "common.json"
+    },
+    {
+      "include": "activity.json"
+    },
+    {
+      "include": "microsoft/windows/windows.json"
+    },
+
+    {
+      "class_id": {
+        "desc": "Process Activity Class(114)",
+        "@value": 114
+      }
+    },
+    {
+      "disposition_id": {
+        "desc": "Launched (1)",
+        "@value": 1
+      }
+    },
+    {
+      "message": {
+        "@value": "A new process has been created."
+      }
+    },
+
+    {
+      "EventData.LogonProcessName": {
+        "desc": "Translate the Windows Logon Process name.",
+        "@move": "actor_process.name"
+      }
+    },
+    {
+      "EventData.ProcessId": {
+        "@move": {
+          "name": "actor_process.pid",
+          "type": "integer"
+        }
+      }
+    },
+    {
+      "EventData.ParentProcessName": {
+        "@move": {
+          "name": "actor_process.file",
+          "type": "path"
+        }
+      }
+    },
+    {
+      "actor_process.file.type_id": {
+        "@value": 1
+      }
+    },
+
+    {
+      "EventData.NewProcessName": {
+        "@copy": "process.name"
+      }
+    },
+    {
+      "EventData.NewProcessName": {
+        "@move": {
+          "name": "process.file",
+          "type": "path"
+        }
+      }
+    },
+    {
+      "process.file.type_id": {
+        "@value": 1
+      }
+    },
+    {
+      "EventData.NewProcessId": {
+        "@move": {
+          "name": "process.pid",
+          "type": "integer"
+        }
+      }
+    },
+    {
+      "EventData.CommandLine": {
+        "@move": "process.cmd_line"
+      }
+    },
+
+    {
+      "EventData.TargetUserName": {
+        "@move": "user.name"
+      }
+    },
+    {
+      "EventData.TargetDomainName": {
+        "@move": "user.domain"
+      }
+    },
+    {
+      "EventData.TargetUserSid": {
+        "@move": "user.uid"
+      }
+    },
+    {
+      "EventData.TargetLogonId": {
+        "@move": "user.session_uid"
+      }
+    },
+    {
+      "EventData.SubjectUserName": {
+        "@move": "session.user.name"
+      }
+    },
+    {
+      "EventData.SubjectDomainName": {
+        "@move": "session.user.domain"
+      }
+    },
+    {
+      "EventData.SubjectUserSid": {
+        "@move": "session.user.uid"
+      }
+    },
+    {
+      "EventData.SubjectLogonId": {
+        "@move": "session.uid"
+      }
+    }
+  ]
+}

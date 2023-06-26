@@ -18,6 +18,7 @@ package io.ocsf.schema.parsers;
 
 import io.ocsf.schema.Event;
 import io.ocsf.utils.Maps;
+import io.ocsf.utils.Strings;
 
 import java.util.ArrayList;
 import java.util.HashMap;

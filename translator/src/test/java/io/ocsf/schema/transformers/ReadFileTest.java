@@ -48,6 +48,9 @@ public class ReadFileTest extends TestCase
     Assert.assertNotNull(Transformer.fromFile(
         path,
         Paths.get("microsoft/windows/security/xml/translate-4625.json")));
+    Assert.assertNotNull(Transformer.fromFile(
+        path,
+        Paths.get("cisco/111010.json")));
   }
 
   public void testTranslators() throws IOException
@@ -57,7 +60,8 @@ public class ReadFileTest extends TestCase
     translators.addFile("4688", Paths.get("microsoft/windows/security/xml/translate-4688.json"));
     translators.addFile("4624", Paths.get("microsoft/windows/security/xml/translate-4624.json"));
     translators.addFile("4625", Paths.get("microsoft/windows/security/xml/translate-4625.json"));
+    translators.addFile("111010", Paths.get("cisco/111010.json"));
 
-    assertEquals(3, translators.size());
+    assertEquals(4, translators.size());
   }
 }

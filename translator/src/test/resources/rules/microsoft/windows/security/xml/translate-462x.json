@@ -1,0 +1,117 @@
+[
+  {
+    "class_id": {
+      "desc": "Authentication Activity Class(101)",
+      "@value": 101
+    }
+  },
+  {
+    "disposition_id": {
+      "desc": "User Logon(1)",
+      "@value": 1
+    }
+  },
+
+  {
+    "EventData.ProcessName": {
+      "@move": "actor_process.file.name"
+    }
+  },
+  {
+    "EventData.LogonProcessName": {
+      "desc": "Translate the Windows Logon Process name.",
+      "@move": "actor_process.name"
+    }
+  },
+  {
+    "EventData.ProcessId": {
+      "desc": "Translate the Windows Process ID.",
+      "@move": {
+        "name": "actor_process.pid",
+        "type": "integer"
+      }
+    }
+  },
+  {
+    "EventData.SubjectUserName": {
+      "@move": "user.name"
+    }
+  },
+  {
+    "EventData.SubjectDomainName": {
+      "@move": "user.domain"
+    }
+  },
+  {
+    "EventData.SubjectUserSid": {
+      "@move": "user.uid"
+    }
+  },
+  {
+    "EventData.SubjectLogonId": {
+      "@move": "user.session_uid"
+    }
+  },
+
+  {
+    "EventData.LogonType": {
+      "desc": "Translate the Windows Logon Type.",
+      "@move": {
+        "name": "session.logon_type_id",
+        "type": "integer"
+      }
+    }
+  },
+  {
+    "EventData.TargetUserName": {
+      "@move": "session.user.name"
+    }
+  },
+  {
+    "EventData.TargetDomainName": {
+      "@move": "session.user.domain"
+    }
+  },
+  {
+    "EventData.TargetUserSid": {
+      "@move": "session.user.uid"
+    }
+  },
+  {
+    "EventData.TargetLogonId": {
+      "@move": "session.uid"
+    }
+  },
+  {
+    "EventData.IpAddress": {
+      "@move": "session.src.ip"
+    }
+  },
+  {
+    "EventData.WorkstationName": {
+      "@move": "session.src.hostname"
+    }
+  },
+  {
+    "EventData.IpPort": {
+      "@move": {
+        "name": "session.src.port",
+        "type": "integer"
+      }
+    }
+  },
+  {
+    "EventData.AuthenticationPackageName": {
+      "desc": "Translate the Windows Authentication Package.",
+      "@enum": {
+        "name": "session.auth_protocol_id",
+        "default": 0,
+        "other": "session.auth_protocol",
+        "values": {
+          "ntlm": 1,
+          "kerberos": 2
+        }
+      }
+    }
+  }
+]

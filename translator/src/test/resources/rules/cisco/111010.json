@@ -1,0 +1,50 @@
+{
+  "desc": "Translates Cisco ASA-5-111010 (A user made a configuration change).",
+  "when": "code = 111010",
+  "parser": {
+    "name": "message",
+    "pattern": "User '#{username}', running '#{application}' from IP #{ip_addr}, executed '#{cmd}'",
+    "output": "event_data"
+  },
+
+  "rules": [
+    {
+      "host": {
+        "@move": "origin.device.ip"
+      }
+    },
+    {
+      "event_data.username": {
+        "@move": "user.name"
+      }
+    }
+  ],
+
+  "ruleset": [
+    {
+      "desc": "Checks for admin users to set the user.type_id",
+      "when": "data.username in ['admin', 'root']",
+      "rules": [
+        {
+          "user.type_id": {
+            "@value": 2
+          }
+        },
+        {
+          "user.type_id": {
+            "@value": {
+              "when": "data.username != null",
+              "value": 1
+            }
+          }
+        },
+        {
+          "data.username": {
+            "@remove": true
+          }
+        }
+      ]
+    }
+  ]
+
+}

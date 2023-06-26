@@ -1,0 +1,102 @@
+[
+  // set default values for the required attributes
+  {
+    "device.type_id": {
+      "desc": "The device type is unknown(0)",
+      "@value": 0
+    }
+  },
+  {
+    "device.os.type_id": {
+      "desc": "The device OS is Windows(100)",
+      "@value": 100
+    }
+  },
+  {
+    "device.os.name": {
+      "@value": "Microsoft Windows"
+    }
+  },
+  {
+    "Computer": {
+      "@move": "device.hostname"
+    }
+  },
+
+  {
+    "TimeCreated.SystemTime": {
+      "desc": "Translate the event time",
+      "@move": {
+        "name": "time",
+        "type": "timestamp",
+
+        // if timestamp is missing, then use the current time
+        "default": ""
+      }
+    }
+  },
+  {
+    "Task" : {
+      "@move": "category"
+    }
+  },
+  {
+    "EventID": {
+      "desc": "Translate the Windows Event ID.",
+      "@move": {
+        "name": "origin.ref_event_code",
+        "type": "string"
+      }
+    }
+  },
+  {
+    "Correlation.ActivityID": {
+      "@move": "correlation_uid"
+    }
+  },
+  {
+    "EventRecordID": {
+      "desc": "Translate the Windows Event EventRecordID.",
+      "@move": "origin.ref_event_uid"
+    }
+  },
+  {
+    "origin.source.type_id": {
+      "@value": 4
+      // ETW	The event was logged from the Event Tracing for Windows
+    }
+  },
+  {
+    "Channel": {
+      "@move": "origin.source.facility"
+    }
+  },
+  {
+    "origin.product.name": {
+      "@value": "Microsoft Windows"
+    }
+  },
+  {
+    "Provider.Name": {
+      "@move": "origin.feature.name"
+    }
+  },
+  {
+    "Provider.Guid": {
+      "@move": "origin.feature.uid"
+    }
+  },
+  {
+    "Opcode": {
+      "desc": "Translate the Opcode.",
+      "@enum": {
+        "name": "status_id",
+        "default": 0,
+        "other": "status",
+        "values": {
+          "0": 1
+        }
+      }
+    }
+  }
+]

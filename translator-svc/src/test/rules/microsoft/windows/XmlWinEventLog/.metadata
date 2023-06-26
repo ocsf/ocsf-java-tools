@@ -1,0 +1,4 @@
+{
+  "desc": "Windows Event Log data",
+  "type": "XmlWinEventLog"
+}

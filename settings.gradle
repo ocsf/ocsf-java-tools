@@ -16,3 +16,4 @@ rootProject.name = 'ocsf-tools'
 include('utils')
 include('schema')
 include('translator')
+include('translator-svc')

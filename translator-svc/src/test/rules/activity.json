@@ -1,0 +1,14 @@
+[
+  {
+    "category_id": {
+      "desc": "Set the event category_id to Activity(1) category",
+      "@value": 1
+    }
+  },
+  {
+    "severity_id": {
+      "desc": "Set the event severity_id to Informational(1)",
+      "@value": 1
+    }
+  }
+]

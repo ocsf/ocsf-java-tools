@@ -1,0 +1,23 @@
+[
+  {
+    "metadata.version": {
+      "desc": "Set the event schema version",
+      "@value": "1.0.0"
+    }
+  },
+  {
+    "customer_uid": {
+      "@move": "metadata.customer_uid"
+    }
+  },
+  {
+    "source_type": {
+      "@move": "metadata.source_type"
+    }
+  },
+  {
+    "raw_data": {
+      "@move": "raw_data"
+    }
+  }
+]

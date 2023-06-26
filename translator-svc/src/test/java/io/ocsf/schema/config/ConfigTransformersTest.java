@@ -32,6 +32,6 @@ public class ConfigTransformersTest
     final ProcessorList<Transformers> transformers = ConfigTransformers.load("src/test/rules");
 
     Assert.assertEquals(1, transformers.size());
-    Assert.assertEquals(5, transformers.get("XmlWinEventLog").size());
+    Assert.assertEquals(2, transformers.get("XmlWinEventLog").size());
   }
 }

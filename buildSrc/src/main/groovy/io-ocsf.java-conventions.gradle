@@ -13,13 +13,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 }
 
-// Apply a specific Java toolchain to ease working on different environments.
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
-    }
-}
-
 // Enable deprecation messages when compiling Java code
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << "-Xlint:deprecation"

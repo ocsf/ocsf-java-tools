@@ -19,8 +19,8 @@ package io.ocsf.schema;
 
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -52,7 +52,7 @@ import static io.ocsf.utils.Files.readJson;
  */
 public final class Schema
 {
-  private static final Logger logger = LogManager.getLogger(Schema.class);
+  private static final Logger logger = LoggerFactory.getLogger(Schema.class);
 
   private static final String TYPES = "types";
   private static final String OBJECTS = "objects";

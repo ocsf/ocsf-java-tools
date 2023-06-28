@@ -23,15 +23,15 @@ import io.ocsf.schema.concurrent.Source;
 import io.ocsf.schema.concurrent.Transformer;
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.Parser;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.Map;
 import java.util.function.Function;
 
 public class EventParser extends Transformer
 {
-  private static final Logger logger = LogManager.getLogger(EventParser.class);
+  private static final Logger logger = LoggerFactory.getLogger(EventParser.class);
 
   private final Parser parser;
 

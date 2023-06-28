@@ -17,12 +17,12 @@
 package io.ocsf.schema.concurrent;
 
 import io.ocsf.schema.Event;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 public abstract class Transformer implements Runnable
 {
-  private static final Logger logger = LogManager.getLogger(Transformer.class);
+  private static final Logger logger = LoggerFactory.getLogger(Transformer.class);
 
   private final String name;
   private final Source<Event> source;

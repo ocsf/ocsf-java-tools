@@ -16,14 +16,14 @@
 
 package io.ocsf.schema.concurrent;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.Objects;
 
 public class MutableProcessorList<T> extends ProcessorList<T>
 {
-  private static final Logger logger = LogManager.getLogger(MutableProcessorList.class);
+  private static final Logger logger = LoggerFactory.getLogger(MutableProcessorList.class);
 
   public MutableProcessorList(final String name)
   {

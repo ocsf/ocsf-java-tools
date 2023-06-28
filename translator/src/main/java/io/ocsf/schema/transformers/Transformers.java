@@ -20,8 +20,8 @@ import io.ocsf.schema.Event;
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.ParserException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -37,7 +37,7 @@ import java.util.Objects;
  */
 public final class Transformers
 {
-  private static final Logger logger = LogManager.getLogger(Transformers.class);
+  private static final Logger logger = LoggerFactory.getLogger(Transformers.class);
 
   private final Path home;
 

@@ -21,14 +21,14 @@ import io.ocsf.schema.concurrent.Sink;
 import io.ocsf.schema.concurrent.Source;
 import io.ocsf.schema.concurrent.Transformer;
 import io.ocsf.schema.transformers.Transformers;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.Map;
 
 public class EventNormalizer extends Transformer
 {
-  private static final Logger logger = LogManager.getLogger(EventNormalizer.class);
+  private static final Logger logger = LoggerFactory.getLogger(EventNormalizer.class);
 
   private final Transformers transformers;
 

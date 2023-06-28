@@ -21,8 +21,8 @@ import io.ocsf.utils.Maps;
 import io.ocsf.utils.Parser;
 import io.ocsf.utils.Strings;
 import io.ocsf.schema.RawEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -37,7 +37,7 @@ import java.util.Objects;
  */
 public class Parsers
 {
-  private static final Logger logger = LogManager.getLogger(Parsers.class);
+  private static final Logger logger = LoggerFactory.getLogger(Parsers.class);
 
   private final Map<String, Parser> parsers = new HashMap<>();
 

@@ -20,8 +20,8 @@ import io.ocsf.schema.concurrent.MutableProcessorList;
 import io.ocsf.schema.concurrent.ProcessorList;
 import io.ocsf.utils.Maps;
 import io.ocsf.schema.transformers.Transformers;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public final class ConfigTransformers
 {
-  private static final Logger logger = LogManager.getLogger(ConfigTransformers.class);
+  private static final Logger logger = LoggerFactory.getLogger(ConfigTransformers.class);
 
   private static final String SOURCE_TYPE_FILE = ".metadata";
 

@@ -25,8 +25,8 @@ import io.ocsf.schema.concurrent.Source;
 import io.ocsf.schema.concurrent.Transformer;
 import io.ocsf.schema.transformers.Transformers;
 import io.ocsf.utils.Parser;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class EventDemuxer extends Transformer
 {
-  private static final Logger logger = LogManager.getLogger(EventDemuxer.class);
+  private static final Logger logger = LoggerFactory.getLogger(EventDemuxer.class);
 
   private final ProcessorList<Parser> parsers;
   private final ProcessorList<Transformers> normalizers;

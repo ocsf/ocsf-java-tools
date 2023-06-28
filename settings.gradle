@@ -12,9 +12,9 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.4.0'
 }
 
-rootProject.name = 'ocsf-tools'
-include('utils')
-include('schema')
-include('translator')
-include('translator-svc')
-include('translator-cli')
+rootProject.name = 'ocsf-java-tools'
+include('ocsf-utils')
+include('ocsf-schema')
+include('ocsf-translator')
+include('ocsf-translator-svc')
+include('ocsf-translator-cli')

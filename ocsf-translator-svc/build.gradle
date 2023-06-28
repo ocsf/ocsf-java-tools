@@ -1,0 +1,8 @@
+plugins {
+    id 'io-ocsf.library-conventions'
+}
+
+dependencies {
+    implementation project(':ocsf-utils')
+    implementation project(':ocsf-translator')
+}

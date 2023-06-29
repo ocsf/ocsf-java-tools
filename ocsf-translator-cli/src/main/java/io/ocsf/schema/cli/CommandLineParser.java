@@ -50,9 +50,9 @@ public class CommandLineParser
      * @throws IllegalArgumentException if arg values are malformed
      */
     Argument(final char opt,
-             final String long_opt,
-             final String name,
-             final String desc) throws IllegalArgumentException
+      final String long_opt,
+      final String name,
+      final String desc) throws IllegalArgumentException
     {
       if (!Character.isLetterOrDigit(opt))
       {
@@ -111,7 +111,8 @@ public class CommandLineParser
     {
       if (name == null)
       {
-        throw new IllegalArgumentException(String.format("flag -%c does not take an argument", opt));
+        throw new IllegalArgumentException(String.format("flag -%c does not take an argument",
+          opt));
       }
       this.value = value;
     }
@@ -207,13 +208,15 @@ public class CommandLineParser
 
   private Argument getLongArg(final String longArg)
   {
-    final Optional<Argument> arg = arguments.stream().filter(a -> a.long_opt != null && a.long_opt.equals(longArg)).findFirst();
+    final Optional<Argument> arg =
+      arguments.stream().filter(a -> a.long_opt != null && a.long_opt.equals(longArg)).findFirst();
     return arg.orElse(null);
   }
 
   public Argument getArg(final char o)
   {
-    final Optional<Argument> arg = arguments.stream().filter(a -> a.opt > 0 && a.opt == o).findFirst();
+    final Optional<Argument> arg =
+      arguments.stream().filter(a -> a.opt > 0 && a.opt == o).findFirst();
     return arg.orElse(null);
   }
 
@@ -236,9 +239,9 @@ public class CommandLineParser
     final StringBuilder help = new StringBuilder();
 
     help.append("Usage: ")
-        .append(this.name)
-        .append(" <options> <files>\n")
-        .append(this.help);
+      .append(this.name)
+      .append(" <options> <files>\n")
+      .append(this.help);
 
     for (final Argument arg : arguments)
     {
@@ -279,8 +282,9 @@ public class CommandLineParser
   }
 
   /**
-   * parse the command line with argv. Args not processed by the command line flags are copied to extraArgs. Exits
-   * program with error message on command line violations (unknown flag, or missing arg on flag).
+   * parse the command line with argv. Args not processed by the command line flags are copied to
+   * extraArgs. Exits program with error message on command line violations (unknown flag, or
+   * missing arg on flag).
    *
    * @param argv - the command line args
    */

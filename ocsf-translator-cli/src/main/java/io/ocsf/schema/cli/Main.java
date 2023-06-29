@@ -42,13 +42,13 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
- * OCSF event transformer command line tool.
+ * OCSF event translator command line tool.
  */
 public final class Main
 {
   private Main() {}
 
-  public static final String Name = "schema-cli";
+  public static final String Name = "ocsf-translator-cli";
 
   private static final CommandLineParser clp;
 
@@ -315,72 +315,39 @@ public final class Main
     observables = schemaFile != null && clp.getArg('o').isSet();
   }
 
-  // Lazy initialization
-  private static Optional<Parser> parser = Optional.empty();
-
   private static Optional<Parser> parser()
   {
-    if (parser.isEmpty())
+    final Argument arg = clp.getArg('p');
+
+    if (arg.isSet())
     {
-      final Argument arg = clp.getArg('p');
+      final Parser p = parsers.parser(arg.value());
 
-      if (arg.isSet())
-      {
-        final Parser p = parsers.parser(arg.value());
+      if (p != null)
+        return Optional.of(p);
 
-        if (p == null)
-        {
-          System.err.println("Invalid parser name: " + arg.value());
-          printParsers();
-          System.exit(2);
-        }
-        else
-          parser = Optional.of(p);
-      }
-      else
-      {
-        parser = Optional.empty();
-      }
+      System.err.println("Invalid parser name: " + arg.value());
+      printParsers();
+      System.exit(2);
     }
 
-    return parser;
+    return Optional.empty();
   }
-
-  // Lazy initialization
-  private static Optional<Transformer.Translator> translator = Optional.empty();
 
   private static Optional<Transformer.Translator> translator()
   {
-    if (translator.isEmpty())
-    {
-      final Argument ruleDir  = clp.getArg('R');
-      final Argument ruleFile = clp.getArg('r');
+    final Argument ruleDir  = clp.getArg('R');
+    final Argument ruleFile = clp.getArg('r');
 
-      if (ruleDir.isSet() && ruleFile.isSet())
-      {
-        translator = Optional.ofNullable(translator(ruleDir.value(), ruleFile.value()));
-      }
-      else
-      {
-        translator = Optional.empty();
-      }
-    }
-
-    return translator;
+    return ruleDir.isSet() && ruleFile.isSet() ?
+      Optional.ofNullable(translator(ruleDir.value(), ruleFile.value())) :
+      Optional.empty();
   }
-
-  // Lazy initialization
-  private static Optional<SchemaServices> validator = Optional.empty();
 
   private static Optional<SchemaServices> validator()
   {
-    if (validator.isEmpty())
-    {
-      validator = clp.getArg('v').isSet() ? Optional.of(new SchemaServices(schemaUrl)) :
-        Optional.empty();
-    }
-
-    return validator;
+    return clp.getArg('v').isSet() ?
+      Optional.of(new SchemaServices(schemaUrl)) : Optional.empty();
   }
 
   private static void parse(final Parser parser, final List<String> files,
@@ -713,5 +680,31 @@ public final class Main
     // found it - return the path relative to basedir.
     final String name = matches.get(0).substring(baseDir.getPath().length());
     return name.charAt(0) == '/' ? name.substring(1) : name;
+  }
+
+  private static void runPerformanceTest(final String home, final String[] args)
+  {
+    System.out.println("Using rules home : " + home);
+
+    try
+    {
+      final Schema schema = new Schema(schemaFile, schemaEnums, observables);
+
+      final LoadRunner runner = new LoadRunner(home, schema);
+      for (final String file : args)
+      {
+        if (file.endsWith(".json"))
+        {
+          System.out.println("Using data file  : " + file);
+          runner.run(file);
+        }
+      }
+
+      runner.printResults();
+    }
+    catch (final IOException ex)
+    {
+      System.err.printf("Performance test failed: %s%n", ex);
+    }
   }
 }

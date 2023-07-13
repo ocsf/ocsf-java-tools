@@ -17,7 +17,6 @@
 
 package io.ocsf.parsers;
 
-import io.ocsf.parsers.CEFParser;
 import io.ocsf.utils.Json;
 import org.junit.Test;
 

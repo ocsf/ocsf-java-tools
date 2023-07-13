@@ -17,7 +17,6 @@
 
 package io.ocsf.parsers;
 
-import io.ocsf.parsers.Syslog;
 import io.ocsf.utils.FMap;
 import org.junit.Assert;
 import org.junit.Test;

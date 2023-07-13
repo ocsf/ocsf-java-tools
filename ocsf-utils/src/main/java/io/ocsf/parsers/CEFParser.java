@@ -17,7 +17,6 @@
 
 package io.ocsf.parsers;
 
-import io.ocsf.parsers.NameValueParser;
 import io.ocsf.utils.ParserException;
 
 import java.util.HashMap;

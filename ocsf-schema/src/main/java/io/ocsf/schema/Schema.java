@@ -39,8 +39,9 @@ import static io.ocsf.utils.Files.readJson;
  * <p>
  * The enrichment adds:
  * <ul>
- *  <li><code>type_uid</code>  and <code>type_name</code> attributes</li>
- *  <li>textual values of the enum attributes</li>
+ *  <li>the <code>type_uid</code> attribute</li>
+ *  <li>the textual values, aka siblings, of the enum attributes</li>
+ *  <li>the <code>observables</code> associated with the event</li>
  * </ul>
  * <p>
  * The <code>type_uid</code> value is calculated based on the <code>class_uid</code> and
@@ -91,36 +92,41 @@ public final class Schema
   // All event observables: class_id -> observables (name -> observable)
   private final Map<Integer, List<Map<String, Object>>> observables;
 
-  private final boolean translateEnums;
+  private final boolean addEnumSiblings;
+  private final boolean addObservables;
 
-  private final boolean generateObservables;
   private final boolean schemaLoaded;
 
   /**
-   * Load the schema in memory.
+   * Load the schema in memory. The schema enrichment defaults to adding the type_uid only.
    * <p>
-   * Note: Use a single instance per JVM.
+   * Note: This class caches the entire schema in memory, thus use a single instance per JVM.
    *
    * @param path the schema JSON file
    */
   public Schema(final Path path)
   {
-    this(path, false, true);
+    this(path, false, false);
   }
 
-  public Schema(final Path path, final boolean translateEnums)
+  /**
+   * Load the schema in memory.
+   * <p>
+   * Note: This class caches the entire schema in memory, thus use a single instance per JVM.
+   *
+   * @param path        the schema JSON file
+   * @param siblings    if true, then enhance the event data by adding the enumerated text values.
+   * @param observables if true, then enhance the event data by adding the observables associated
+   *                    with the event.
+   */
+  public Schema(final Path path, final boolean siblings, final boolean observables)
   {
-    this(path, translateEnums, true);
-  }
-
-  public Schema(final Path path, final boolean translateEnums, final boolean generateObservables)
-  {
-    this.translateEnums = translateEnums;
-    this.generateObservables = generateObservables;
+    this.addEnumSiblings = siblings;
+    this.addObservables = observables;
 
     if (path != null)
     {
-      logger.info("Using schema file: {}, translateEnums: {}", path, translateEnums);
+      logger.info("Using schema file: {}, addEnumSiblings: {}", path, addEnumSiblings);
 
       if (Files.isRegularFile(path))
       {
@@ -160,19 +166,34 @@ public final class Schema
   }
 
   /**
-   * Enriches the event data using the loaded schema.
+   * Enriches the event data using the default enrichment configuration.
    *
    * @param data the original event
    * @return enriched event data
    */
   public Map<String, Object> enrich(final Map<String, Object> data)
   {
+    return enrich(data, addEnumSiblings, addObservables);
+  }
+
+  /**
+   * Enriches the event data using the loaded schema.
+   *
+   * @param data        the original event
+   * @param siblings    if true, then enhance the event data by adding the enumerated text values.
+   * @param observables if true, then enhance the event data by adding the observables associated
+   *                    with the event.
+   * @return enriched event data
+   */
+  public Map<String, Object> enrich(
+    final Map<String, Object> data, final boolean siblings, final boolean observables)
+  {
     if (schemaLoaded)
     {
       final Map<String, Object> type = eventClassType(data);
 
       // If the class_id does not exist, then return the data as-is
-      return type != null ? enrich(data, type) : data;
+      return type != null ? enrich(data, type, siblings, observables) : data;
     }
 
     return data;
@@ -208,32 +229,10 @@ public final class Schema
    * @return a list of observables
    */
   public Optional<Map<String, Map<String, Object>>> getObservables(final int classId,
-    final Observables.TypeID typeId)
+    final int typeId)
   {
     return Observables.filter(observables.get(classId), typeId);
   }
-
-  /**
-   * Returns the associations for the given class ID.
-   *
-   * @param classId the class ID as defined in the schema
-   * @return the class associations
-   */
-  public Optional<Associations> getAssociations(final int classId)
-  {
-    final Map<String, Object> data = classes.get(classId);
-
-    if (data != null)
-    {
-      final Map<String, List<String>> associations =
-        Maps.typecast(data.get(Dictionary.ASSOCIATIONS));
-      if (associations != null && !associations.isEmpty())
-        return Optional.of(new Associations(associations));
-    }
-
-    return Optional.empty();
-  }
-
 
   /**
    * Returns the schema object for the given object name.
@@ -246,7 +245,7 @@ public final class Schema
     return Optional.ofNullable(objects.get(name));
   }
 
-  static final int makeEventUid(final int classId, final int id)
+  static int makeEventUid(final int classId, final int id)
   {
     return id >= 0 ? classId * 100 + id : Schema.OTHER_ID;
   }
@@ -296,7 +295,7 @@ public final class Schema
 
   private Map<String, Object> eventClassType(final Map<String, Object> data)
   {
-    final Object classId = data.get(Dictionary.CLASS_ID);
+    final Object classId = data.get(Dictionary.CLASS_UID);
     if (classId instanceof Integer)
     {
       final Map<String, Object> type = classes.get(((Integer) classId));
@@ -304,7 +303,7 @@ public final class Schema
       if (type != null)
       {
         if (logger.isDebugEnabled())
-          logger.debug("Translating event class: {}", classId);
+          logger.debug("Enriching event class: {}", classId);
 
         return type;
       }
@@ -315,7 +314,10 @@ public final class Schema
   }
 
   private Map<String, Object> enrich(
-    final Map<String, Object> data, final Map<String, Object> type)
+    final Map<String, Object> data,
+    final Map<String, Object> type,
+    final boolean siblings,
+    final boolean observables)
   {
     final int classId = (int) type.get(UID);
 
@@ -326,23 +328,69 @@ public final class Schema
 
     data.put(Dictionary.TYPE_UID, uid);
 
-    if (translateEnums)
+    if (siblings)
     {
-      final List<Map<String, Object>> observables = new ArrayList<>();
-      final Map<String, Object>       enriched    = new HashMap<>(data.size());
+      final List<Map<String, Object>> list     = new ArrayList<>();
+      final Map<String, Object>       enriched = new HashMap<>(data.size());
 
-      enrich(null, data, type, enriched, observables);
+      enrich(null, data, type, enriched, list);
 
-      if (generateObservables)
+      if (observables)
       {
-        if (!observables.isEmpty())
-          enriched.put(Dictionary.OBSERVABLES, observables);
+        if (!list.isEmpty())
+          enriched.put(Dictionary.OBSERVABLES, list);
       }
 
       return enriched;
     }
 
     return data;
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> enrich(
+    final String parent,
+    final Map<String, Object> data,
+    final Map<String, Object> type,
+    final Map<String, Object> enriched)
+  {
+    final Map<String, Object> attributes = (Map<String, Object>) type.get(ATTRIBUTES);
+
+    data.forEach((name, value) -> {
+      final String path = parent != null ? parent + "." + name : name;
+
+      final Map<String, Object> attribute = (Map<String, Object>) attributes.get(name);
+      if (attribute != null)
+      {
+        final Map<String, Object> enumeration = (Map<String, Object>) attribute.get(ENUM);
+
+        if (enumeration != null)
+        {
+          updateEnum(enriched, enumeration, enumSibling(name, attribute), value);
+        }
+        else if (value instanceof Map<?, ?>)
+        {
+          value = enrichEmbeddedObject(
+            path, (String) attribute.get(OBJECT_TYPE), (Map<String, Object>) value);
+        }
+        else if (value instanceof List<?>)
+        {
+          if (Boolean.TRUE.equals(attribute.get(IS_ARRAY)))
+          {
+            value = enrichEmbeddedArray(path, (String) attribute.get(OBJECT_TYPE),
+              (List<Object>) value);
+          }
+          else
+          {
+            logger.warn("SCHEMA: Attribute {} is not an array in the schema", name);
+          }
+        }
+      }
+
+      enriched.put(name, value);
+    });
+
+    return enriched;
   }
 
   @SuppressWarnings("unchecked")
@@ -437,6 +485,74 @@ public final class Schema
     }
 
     return key;
+  }
+
+  private Object enrichEmbeddedObject(
+    final String name,
+    final String obj,
+    final Map<String, Object> value)
+  {
+    if (obj != null)
+    {
+      final Map<String, Object> object = objects.get(obj);
+      if (object != null)
+      {
+        if (logger.isTraceEnabled())
+          logger.trace("Embedded object, name: {}, type: {}", name, obj);
+
+        return enrich(name, value, object, new HashMap<>(value.size()));
+      }
+      else
+      {
+        logger.error("SCHEMA: attribute {} has invalid object type: {}", name, obj);
+      }
+    }
+    else
+    {
+      logger.warn("SCHEMA: Attribute {} is not an object in the schema", name);
+    }
+
+    return value;
+  }
+
+  @SuppressWarnings("unchecked")
+  private Object enrichEmbeddedArray(
+    final String name,
+    final String obj,
+    final List<Object> list)
+  {
+    if (!list.isEmpty() && list.get(0) instanceof Map<?, ?>)
+    {
+      if (obj != null)
+      {
+        final Map<String, Object> object = objects.get(obj);
+        if (object != null)
+        {
+          final ArrayList<Map<String, Object>> array = new ArrayList<>(list.size());
+
+          if (logger.isTraceEnabled())
+            logger.trace("Embedded array, name: {}, type: {}", name, obj);
+
+          list.forEach(i -> {
+            final Map<String, Object> o = (Map<String, Object>) i;
+
+            array.add(enrich(name, o, object, new HashMap<>(o.size())));
+          });
+
+          return array;
+        }
+        else
+        {
+          logger.error("SCHEMA: attribute {} has invalid object type: {}", name, obj);
+        }
+      }
+      else
+      {
+        logger.warn("SCHEMA: Array {}'s type is not an object in the schema", name);
+      }
+    }
+
+    return list;
   }
 
   private Object enrichEmbeddedObject(

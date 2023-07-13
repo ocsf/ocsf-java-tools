@@ -36,45 +36,6 @@ import static io.ocsf.schema.Schema.*;
 public final class Observables
 {
   /**
-   * The Observable type identifiers. Must be kept in sync with the schema.
-   */
-  public enum TypeID
-  {
-    Unknown,
-    Hostname,
-    IP_Address,
-    MAC_Address,
-    Username,
-    Email_Address,
-    URL_String,
-    File_Name,
-    File_Hash,
-    Process_Name,
-    Resource_UID,
-
-    Reserved11,
-    Reserved12,
-    Reserved13,
-    Reserved14,
-    Reserved15,
-    Reserved16,
-    Reserved17,
-    Reserved18,
-    Reserved19,
-
-    Endpoint,
-    User,
-    Email,
-    URL,
-    File,
-    Process,
-    Location,
-    Container,
-    Reg_Key,
-    Reg_Value
-  }
-
-  /**
    * Returns the observables associated with the given event.
    *
    * @param event the event data
@@ -119,12 +80,12 @@ public final class Observables
    * @return a list of observables that matched the type ID
    */
   public static Optional<List<Map<String, Object>>> observables(
-    final Map<String, Object> event, final TypeID typeId)
+    final Map<String, Object> event, final int typeId)
   {
     final List<Map<String, Object>> observables = Maps.typecast(event.get(Dictionary.OBSERVABLES));
     if (observables != null)
     {
-      final Integer id = typeId.ordinal();
+      final Integer id = typeId;
 
       final List<Map<String, Object>> acc = new ArrayList<>();
 
@@ -148,7 +109,7 @@ public final class Observables
    * @return a map of observables that matched the type ID
    */
   public static Optional<Map<String, Map<String, Object>>> getObservables(
-    final Map<String, Object> event, final TypeID typeId)
+    final Map<String, Object> event, final int typeId)
   {
     return filter(Maps.typecast(event.get(Dictionary.OBSERVABLES)), typeId);
   }
@@ -161,18 +122,18 @@ public final class Observables
    * @return observables that matched the type ID
    */
   public static Optional<Map<String, Map<String, Object>>> filter(
-    final List<Map<String, Object>> observables, final TypeID typeId)
+    final List<Map<String, Object>> observables, final int typeId)
   {
     if (observables != null)
     {
-      final Integer id = typeId.ordinal();
+      final Integer id = typeId;
 
       final HashMap<String, Map<String, Object>> acc = new HashMap<>();
 
       observables.forEach(o -> {
         if (id.equals(o.get(TYPE_ID)))
         {
-          final String name = (String) o.get("name");
+          final String name = (String) o.get(Schema.NAME);
           acc.put(name, o);
         }
       });
@@ -191,8 +152,7 @@ public final class Observables
     final HashMap<String, Map<String, Object>> acc = new HashMap<>();
 
     observables.forEach(o -> {
-      final String name = (String) o.get("name");
-
+      final String name = (String) o.get(Schema.NAME);
       acc.put(name, o);
     });
 

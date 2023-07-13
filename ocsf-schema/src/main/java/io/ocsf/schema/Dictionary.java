@@ -25,23 +25,16 @@ public final class Dictionary
 
   public static final String TYPE_ID = "type_id";
 
-  /**
-   * Common attribute names.
-   */
   public static final String CLASS_NAME = "class_name";
-  public static final String CLASS_ID = "class_uid";
+  public static final String CLASS_UID = "class_uid";
 
   public static final String ACTIVITY_NAME = "activity_name";
   public static final String ACTIVITY_ID = "activity_id";
 
-  public static final String DISPOSITION = "disposition";
-  public static final String DISPOSITION_ID = "disposition_id";
-
-  public static final String TYPE_UID = "type_uid";
   public static final String TYPE_NAME = "type_name";
+  public static final String TYPE_UID = "type_uid";
 
   public static final String OBSERVABLES = "observables";
-  public static final String ASSOCIATIONS = "associations";
 
   public static final Integer UNKNOWN_ID = 0;
 

@@ -30,15 +30,12 @@ public class InfobloxDhcpSyslogTest
 
   private static final String Rule = "{" +
       "  \"desc\": \"Translates Infoblox DHCP\"," +
-      "" +
       "  \"when\": \"message like 'DHCPACK'\"," +
-      "" +
       "  \"parser\": {" +
       "    \"name\": \"message\"," +
       "    \"pattern\": \"DHCPACK on #{ip} to #{mac} (#{hostname}) via #{interface} relay #{relay_interface} lease-duration #{lease_duration} #{_}\"," +
       "    \"output\": \"event_data\"" +
       "  }," +
-      "" +
       "  \"rules\": [" +
       "    {" +
       "      \"event_data.ip\": {" +
@@ -55,15 +52,12 @@ public class InfobloxDhcpSyslogTest
 
   private static final String RegexRule = "{" +
       "  \"desc\": \"Translates Infoblox DHCP\"," +
-      "" +
       "  \"when\": \"message like 'DHCPACK'\"," +
-      "" +
       "  \"parser\": {" +
       "    \"name\": \"message\"," +
       "    \"regex\": \"(?<evcls>DHCPACK)\\\\s+on\\\\s+(?<ip>\\\\S+)\\\\s+to\\\\s+(?<mac>\\\\S+)(?:\\\\s+\\\\((?<host>.+?)\\\\))?\\\\s+via\\\\s+(?<interface>.*)\\\\s+relay\\\\s+(?<relay>\\\\S+)\\\\s+lease-duration\\\\s+(?<duration>\\\\d+).*?(?:uid\\\\s+(?<uid>.+))?\"," +
       "    \"output\": \"event_data\"" +
       "  }," +
-      "" +
       "  \"rules\": [" +
       "    {" +
       "      \"event_data.ip\": {" +
@@ -80,9 +74,7 @@ public class InfobloxDhcpSyslogTest
 
   private static final String MultiStageParsingRule = "{" +
       "  \"desc\": \"Translates Infoblox DHCP\"," +
-      "" +
       "  \"when\": \"message like 'DHCPACK'\"," +
-      "" +
       "  \"parsers\": [{" +
       "    \"name\": \"message\"," +
       "    \"pattern\": \"DHCPACK on #{ip} to #{mac} (#{hostname}) via #{interface} relay #{relay_interface} lease-duration #{lease_duration} #{_}\"," +
@@ -93,7 +85,6 @@ public class InfobloxDhcpSyslogTest
       "    \"pattern\": \"#{ip1}.#{ip2}.#{ip3}.#{ip4}\"," +
       "    \"output\": \"event_data\"" +
       "  }]," +
-      "" +
       "  \"rules\": [" +
       "    {" +
       "      \"event_data.ip\": {" +
@@ -110,9 +101,7 @@ public class InfobloxDhcpSyslogTest
 
   private static final String MultiStageParsingRegex = "{" +
       "  \"desc\": \"Translates Infoblox DHCPACK event.\"," +
-      "" +
       "  \"when\": \"message like 'DHCPACK'\"," +
-      "" +
       "  \"parsers\": [" +
       "    {" +
       "      \"name\": \"message\"," +
@@ -125,7 +114,6 @@ public class InfobloxDhcpSyslogTest
       "      \"output\": \"event_data\"" +
       "    }" +
       "  ]," +
-      "" +
       "  \"rules\": [" +
       "    {" +
       "      \"class_uid\": {" +

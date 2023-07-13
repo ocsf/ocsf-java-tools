@@ -24,7 +24,7 @@ import io.ocsf.schema.concurrent.MutableProcessorList;
 import io.ocsf.schema.transformers.Transformers;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
-import io.ocsf.utils.Parser;
+import io.ocsf.parsers.Parser;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;

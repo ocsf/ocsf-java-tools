@@ -23,7 +23,7 @@ import io.ocsf.schema.config.ConfigParsers;
 import io.ocsf.schema.config.ConfigTransformers;
 import io.ocsf.schema.transformers.Transformers;
 import io.ocsf.utils.Maps;
-import io.ocsf.utils.Parser;
+import io.ocsf.parsers.Parser;
 
 import java.io.IOException;
 import java.util.Map;

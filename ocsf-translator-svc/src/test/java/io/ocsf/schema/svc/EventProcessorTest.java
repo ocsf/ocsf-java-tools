@@ -22,7 +22,7 @@ import io.ocsf.schema.Tests;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
 import io.ocsf.schema.transformers.Transformers;
-import io.ocsf.utils.Parser;
+import io.ocsf.parsers.Parser;
 import io.ocsf.utils.Strings;
 
 import org.junit.After;

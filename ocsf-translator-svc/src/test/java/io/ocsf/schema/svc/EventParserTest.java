@@ -21,7 +21,7 @@ import io.ocsf.schema.RawEvent;
 import io.ocsf.schema.Tests;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
-import io.ocsf.utils.Parser;
+import io.ocsf.parsers.Parser;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;

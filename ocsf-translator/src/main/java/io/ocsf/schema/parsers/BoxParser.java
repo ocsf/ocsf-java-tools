@@ -16,8 +16,8 @@
 
 package io.ocsf.schema.parsers;
 
-import io.ocsf.utils.NameValueParser;
-import io.ocsf.utils.Parser;
+import io.ocsf.parsers.NameValueParser;
+import io.ocsf.parsers.Parser;
 
 import java.util.Map;
 

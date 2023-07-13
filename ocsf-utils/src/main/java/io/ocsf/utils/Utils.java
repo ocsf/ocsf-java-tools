@@ -16,11 +16,6 @@
 
 package io.ocsf.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Helper function to parse text and number.
  */
@@ -88,28 +83,5 @@ public final class Utils
 
     return N;
   }
-
-  /**
-   * Returns the named groups found in the given regex pattern.
-   *
-   * @param pattern the pattern
-   * @return the named groups found in the pattern
-   */
-  public static List<String> getNamedGroups(final Pattern pattern)
-  {
-    final List<String> groups  = new ArrayList<>();
-    final Matcher      matcher = Pattern.compile("\\(\\?<(.+?)>.*?\\)").matcher(pattern.pattern());
-
-    while (matcher.find())
-    {
-      for (int i = 1; i <= matcher.groupCount(); ++i)
-      {
-        groups.add(matcher.group(i));
-      }
-    }
-
-    return groups;
-  }
-
 
 }

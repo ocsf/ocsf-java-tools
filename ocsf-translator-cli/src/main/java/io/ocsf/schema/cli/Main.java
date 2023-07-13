@@ -22,7 +22,7 @@ import io.ocsf.schema.Schema;
 import io.ocsf.schema.transformers.Transformer;
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Json;
-import io.ocsf.utils.Parser;
+import io.ocsf.parsers.Parser;
 import io.ocsf.utils.ParserException;
 import io.ocsf.schema.parsers.*;
 

@@ -21,7 +21,7 @@ import io.ocsf.schema.concurrent.BlockingQueue;
 import io.ocsf.schema.concurrent.Sink;
 import io.ocsf.schema.concurrent.Source;
 import io.ocsf.schema.transformers.Transformers;
-import io.ocsf.utils.Parser;
+import io.ocsf.parsers.Parser;
 
 /**
  * The EventProcessor concurrently runs a parser and a normalizer in two separate threads.

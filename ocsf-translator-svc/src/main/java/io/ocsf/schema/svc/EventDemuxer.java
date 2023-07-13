@@ -24,7 +24,7 @@ import io.ocsf.schema.concurrent.Sink;
 import io.ocsf.schema.concurrent.Source;
 import io.ocsf.schema.concurrent.Transformer;
 import io.ocsf.schema.transformers.Transformers;
-import io.ocsf.utils.Parser;
+import io.ocsf.parsers.Parser;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 

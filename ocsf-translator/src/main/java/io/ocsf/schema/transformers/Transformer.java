@@ -17,6 +17,8 @@
 
 package io.ocsf.schema.transformers;
 
+import io.ocsf.parsers.PatternParser;
+import io.ocsf.parsers.RegexParser;
 import io.ocsf.schema.Event;
 import io.ocsf.utils.*;
 import org.slf4j.LoggerFactory;
@@ -291,7 +293,7 @@ public final class Transformer
   }
 
   private static DataTranslator buildDataTranslator(
-    final Map<String, Object> parser, final Function<io.ocsf.utils.Parser, DataTranslator> builder)
+    final Map<String, Object> parser, final Function<io.ocsf.parsers.Parser, DataTranslator> builder)
   {
     final String pattern = (String) parser.get(PatternField);
     if (Strings.isNotEmpty(pattern))

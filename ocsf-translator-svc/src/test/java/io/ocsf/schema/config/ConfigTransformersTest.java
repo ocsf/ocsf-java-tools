@@ -17,7 +17,7 @@
 package io.ocsf.schema.config;
 
 import io.ocsf.schema.concurrent.ProcessorList;
-import io.ocsf.schema.transformers.Transformers;
+import io.ocsf.transformers.Transformers;
 import org.junit.Assert;
 import org.junit.Test;
 

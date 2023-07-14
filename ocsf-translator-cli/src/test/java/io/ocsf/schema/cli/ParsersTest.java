@@ -16,10 +16,10 @@
 
 package io.ocsf.schema.cli;
 
+import io.ocsf.parsers.*;
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Json;
 import io.ocsf.utils.ParserException;
-import io.ocsf.schema.parsers.*;
 
 import java.io.File;
 import java.io.IOException;

@@ -16,10 +16,9 @@
 
 package io.ocsf.schema.config;
 
+import io.ocsf.parsers.*;
 import io.ocsf.schema.concurrent.MutableProcessorList;
 import io.ocsf.schema.concurrent.ProcessorList;
-import io.ocsf.parsers.Parser;
-import io.ocsf.schema.parsers.*;
 
 /**
  * Initializes all parsers.

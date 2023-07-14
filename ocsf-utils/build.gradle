@@ -2,5 +2,8 @@ plugins {
     id 'io-ocsf.library-conventions'
 }
 
+group = project['artifactGroup'] + '.utils'
+version = project['artifactVersion']
+
 dependencies {
 }

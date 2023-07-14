@@ -3,11 +3,14 @@ plugins {
     id 'io-ocsf.library-conventions'
 }
 
+group = project['artifactGroup'] + '.schema'
+version = project['artifactVersion']
+
 dependencies {
     implementation project(':ocsf-utils')
 }
 
-def schemaFileName = 'schema-' + artifactVersion + '.tar.gz'
+//def schemaFileName = 'schema-' + version + '.tar.gz'
 
 tasks.register('downloadSchema', Download) {
     src 'https://schema.ocsf.io/export/schema?extensions='

@@ -4,10 +4,13 @@ plugins {
     id 'application'
 }
 
+group = project['artifactGroup'] + '.translator-cli'
+version = project['artifactVersion']
+
 dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.4.8'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.8'
-    
+
     implementation project(':ocsf-utils')
     implementation project(':ocsf-schema')
     implementation project(':ocsf-translator')

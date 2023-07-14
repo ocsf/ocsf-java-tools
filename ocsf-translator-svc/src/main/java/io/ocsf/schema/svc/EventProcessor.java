@@ -16,12 +16,12 @@
 
 package io.ocsf.schema.svc;
 
+import io.ocsf.parsers.Parser;
 import io.ocsf.schema.Event;
 import io.ocsf.schema.concurrent.BlockingQueue;
 import io.ocsf.schema.concurrent.Sink;
 import io.ocsf.schema.concurrent.Source;
-import io.ocsf.schema.transformers.Transformers;
-import io.ocsf.parsers.Parser;
+import io.ocsf.transformers.Transformers;
 
 /**
  * The EventProcessor concurrently runs a parser and a normalizer in two separate threads.

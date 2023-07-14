@@ -16,15 +16,14 @@
 
 package io.ocsf.schema.svc;
 
+import io.ocsf.parsers.Parser;
 import io.ocsf.schema.Event;
 import io.ocsf.schema.RawEvent;
 import io.ocsf.schema.Tests;
+import io.ocsf.transformers.Transformers;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
-import io.ocsf.schema.transformers.Transformers;
-import io.ocsf.parsers.Parser;
 import io.ocsf.utils.Strings;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

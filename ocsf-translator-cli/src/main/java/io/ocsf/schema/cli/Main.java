@@ -16,15 +16,14 @@
 
 package io.ocsf.schema.cli;
 
+import io.ocsf.parsers.*;
 import io.ocsf.schema.Event;
-import io.ocsf.schema.cli.CommandLineParser.Argument;
 import io.ocsf.schema.Schema;
-import io.ocsf.schema.transformers.Transformer;
+import io.ocsf.schema.cli.CommandLineParser.Argument;
+import io.ocsf.transformers.Transformer;
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Json;
-import io.ocsf.parsers.Parser;
 import io.ocsf.utils.ParserException;
-import io.ocsf.schema.parsers.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;

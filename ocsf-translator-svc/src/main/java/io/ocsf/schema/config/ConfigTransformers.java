@@ -18,10 +18,10 @@ package io.ocsf.schema.config;
 
 import io.ocsf.schema.concurrent.MutableProcessorList;
 import io.ocsf.schema.concurrent.ProcessorList;
+import io.ocsf.transformers.Transformers;
 import io.ocsf.utils.Maps;
-import io.ocsf.schema.transformers.Transformers;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;

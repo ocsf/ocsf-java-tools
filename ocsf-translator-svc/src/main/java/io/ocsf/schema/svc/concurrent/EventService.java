@@ -16,6 +16,7 @@
 
 package io.ocsf.schema.svc.concurrent;
 
+import io.ocsf.parsers.Parser;
 import io.ocsf.schema.Event;
 import io.ocsf.schema.concurrent.ProcessorList;
 import io.ocsf.schema.concurrent.Sink;
@@ -23,8 +24,7 @@ import io.ocsf.schema.concurrent.Source;
 import io.ocsf.schema.config.ConfigParsers;
 import io.ocsf.schema.config.ConfigTransformers;
 import io.ocsf.schema.svc.EventDemuxer;
-import io.ocsf.schema.transformers.Transformers;
-import io.ocsf.parsers.Parser;
+import io.ocsf.transformers.Transformers;
 
 import java.io.IOException;
 

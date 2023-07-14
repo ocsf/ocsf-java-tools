@@ -2,10 +2,11 @@ plugins {
     id 'io-ocsf.library-conventions'
 }
 
-group = project['artifactGroup'] + '.translator'
+group = project['artifactGroup'] + '.translators'
 version = project['artifactVersion']
 
 dependencies {
     implementation project(':ocsf-utils')
     implementation project(':ocsf-schema')
+    implementation project(':ocsf-parsers')
 }

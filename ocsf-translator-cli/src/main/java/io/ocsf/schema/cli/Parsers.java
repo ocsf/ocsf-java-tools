@@ -17,7 +17,6 @@
 package io.ocsf.schema.cli;
 
 import io.ocsf.schema.Event;
-import io.ocsf.schema.Utils;
 import io.ocsf.utils.Maps;
 import io.ocsf.parsers.Parser;
 import io.ocsf.utils.Strings;

@@ -13,7 +13,8 @@ dependencies {
 
     implementation project(':ocsf-utils')
     implementation project(':ocsf-schema')
-    implementation project(':ocsf-translator')
+    implementation project(':ocsf-parsers')
+    implementation project(':ocsf-translators')
     implementation project(':ocsf-translator-svc')
 }
 

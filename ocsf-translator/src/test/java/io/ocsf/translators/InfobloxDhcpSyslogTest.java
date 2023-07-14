@@ -15,7 +15,7 @@
  *
  */
 
-package io.ocsf.transformers;
+package io.ocsf.translators;
 
 import io.ocsf.parsers.InfobloxDHCPParser;
 import io.ocsf.utils.Maps;
@@ -197,7 +197,7 @@ public class InfobloxDhcpSyslogTest
       final Map<String, Object> parsed = parser.parse(Data);
       Assert.assertNotNull(parsed);
 
-      final Map<String, Object> translated = Transformer
+      final Map<String, Object> translated = Translator
           .fromString(Rule)
           .apply(parsed);
 
@@ -221,7 +221,7 @@ public class InfobloxDhcpSyslogTest
       final Map<String, Object> parsed = parser.parse(Data);
       Assert.assertNotNull(parsed);
 
-      final Map<String, Object> translated = Transformer
+      final Map<String, Object> translated = Translator
           .fromString(RegexRule)
           .apply(parsed);
 
@@ -244,7 +244,7 @@ public class InfobloxDhcpSyslogTest
       final Map<String, Object> parsed = parser.parse(Data);
       Assert.assertNotNull(parsed);
 
-      final Map<String, Object> translated = Transformer
+      final Map<String, Object> translated = Translator
           .fromString(MultiStageParsingRule)
           .apply(parsed);
 
@@ -274,7 +274,7 @@ public class InfobloxDhcpSyslogTest
       final Map<String, Object> parsed = parser.parse(RelayData);
       Assert.assertNotNull(parsed);
 
-      final Map<String, Object> translated = Transformer
+      final Map<String, Object> translated = Translator
           .fromString(MultiStageParsingRegex)
           .apply(parsed);
 

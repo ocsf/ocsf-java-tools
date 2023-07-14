@@ -18,4 +18,3 @@ tasks.register('downloadSchema', Download) {
 }
 
 tasks.test.dependsOn downloadSchema
-

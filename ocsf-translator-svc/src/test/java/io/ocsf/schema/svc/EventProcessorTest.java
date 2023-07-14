@@ -17,10 +17,11 @@
 package io.ocsf.schema.svc;
 
 import io.ocsf.parsers.Parser;
+import io.ocsf.schema.Dictionary;
 import io.ocsf.schema.Event;
 import io.ocsf.schema.RawEvent;
 import io.ocsf.schema.Tests;
-import io.ocsf.transformers.Transformers;
+import io.ocsf.translators.Translators;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.Strings;
@@ -36,18 +37,18 @@ public class EventProcessorTest extends Tests
   // create a very simple "parser"
   private final Parser parser = text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
 
-  private final Transformers transformers = new Transformers(Strings.EMPTY);
+  private final Translators translators = new Translators(Strings.EMPTY);
 
   @Before
   public void setUp() throws Exception
   {
-    final EventProcessor processor = new EventProcessor(parser, transformers, in, out);
+    final EventProcessor processor = new EventProcessor(parser, translators, in, out);
 
-    transformers.put("Transformer", data ->
+    translators.put("Transformer", data ->
         FMap.<String, Object>b()
             .p(EVENT_ID, data.remove(EVENT_ID))
             .p(EVENT_ORIGIN, data.remove(EVENT_ORIGIN))
-            .p(Event.RAW_EVENT, data.remove(Event.RAW_EVENT)));
+            .p(Dictionary.RAW_EVENT, data.remove(Dictionary.RAW_EVENT)));
 
     processor.start();
 
@@ -78,7 +79,7 @@ public class EventProcessorTest extends Tests
 
       Assert.assertEquals(5, data.size());
       Assert.assertEquals(i, data.get(EVENT_ID));
-      Assert.assertEquals(TEST_MESSAGE, Maps.getIn(data, Event.UNMAPPED, Event.SOURCE_TYPE));
+      Assert.assertEquals(TEST_MESSAGE, Maps.getIn(data, Dictionary.UNMAPPED, Event.SOURCE_TYPE));
     }
 
     Assert.assertEquals(0, out.available());

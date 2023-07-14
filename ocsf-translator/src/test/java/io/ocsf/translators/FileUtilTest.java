@@ -15,7 +15,7 @@
  *
  */
 
-package io.ocsf.transformers;
+package io.ocsf.translators;
 
 import org.junit.Assert;
 import org.junit.Test;

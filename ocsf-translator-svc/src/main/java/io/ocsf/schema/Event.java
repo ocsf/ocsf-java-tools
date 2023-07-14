@@ -21,10 +21,9 @@ import io.ocsf.utils.Maps;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.UUID;
 
 /**
- * Event is a class that encapsulates events.
+ * Event class encapsulates event data.
  */
 public class Event
 {
@@ -34,44 +33,10 @@ public class Event
   public static final String CUSTOMER_ID = "customer_uid";
   public static final String SOURCE_TYPE = "source_type";
 
-  /**
-   * Common attribute names.
-   */
-  public static final String RAW_EVENT = "raw_data";
-  public static final String REF_EVENT_TIME = "ref_time";
-  public static final String UNMAPPED = "unmapped";
-
-  public static final int OTHER_ID = 99;
-
   /*
    * An empty event object indicating that this is the last event in the queue.
    */
   private static final Event EOS = new Event(Collections.emptyMap());
-
-  public static final String[] EVENT_UID = new String[]{"metadata", "uid"};
-
-  /**
-   * Generate a random UUID.
-   *
-   * @return UUID
-   */
-  public static final String newUuid()
-  {
-    return UUID.randomUUID().toString();
-  }
-
-  /**
-   * Adds a randomly generated event UUID to the event in <code>metadata.uid</code>.
-   *
-   * @param data the event
-   * @return the updated event
-   */
-  public static final Map<String, Object> addUuid(final Map<String, Object> data)
-  {
-    Maps.putIn(data, Event.EVENT_UID, Event.newUuid());
-
-    return data;
-  }
 
   /**
    * The End of Stream event.

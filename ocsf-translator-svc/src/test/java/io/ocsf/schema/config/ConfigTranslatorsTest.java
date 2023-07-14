@@ -17,19 +17,19 @@
 package io.ocsf.schema.config;
 
 import io.ocsf.schema.concurrent.ProcessorList;
-import io.ocsf.transformers.Transformers;
+import io.ocsf.translators.Translators;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 
-public class ConfigTransformersTest
+public class ConfigTranslatorsTest
 {
 
   @Test
   public void load() throws IOException
   {
-    final ProcessorList<Transformers> transformers = ConfigTransformers.load("src/test/rules");
+    final ProcessorList<Translators> transformers = ConfigTranslators.load("src/test/rules");
 
     Assert.assertEquals(1, transformers.size());
     Assert.assertEquals(2, transformers.get("XmlWinEventLog").size());

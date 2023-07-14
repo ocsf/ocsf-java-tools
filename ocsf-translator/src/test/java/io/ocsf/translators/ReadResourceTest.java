@@ -15,7 +15,7 @@
  *
  */
 
-package io.ocsf.transformers;
+package io.ocsf.translators;
 
 import io.ocsf.utils.Files;
 import junit.framework.TestCase;
@@ -27,41 +27,41 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
-public class ReadFileTest extends TestCase
+public class ReadResourceTest extends TestCase
 {
   public void testReadJsonFile() throws IOException
   {
-    final List<Map<String, Object>> data = Files.readJson("src/test/resources/rules/common.json");
+    final List<Map<String, Object>> data = Files.readJsonFromResource("rules/common.json");
 
     Assert.assertFalse(data.isEmpty());
   }
 
   public void testRules() throws IOException
   {
-    final Path path = Paths.get("src/test/resources/rules");
+    final Path rules = Paths.get("rules");
 
-    Assert.assertNotNull(Transformer.fromFile(
-        path,
+    Assert.assertNotNull(Translator.fromResource(
+        rules,
         Paths.get("microsoft/windows/security/xml/translate-4688.json")));
-    Assert.assertNotNull(Transformer.fromFile(
-        path,
+    Assert.assertNotNull(Translator.fromResource(
+        rules,
         Paths.get("microsoft/windows/security/xml/translate-4624.json")));
-    Assert.assertNotNull(Transformer.fromFile(
-        path,
+    Assert.assertNotNull(Translator.fromResource(
+        rules,
         Paths.get("microsoft/windows/security/xml/translate-4625.json")));
-    Assert.assertNotNull(Transformer.fromFile(
-        path,
+    Assert.assertNotNull(Translator.fromResource(
+        rules,
         Paths.get("cisco/111010.json")));
   }
 
   public void testTranslators() throws IOException
   {
-    final Transformers translators = new Transformers("src/test/resources/rules");
+    final Translators translators = new Translators("rules");
 
-    translators.addFile("4688", Paths.get("microsoft/windows/security/xml/translate-4688.json"));
-    translators.addFile("4624", Paths.get("microsoft/windows/security/xml/translate-4624.json"));
-    translators.addFile("4625", Paths.get("microsoft/windows/security/xml/translate-4625.json"));
-    translators.addFile("111010", Paths.get("cisco/111010.json"));
+    translators.addResource("4688", Paths.get("microsoft/windows/security/xml/translate-4688.json"));
+    translators.addResource("4624", Paths.get("microsoft/windows/security/xml/translate-4624.json"));
+    translators.addResource("4625", Paths.get("microsoft/windows/security/xml/translate-4625.json"));
+    translators.addResource("111010", Paths.get("cisco/111010.json"));
 
     assertEquals(4, translators.size());
   }

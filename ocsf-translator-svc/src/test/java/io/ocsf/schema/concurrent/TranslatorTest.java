@@ -28,7 +28,7 @@ import org.junit.Test;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class TransformerTest extends Tests
+public class TranslatorTest extends Tests
 {
   private static final AtomicBoolean done = new AtomicBoolean();
 

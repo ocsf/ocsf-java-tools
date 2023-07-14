@@ -17,6 +17,7 @@
 package io.ocsf.schema.cli;
 
 import io.ocsf.schema.Event;
+import io.ocsf.schema.Utils;
 import io.ocsf.utils.Maps;
 import io.ocsf.parsers.Parser;
 import io.ocsf.utils.Strings;
@@ -88,7 +89,8 @@ public class Parsers
    */
   public Map<String, Object> parse(final Map<String, String> event)
   {
-    return parse(event.get(RawEvent.SOURCE_TYPE), event.get(RawEvent.TENANT), event.get(RawEvent.RAW_EVENT));
+    return parse(event.get(RawEvent.SOURCE_TYPE), event.get(RawEvent.TENANT),
+      event.get(RawEvent.RAW_EVENT));
   }
 
   /**
@@ -120,7 +122,8 @@ public class Parsers
         }
         catch (final Exception ex)
         {
-          logger.warn("Unable to parse event {}: {}. Error: {}", RawEvent.SOURCE_TYPE, name, ex);
+          logger.warn("Unable to parse event {}: {}. Error: {}", RawEvent.SOURCE_TYPE, name,
+            ex.toString());
           logger.debug(text);
         }
       }

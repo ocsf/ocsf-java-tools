@@ -17,7 +17,7 @@
 
 package io.ocsf.parsers;
 
-import io.ocsf.schema.Event;
+import io.ocsf.schema.Dictionary;
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.Strings;
 
@@ -78,7 +78,7 @@ public final class WinMultiLineParser
     // skip the comments
     pos = skip(buf, pos, buf.length);
 
-    event.put(Event.REF_EVENT_TIME, eventTime());
+    event.put(Dictionary.REF_EVENT_TIME, eventTime());
 
     return parse(event);
   }

@@ -15,7 +15,7 @@
  *
  */
 
-package io.ocsf.transformers;
+package io.ocsf.translators;
 
 import junit.framework.TestCase;
 import org.junit.Assert;

@@ -21,8 +21,8 @@ import io.ocsf.schema.Event;
 import io.ocsf.schema.RawEvent;
 import io.ocsf.schema.concurrent.ProcessorList;
 import io.ocsf.schema.config.ConfigParsers;
-import io.ocsf.schema.config.ConfigTransformers;
-import io.ocsf.transformers.Transformers;
+import io.ocsf.schema.config.ConfigTranslators;
+import io.ocsf.translators.Translators;
 import io.ocsf.utils.Maps;
 
 import java.io.IOException;
@@ -36,7 +36,7 @@ import java.util.Map;
 public class EventService
 {
   private final ProcessorList<Parser> parsers;
-  private final ProcessorList<Transformers> normalizers;
+  private final ProcessorList<Translators> normalizers;
 
   /**
    * Creates a new event service that parses and translates events in a blocking call;
@@ -47,7 +47,7 @@ public class EventService
   public EventService(final String rules) throws IOException
   {
     this.parsers = ConfigParsers.parsers();
-    this.normalizers = ConfigTransformers.load(rules);
+    this.normalizers = ConfigTranslators.load(rules);
   }
 
   /**
@@ -73,8 +73,8 @@ public class EventService
       throw new TranslatorException(TranslatorException.Reason.NoParser);
     }
 
-    final Transformers transformers = normalizers.get(source);
-    if (transformers == null)
+    final Translators translators = normalizers.get(source);
+    if (translators == null)
     {
       throw new TranslatorException(TranslatorException.Reason.NoTranslator);
     }
@@ -106,7 +106,7 @@ public class EventService
     final Map<String, Object> translated;
     try
     {
-      translated = transformers.translate(parsed);
+      translated = translators.translate(parsed);
     }
     catch (final Exception e)
     {

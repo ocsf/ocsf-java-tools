@@ -15,9 +15,10 @@
  *
  */
 
-package io.ocsf.transformers;
+package io.ocsf.translators;
 
-import io.ocsf.schema.Event;
+import io.ocsf.schema.Dictionary;
+import io.ocsf.schema.Utils;
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.ParserException;
@@ -32,33 +33,33 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * A group of related event transformers.
+ * A group of related event translators.
  * <p>
  * NOTE: This class is intended for use in a single thread.
  */
-public final class Transformers
+public final class Translators
 {
-  private static final Logger logger = LoggerFactory.getLogger(Transformers.class);
+  private static final Logger logger = LoggerFactory.getLogger(Translators.class);
 
   private final Path home;
 
-  private final Map<String, Transformer.Translator> translators = new LinkedHashMap<>();
+  private final Map<String, Translator.I> translators = new LinkedHashMap<>();
 
   // This translator is used by the 'translate(data)' function when none of the named translators
   // translates the given data. It is set to the translator that does not have a 'when' clause.
-  private Transformer.Translator translator;
+  private Translator.I translator;
 
   /**
    * Creates a new collections of translators.
    *
    * @param path the home folder of the translator's rules
    */
-  public Transformers(final String path)
+  public Translators(final String path)
   {
     this(Paths.get(path));
   }
 
-  public Transformers(final Path path)
+  public Translators(final Path path)
   {
     Objects.requireNonNull(path, "path is a required parameter");
 
@@ -106,18 +107,18 @@ public final class Transformers
    * @throws IOException     unable to read the resource
    */
   public void add(
-    final String name, final Path path, final Transformer.JsonReader reader) throws IOException
+    final String name, final Path path, final Translator.JsonReader reader) throws IOException
   {
-    put(name, Transformer.build(home, reader, Maps.typecast(reader.read(validate(path)))));
+    put(name, Translator.build(home, reader, Maps.typecast(reader.read(validate(path)))));
   }
 
   public void addRule(
-    final String name, final Transformer.JsonReader reader, final Map<String, Object> rule) throws IOException
+    final String name, final Translator.JsonReader reader, final Map<String, Object> rule) throws IOException
   {
-    put(name, Transformer.build(home, reader, rule));
+    put(name, Translator.build(home, reader, rule));
   }
 
-  public void put(final String name, final Transformer.Translator translator)
+  public void put(final String name, final Translator.I translator)
   {
     if (translator.hasPredicate())
     {
@@ -164,7 +165,7 @@ public final class Transformers
   {
     if (data != null)
     {
-      final Transformer.Translator t = translators.get(name);
+      final Translator.I t = translators.get(name);
 
       return t != null ? translate(t, data) : null;
     }
@@ -187,13 +188,13 @@ public final class Transformers
   {
     if (data != null)
     {
-      final Transformer.Translator t = translators.get(name);
+      final Translator.I t = translators.get(name);
       if (t != null)
       {
         final Map<String, Object> translated = translate(t, data);
         if (translated != null)
         {
-          return Event.addUuid(translated);
+          return Utils.addUuid(translated);
         }
       }
 
@@ -221,12 +222,12 @@ public final class Transformers
   {
     if (data != null)
     {
-      for (final Transformer.Translator t : translators.values())
+      for (final Translator.I t : translators.values())
       {
         final Map<String, Object> translated = translate(t, data);
         if (translated != null)
         {
-          return Event.addUuid(translated);
+          return Utils.addUuid(translated);
         }
       }
 
@@ -247,7 +248,7 @@ public final class Transformers
   }
 
   private static Map<String, Object> translate(
-    final Transformer.Translator translator, final Map<String, Object> data)
+    final Translator.I translator, final Map<String, Object> data)
   {
     final Map<String, Object> translated = translator.apply(data);
     if (data == translated)
@@ -257,10 +258,10 @@ public final class Transformers
 
     if (!data.isEmpty())
     {
-      translated.put(Event.UNMAPPED, data);
+      translated.put(Dictionary.UNMAPPED, data);
     }
 
-    return Event.addUuid(translated);
+    return Utils.addUuid(translated);
   }
 
   private Path validate(final Path path) throws IOException

@@ -15,7 +15,7 @@
  *
  */
 
-package io.ocsf.transformers;
+package io.ocsf.translators;
 
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Strings;

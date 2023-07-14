@@ -99,7 +99,7 @@ public class SchemaTest
     Assert.assertNotNull(enriched.get(Dictionary.CLASS_NAME));
     Assert.assertNotNull(enriched.get(Dictionary.ACTIVITY_NAME));
     Assert.assertNotNull(enriched.get(Dictionary.TYPE_NAME));
-    Assert.assertEquals(Schema.makeEventUid(Data.TEST_CLASS_ID, Data.TEST_ACTIVITY_ID),
+    Assert.assertEquals(Utils.typeUid(Data.TEST_CLASS_ID, Data.TEST_ACTIVITY_ID),
       enriched.get(Dictionary.TYPE_UID));
   }
 
@@ -118,7 +118,7 @@ public class SchemaTest
     Assert.assertNotNull(enriched.get(Dictionary.ACTIVITY_NAME));
     Assert.assertNotNull(enriched.get(Dictionary.TYPE_UID));
     Assert.assertNotNull(enriched.get(DISPOSITION));
-    Assert.assertEquals(Schema.makeEventUid(Data.TEST_CLASS_ID, Data.TEST_ACTIVITY_ID),
+    Assert.assertEquals(Utils.typeUid(Data.TEST_CLASS_ID, Data.TEST_ACTIVITY_ID),
       enriched.get(Dictionary.TYPE_UID));
   }
 

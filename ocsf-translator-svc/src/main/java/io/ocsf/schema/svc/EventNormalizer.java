@@ -20,7 +20,7 @@ import io.ocsf.schema.Event;
 import io.ocsf.schema.concurrent.Sink;
 import io.ocsf.schema.concurrent.Source;
 import io.ocsf.schema.concurrent.Transformer;
-import io.ocsf.transformers.Transformers;
+import io.ocsf.translators.Translators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,13 +30,13 @@ public class EventNormalizer extends Transformer
 {
   private static final Logger logger = LoggerFactory.getLogger(EventNormalizer.class);
 
-  private final Transformers transformers;
+  private final Translators translators;
 
   public EventNormalizer(
-      final Transformers transformers, final Source<Event> source, final Sink<Event> sink)
+      final Translators translators, final Source<Event> source, final Sink<Event> sink)
   {
-    super(transformers.toString(), source, sink);
-    this.transformers = transformers;
+    super(translators.toString(), source, sink);
+    this.translators = translators;
   }
 
   @Override
@@ -44,7 +44,7 @@ public class EventNormalizer extends Transformer
   {
     try
     {
-      final Map<String, Object> event = transformers.translate(data.data());
+      final Map<String, Object> event = translators.translate(data.data());
       if (event != null)
       {
         return new Event(event);

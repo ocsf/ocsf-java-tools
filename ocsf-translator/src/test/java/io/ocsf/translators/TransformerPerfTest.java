@@ -15,7 +15,7 @@
  *
  */
 
-package io.ocsf.transformers;
+package io.ocsf.translators;
 
 import io.ocsf.utils.Files;
 import io.ocsf.utils.ParserException;
@@ -58,7 +58,7 @@ public final class TransformerPerfTest
         }
       }
 
-      final Transformer.Translator translator = Transformer.fromFile(Paths.get(home), Paths.get(rule));
+      final Translator.I translator = Translator.fromFile(Paths.get(home), Paths.get(rule));
 
       final long start = System.currentTimeMillis();
       for (int i = 0; i < 100_000; ++i)

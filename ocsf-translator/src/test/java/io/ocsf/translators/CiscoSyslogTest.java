@@ -15,7 +15,7 @@
  *
  */
 
-package io.ocsf.transformers;
+package io.ocsf.translators;
 
 import io.ocsf.parsers.CiscoSyslogParser;
 import io.ocsf.utils.Maps;
@@ -58,7 +58,7 @@ public class CiscoSyslogTest
       final Map<String, Object> parsed = parser.parse(Data);
       Assert.assertNotNull(parsed);
 
-      final Map<String, Object> translated = Transformer
+      final Map<String, Object> translated = Translator
           .fromString(Rule)
           .apply(parsed);
 

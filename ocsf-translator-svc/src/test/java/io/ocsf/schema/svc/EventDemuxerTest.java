@@ -17,12 +17,13 @@
 package io.ocsf.schema.svc;
 
 import io.ocsf.parsers.Parser;
+import io.ocsf.schema.Dictionary;
 import io.ocsf.schema.Event;
 import io.ocsf.schema.RawEvent;
 import io.ocsf.schema.Tests;
 import io.ocsf.schema.concurrent.BlockingQueue;
 import io.ocsf.schema.concurrent.MutableProcessorList;
-import io.ocsf.transformers.Transformers;
+import io.ocsf.translators.Translators;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
 import org.junit.After;
@@ -44,27 +45,27 @@ public class EventDemuxerTest extends Tests
 
   // create a very simple "parser"
   private final Parser parser = text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
-  private final Transformers transformers = new Transformers("test");
+  private final Translators translators = new Translators("test");
 
   private final MutableProcessorList<Parser> parsers = new MutableProcessorList<>(NAME);
-  private final MutableProcessorList<Transformers> normalizers = new MutableProcessorList<>(NAME);
+  private final MutableProcessorList<Translators> normalizers = new MutableProcessorList<>(NAME);
 
   private final BlockingQueue<Event> rawEventQueue = new BlockingQueue<>();
 
   @Before
   public void setUp() throws Exception
   {
-    transformers.put("Transformer", data ->
+    translators.put("Transformer", data ->
         FMap.<String, Object>b()
             .p(EVENT_ID, data.remove(EVENT_ID))
             .p(EVENT_ORIGIN, data.remove(EVENT_ORIGIN))
-            .p(Event.RAW_EVENT, data.remove(Event.RAW_EVENT)));
+            .p(Dictionary.RAW_EVENT, data.remove(Dictionary.RAW_EVENT)));
 
     parsers.register(NAME1, parser);
-    normalizers.register(NAME1, transformers);
+    normalizers.register(NAME1, translators);
 
     parsers.register(NAME2, parser);
-    normalizers.register(NAME2, transformers);
+    normalizers.register(NAME2, translators);
 
     new Thread(new EventDemuxer(parsers, normalizers, in, out, rawEventQueue)
     {
@@ -118,7 +119,7 @@ public class EventDemuxerTest extends Tests
     for (int i = 0; i < 2 * MAX_QUEUE_SIZE; i++)
     {
       final Map<String, Object> data   = out.take().data();
-      final String              source = (String) Maps.getIn(data, new String[]{Event.UNMAPPED, Event.SOURCE_TYPE});
+      final String              source = (String) Maps.getIn(data, new String[]{Dictionary.UNMAPPED, Event.SOURCE_TYPE});
 
       Assert.assertEquals(5, data.size());
       Assert.assertTrue(NAME1.equals(source) || NAME2.equals(source));

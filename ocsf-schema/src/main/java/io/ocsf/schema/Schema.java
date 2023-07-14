@@ -55,6 +55,7 @@ public final class Schema
 {
   private static final Logger logger = LoggerFactory.getLogger(Schema.class);
 
+  // Schema metadata/attribute property names
   private static final String TYPES = "types";
   private static final String OBJECTS = "objects";
   private static final String CLASSES = "classes";
@@ -74,8 +75,6 @@ public final class Schema
   static final String IS_ARRAY = "is_array";
   static final String OBJECT_TYPE = "object_type";
   static final String OBSERVABLE = "observable";
-  static final String OTHER = "Other";
-  static final int OTHER_ID = 99;
 
   // All event classes: class_id -> class
   private final Map<Integer, Map<String, Object>> classes;
@@ -245,11 +244,6 @@ public final class Schema
     return Optional.ofNullable(objects.get(name));
   }
 
-  static int makeEventUid(final int classId, final int id)
-  {
-    return id >= 0 ? classId * 100 + id : Schema.OTHER_ID;
-  }
-
   private static Map<String, Map<String, Object>> types(final Map<String, Map<String, Object>> schema)
   {
     return Maps.typecast(schema.get(TYPES));
@@ -324,7 +318,7 @@ public final class Schema
     final Integer activity = (Integer) data.getOrDefault(Dictionary.ACTIVITY_ID,
       Dictionary.UNKNOWN_ID);
 
-    final int uid = makeEventUid(classId, activity);
+    final int uid = Utils.typeUid(classId, activity);
 
     data.put(Dictionary.TYPE_UID, uid);
 
@@ -723,7 +717,7 @@ public final class Schema
     {
       final FMap<String, Object> observable = FMap.<String, Object>b()
         .p(NAME, name)
-        .p(TYPE, observableTypes.getOrDefault(typeId, OTHER))
+        .p(TYPE, observableTypes.getOrDefault(typeId, Dictionary.OTHER))
         .p(TYPE_ID, typeId);
 
       observables.add(observable);

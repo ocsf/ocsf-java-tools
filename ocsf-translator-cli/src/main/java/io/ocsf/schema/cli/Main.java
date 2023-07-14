@@ -17,10 +17,11 @@
 package io.ocsf.schema.cli;
 
 import io.ocsf.parsers.*;
-import io.ocsf.schema.Event;
+import io.ocsf.schema.Dictionary;
+import io.ocsf.schema.Utils;
 import io.ocsf.schema.Schema;
 import io.ocsf.schema.cli.CommandLineParser.Argument;
-import io.ocsf.transformers.Transformer;
+import io.ocsf.translators.Translator;
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Json;
 import io.ocsf.utils.ParserException;
@@ -333,7 +334,7 @@ public final class Main
     return Optional.empty();
   }
 
-  private static Optional<Transformer.Translator> translator()
+  private static Optional<Translator.I> translator()
   {
     final Argument ruleDir  = clp.getArg('R');
     final Argument ruleFile = clp.getArg('r');
@@ -390,7 +391,7 @@ public final class Main
   }
 
   private static void translate(
-    final Transformer.Translator translator, final List<String> files,
+    final Translator.I translator, final List<String> files,
     final Consumer<Item> consumer)
   {
     for (final String arg : files)
@@ -461,7 +462,7 @@ public final class Main
   }
 
   private static boolean translate(
-    final Transformer.Translator translator, final Item source, final Consumer<Item> consumer)
+    final Translator.I translator, final Item source, final Consumer<Item> consumer)
   {
     if (source.data == null)
     {
@@ -474,7 +475,7 @@ public final class Main
     {
       if (!source.data.isEmpty())
       {
-        translated.put(Event.UNMAPPED, source.data);
+        translated.put(Dictionary.UNMAPPED, source.data);
       }
 
       final Item transItem = new Item(source.source, translated, "translate");
@@ -486,7 +487,7 @@ public final class Main
     return false;
   }
 
-  private static Transformer.Translator translator(final String home, final String rule)
+  private static Translator.I translator(final String home, final String rule)
   {
     try
     {
@@ -498,17 +499,17 @@ public final class Main
         System.out.println("// rule  file: " + ruleFile);
       }
 
-      final Transformer.Translator translator = Transformer.fromFile(Paths.get(home),
+      final Translator.I translator = Translator.fromFile(Paths.get(home),
         Paths.get(ruleFile));
 
       if (schemaFile != null)
       {
         final Schema schema = new Schema(schemaFile, schemaEnums, observables);
 
-        return data -> Event.addUuid(schema.enrich(translator.apply(data)));
+        return data -> Utils.addUuid(schema.enrich(translator.apply(data)));
       }
 
-      return data -> Event.addUuid(translator.apply(data));
+      return data -> Utils.addUuid(translator.apply(data));
     }
     catch (final ParserException e)
     {

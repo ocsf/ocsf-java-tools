@@ -37,6 +37,14 @@ public final class Dictionary
   public static final String OBSERVABLES = "observables";
 
   public static final Integer UNKNOWN_ID = 0;
+  /**
+   * Common attribute names.
+   */
+  public static final String RAW_EVENT = "raw_data";
+  public static final String REF_EVENT_TIME = "ref_time";
+  public static final String UNMAPPED = "unmapped";
+  public static final int OTHER_ID = 99;
+  static final String OTHER = "Other";
 
   private Dictionary() {}
 }

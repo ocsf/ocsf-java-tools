@@ -15,7 +15,7 @@
  *
  */
 
-package io.ocsf.transformers;
+package io.ocsf.translators;
 
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Json;
@@ -38,7 +38,7 @@ public final class TransformerFileTest
       final String home     = args[0];
       final String ruleFile = args[1];
 
-      final Transformer.Translator translator = Transformer.fromFile(Paths.get(home), Paths.get(ruleFile));
+      final Translator.I translator = Translator.fromFile(Paths.get(home), Paths.get(ruleFile));
 
       System.out.println("Using rule file: " + ruleFile);
 
@@ -55,7 +55,7 @@ public final class TransformerFileTest
     }
   }
 
-  private static void visitAllDirsAndFiles(final Transformer.Translator translator, final File file) throws IOException
+  private static void visitAllDirsAndFiles(final Translator.I translator, final File file) throws IOException
   {
     System.out.println("Processing " + file);
 
@@ -75,7 +75,7 @@ public final class TransformerFileTest
     }
   }
 
-  private static void transform(final Transformer.Translator translator, final String filename) throws IOException
+  private static void transform(final Translator.I translator, final String filename) throws IOException
   {
     try
     {

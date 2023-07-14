@@ -15,9 +15,9 @@
  *
  */
 
-package io.ocsf.transformers;
+package io.ocsf.translators;
 
-import io.ocsf.schema.Event;
+import io.ocsf.schema.Dictionary;
 import io.ocsf.utils.Maps;
 
 import java.util.Collections;
@@ -87,7 +87,7 @@ final class Fingerprint
           algorithm_id = 4;
           break;
         default:
-          algorithm_id = Event.OTHER_ID;
+          algorithm_id = Dictionary.OTHER_ID;
           fingerprint.put(Algorithm, value);
           break;
       }

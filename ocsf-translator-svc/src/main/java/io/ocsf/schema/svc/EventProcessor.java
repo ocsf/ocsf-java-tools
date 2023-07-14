@@ -21,7 +21,7 @@ import io.ocsf.schema.Event;
 import io.ocsf.schema.concurrent.BlockingQueue;
 import io.ocsf.schema.concurrent.Sink;
 import io.ocsf.schema.concurrent.Source;
-import io.ocsf.transformers.Transformers;
+import io.ocsf.translators.Translators;
 
 /**
  * The EventProcessor concurrently runs a parser and a normalizer in two separate threads.
@@ -34,13 +34,13 @@ public class EventProcessor
   private final EventNormalizer normalizer;
 
   public EventProcessor(
-      final Parser parser, final Transformers transformers,
+      final Parser parser, final Translators translators,
       final Source<Event> source, final Sink<Event> sink)
   {
     final BlockingQueue<Event> queue = new BlockingQueue<>(2);
 
     this.parser = new EventParser(parser, source, queue);
-    this.normalizer = new EventNormalizer(transformers, queue, sink);
+    this.normalizer = new EventNormalizer(translators, queue, sink);
   }
 
   /**

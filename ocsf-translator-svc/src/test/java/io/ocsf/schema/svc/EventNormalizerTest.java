@@ -18,7 +18,7 @@ package io.ocsf.schema.svc;
 
 import io.ocsf.schema.Event;
 import io.ocsf.schema.Tests;
-import io.ocsf.transformers.Transformers;
+import io.ocsf.translators.Translators;
 import io.ocsf.utils.FMap;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -31,19 +31,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EventNormalizerTest extends Tests
 {
-  private final Transformers transformers = new Transformers("test");
+  private final Translators translators = new Translators("test");
 
   private static final AtomicBoolean done = new AtomicBoolean();
 
   @Before
   public void setUp() throws Exception
   {
-    transformers.put("Transformer", data ->
+    translators.put("Transformer", data ->
         FMap.<String, Object>b()
             .o(EVENT_ID, data.remove(EVENT_ID))
             .o(MESSAGE, data.remove(MESSAGE)));
 
-    new Thread(new EventNormalizer(transformers, in, out)
+    new Thread(new EventNormalizer(translators, in, out)
     {
       @Override
       protected void terminated()

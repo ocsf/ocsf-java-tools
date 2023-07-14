@@ -24,7 +24,7 @@ import io.ocsf.schema.concurrent.ProcessorList;
 import io.ocsf.schema.concurrent.Sink;
 import io.ocsf.schema.concurrent.Source;
 import io.ocsf.schema.concurrent.Transformer;
-import io.ocsf.transformers.Transformers;
+import io.ocsf.translators.Translators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ public class EventDemuxer extends Transformer
   private static final Logger logger = LoggerFactory.getLogger(EventDemuxer.class);
 
   private final ProcessorList<Parser> parsers;
-  private final ProcessorList<Transformers> normalizers;
+  private final ProcessorList<Translators> normalizers;
 
   // translated events sink
   private final Sink<Event> eventSink;
@@ -57,7 +57,7 @@ public class EventDemuxer extends Transformer
    */
   public EventDemuxer(
       final ProcessorList<Parser> parsers,
-      final ProcessorList<Transformers> normalizers,
+      final ProcessorList<Translators> normalizers,
       final Source<Event> source,
       final Sink<Event> sink,
       final Sink<Event> unparsed)
@@ -87,10 +87,10 @@ public class EventDemuxer extends Transformer
       final Parser parser = parsers.get(source);
       if (parser != null)
       {
-        final Transformers transformers = normalizers.get(source);
-        if (transformers != null)
+        final Translators translators = normalizers.get(source);
+        if (translators != null)
         {
-          return EventParser.process(parser, data, transformers::translate);
+          return EventParser.process(parser, data, translators::translate);
         }
 
         logger.warn("Missing event normalizer for source type: {}", source);
@@ -112,7 +112,7 @@ public class EventDemuxer extends Transformer
   @Override
   protected Event process(final Event data) throws InterruptedException
   {
-    final String source = RawEvent.source(data);
+    final String source = (String) data.data().get(RawEvent.SOURCE_TYPE);
     if (source != null)
     {
       final Sink<Event> sink = sink(source);
@@ -157,8 +157,8 @@ public class EventDemuxer extends Transformer
 
     if (sink == null)
     {
-      final Parser       parser     = parsers.get(source);
-      final Transformers normalizer = normalizers.get(source);
+      final Parser      parser     = parsers.get(source);
+      final Translators normalizer = normalizers.get(source);
 
       if (parser != null && normalizer != null)
       {

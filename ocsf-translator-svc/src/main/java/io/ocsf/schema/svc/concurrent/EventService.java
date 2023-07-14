@@ -18,13 +18,14 @@ package io.ocsf.schema.svc.concurrent;
 
 import io.ocsf.parsers.Parser;
 import io.ocsf.schema.Event;
+
 import io.ocsf.schema.concurrent.ProcessorList;
 import io.ocsf.schema.concurrent.Sink;
 import io.ocsf.schema.concurrent.Source;
 import io.ocsf.schema.config.ConfigParsers;
-import io.ocsf.schema.config.ConfigTransformers;
+import io.ocsf.schema.config.ConfigTranslators;
 import io.ocsf.schema.svc.EventDemuxer;
-import io.ocsf.transformers.Transformers;
+import io.ocsf.translators.Translators;
 
 import java.io.IOException;
 
@@ -38,8 +39,8 @@ public class EventService implements Runnable
       final Sink<Event> out,
       final Sink<Event> raw) throws IOException
   {
-    final ProcessorList<Parser>       parsers      = ConfigParsers.parsers();
-    final ProcessorList<Transformers> transformers = ConfigTransformers.load(rules);
+    final ProcessorList<Parser>      parsers      = ConfigParsers.parsers();
+    final ProcessorList<Translators> transformers = ConfigTranslators.load(rules);
 
     demuxer = new EventDemuxer(parsers, transformers, in, out, raw);
   }

@@ -7,5 +7,6 @@ version = project['artifactVersion']
 
 dependencies {
     implementation project(':ocsf-utils')
+    implementation project(':ocsf-schema')
     implementation project(':ocsf-translator')
 }

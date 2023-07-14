@@ -16,11 +16,11 @@
  *
  */
 
-package io.ocsf.transformers;
+package io.ocsf.translators;
 
 import io.ocsf.parsers.PatternParser;
 import io.ocsf.parsers.RegexParser;
-import io.ocsf.schema.Event;
+import io.ocsf.schema.Dictionary;
 import io.ocsf.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +36,9 @@ import java.util.function.Predicate;
 /**
  * Transformer uses a set of rules to map a Map[String, Object] to another Map[String, Object].
  */
-public final class Transformer
+public final class Translator
 {
-  private static final Logger logger = LoggerFactory.getLogger(Transformer.class);
+  private static final Logger logger = LoggerFactory.getLogger(Translator.class);
 
   private static final String RuleList = "rules";
   private static final String RuleSet = "ruleset";
@@ -66,7 +66,7 @@ public final class Transformer
    * Translator Interface.
    */
   @FunctionalInterface
-  public interface Translator
+  public interface I
   {
     /**
      * Applies the rules to the given data.
@@ -89,7 +89,7 @@ public final class Transformer
    * Translator Interface.
    */
   @FunctionalInterface
-  public interface ConditionalTranslator extends Translator
+  public interface ConditionalTranslator extends I
   {
     default boolean hasPredicate() {return true;}
   }
@@ -122,7 +122,7 @@ public final class Transformer
    * @throws ParserException invalid json file
    * @throws IOException     unable to read the file
    */
-  public static Translator fromFile(final Path home, final Path path) throws IOException
+  public static I fromFile(final Path home, final Path path) throws IOException
   {
     return create(home, home.resolve(path), Files::readJson);
   }
@@ -136,7 +136,7 @@ public final class Transformer
    * @throws ParserException invalid json file
    * @throws IOException     unable to read the file
    */
-  public static Translator fromResource(final Path home, final Path path) throws IOException
+  public static I fromResource(final Path home, final Path path) throws IOException
   {
     return create(home, home.resolve(path), Files::readJsonFromResource);
   }
@@ -151,7 +151,7 @@ public final class Transformer
    * @throws ParserException invalid json
    * @throws IOException     unable to read the resource
    */
-  public static Translator create(final Path home, final Path path, final JsonReader reader) throws IOException
+  public static I create(final Path home, final Path path, final JsonReader reader) throws IOException
   {
     return build(home, reader, Maps.typecast(reader.read(path)));
   }
@@ -161,15 +161,15 @@ public final class Transformer
    *
    * NOTE: this function does not support included rules.
    */
-  static Translator fromString(final String json) throws IOException
+  static I fromString(final String json) throws IOException
   {
     return build(null, null, Json5Parser.to(json));
   }
 
-  static Translator build(
+  static I build(
     final Path home, final JsonReader reader, final Map<String, Object> map) throws IOException
   {
-    final Translator translator = createTranslator(
+    final I translator = createTranslator(
       (String) map.get(Predicate), readParser(map), readRules(home, reader, map));
 
     final Collection<Map<String, Object>> ruleset = Maps.typecast(map.get(RuleSet));
@@ -179,14 +179,14 @@ public final class Transformer
     }
 
     {
-      final Collection<Translator> translators = new ArrayList<>(ruleset.size());
+      final Collection<I> translators = new ArrayList<>(ruleset.size());
       for (final Map<String, Object> rule : ruleset)
       {
         translators.add(createSubTranslator(
           (String) rule.get(Predicate), readParser(rule), readRules(home, reader, rule)));
       }
 
-      return new Translator()
+      return new I()
       {
         @Override
         public Map<String, Object> apply(final Map<String, Object> data)
@@ -194,7 +194,7 @@ public final class Transformer
           final Map<String, Object> updated    = translator.apply(data);
           final Map<String, Object> translated = updated != data ? updated : new HashMap<>();
 
-          for (final Translator t : translators)
+          for (final I t : translators)
           {
             t.apply(data, translated);
           }
@@ -312,7 +312,7 @@ public final class Transformer
   }
 
 
-  private static Translator createTranslator(
+  private static I createTranslator(
     final String cond, final DataTranslator translator, final Collection<Map<String, Object>> rules)
   {
     // no rules, no translations
@@ -330,13 +330,13 @@ public final class Transformer
       @Override
       public Map<String, Object> apply(final Map<String, Object> data)
       {
-        return p.test(data) ? Transformer.apply(compiled, translator.parse(data)) :
+        return p.test(data) ? Translator.apply(compiled, translator.parse(data)) :
           translator.parse(data);
       }
     };
   }
 
-  private static Translator createSubTranslator(
+  private static I createSubTranslator(
     final String cond, final DataTranslator translator, final Collection<Map<String, Object>> rules)
   {
     // no rules, no translations
@@ -347,19 +347,19 @@ public final class Transformer
     // if no conditions, then translate everything
     if (Strings.isEmpty(cond))
     {
-      return new Translator()
+      return new I()
       {
         @Override
         public Map<String, Object> apply(final Map<String, Object> data)
         {
-          return Transformer.apply(compiled, translator.parse(data));
+          return Translator.apply(compiled, translator.parse(data));
         }
 
         @Override
         public Map<String, Object> apply(final Map<String, Object> data, final Map<String,
           Object> translated)
         {
-          return Transformer.apply(compiled, translator.parse(data), translated);
+          return Translator.apply(compiled, translator.parse(data), translated);
         }
       };
     }
@@ -371,7 +371,7 @@ public final class Transformer
       @Override
       public Map<String, Object> apply(final Map<String, Object> data)
       {
-        return p.test(data) ? Transformer.apply(compiled, translator.parse(data)) :
+        return p.test(data) ? Translator.apply(compiled, translator.parse(data)) :
           translator.parse(data);
       }
 
@@ -379,7 +379,7 @@ public final class Transformer
       public Map<String, Object> apply(final Map<String, Object> data,
         final Map<String, Object> translated)
       {
-        return p.test(data) ? Transformer.apply(compiled, translator.parse(data), translated) :
+        return p.test(data) ? Translator.apply(compiled, translator.parse(data), translated) :
           translator.parse(data);
       }
     };
@@ -757,7 +757,7 @@ public final class Transformer
           }
           else if (other != null)
           {
-            Maps.putIn(translated, key, Event.OTHER_ID, overwrite);
+            Maps.putIn(translated, key, Dictionary.OTHER_ID, overwrite);
             Maps.putIn(translated, other, strValue, overwrite);
           }
         }
@@ -1017,6 +1017,6 @@ public final class Transformer
     return (value != null ? value.hashCode() : null);
   }
 
-  private Transformer() {}
+  private Translator() {}
 
 }

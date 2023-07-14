@@ -18,7 +18,7 @@ package io.ocsf.schema.config;
 
 import io.ocsf.schema.concurrent.MutableProcessorList;
 import io.ocsf.schema.concurrent.ProcessorList;
-import io.ocsf.transformers.Transformers;
+import io.ocsf.translators.Translators;
 import io.ocsf.utils.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,22 +33,22 @@ import java.util.Map;
 /**
  * TransformersConfig loads all translation rules in the given <code>home</code> folder.
  */
-public final class ConfigTransformers
+public final class ConfigTranslators
 {
-  private static final Logger logger = LoggerFactory.getLogger(ConfigTransformers.class);
+  private static final Logger logger = LoggerFactory.getLogger(ConfigTranslators.class);
 
   private static final String SOURCE_TYPE_FILE = ".metadata";
 
-  private ConfigTransformers() {}
+  private ConfigTranslators() {}
 
   /**
    * Scans the given <code>path</code>, compiles, and loads the translation rules found in the path.
    *
    * @param path the path to the rules folder
-   * @return a list of transformers
+   * @return a list of translators
    * @throws IOException if the given <code>path</code> is invalid
    */
-  public static ProcessorList<Transformers> load(final String path) throws IOException
+  public static ProcessorList<Translators> load(final String path) throws IOException
   {
     return load(Paths.get(path));
   }
@@ -57,16 +57,16 @@ public final class ConfigTransformers
    * Scans the given <code>path</code>, compiles, and loads the translation rules found in the path.
    *
    * @param path the path to the rules folder
-   * @return a list of transformers
+   * @return a list of translators
    * @throws IOException if the given <code>path</code> is invalid
    */
-  public static ProcessorList<Transformers> load(final Path path) throws IOException
+  public static ProcessorList<Translators> load(final Path path) throws IOException
   {
     final Path home = validate(path);
 
     logger.info("Init rules: {}", home);
 
-    final MutableProcessorList<Transformers> acc = new MutableProcessorList<>(getPathName(home));
+    final MutableProcessorList<Translators> acc = new MutableProcessorList<>(getPathName(home));
     loadTransformers(home, home, null, acc);
 
     return acc;
@@ -86,7 +86,7 @@ public final class ConfigTransformers
 
   private static void loadTransformers(
       final Path home, final Path path, final String type,
-      final MutableProcessorList<Transformers> acc) throws IOException
+      final MutableProcessorList<Translators> acc) throws IOException
   {
     try (final DirectoryStream<Path> stream = Files.newDirectoryStream(path))
     {
@@ -108,14 +108,14 @@ public final class ConfigTransformers
 
   private static void addTranslationRule(
       final Path home, final Path path, final String type,
-      final MutableProcessorList<Transformers> acc) throws IOException
+      final MutableProcessorList<Translators> acc) throws IOException
   {
-    Transformers transformers = acc.get(type);
+    Translators translators = acc.get(type);
 
-    if (transformers == null)
+    if (translators == null)
     {
-      transformers = new Transformers(home);
-      acc.register(type, transformers);
+      translators = new Translators(home);
+      acc.register(type, translators);
     }
 
     final Path   rulePath = home.resolveSibling(path);
@@ -124,7 +124,7 @@ public final class ConfigTransformers
     // the rule file contains a single JSON object
     if (rule instanceof Map<?, ?>)
     {
-      transformers.addRule(getRuleName(path), io.ocsf.utils.Files::readJson, Maps.typecast(rule));
+      translators.addRule(getRuleName(path), io.ocsf.utils.Files::readJson, Maps.typecast(rule));
     }
   }
 

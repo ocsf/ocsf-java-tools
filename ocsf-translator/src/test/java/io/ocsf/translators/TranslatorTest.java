@@ -17,6 +17,7 @@
 
 package io.ocsf.translators;
 
+import io.ocsf.schema.Dictionary;
 import io.ocsf.utils.Json5Parser;
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.ParserException;
@@ -492,11 +493,11 @@ public final class TranslatorTest extends TestCase
     final Map<String, Object> url = Maps.typecast(translated.get("url"));
     Assert.assertNotNull(url);
 
-    Assert.assertEquals("https", url.get(URLUtil.Scheme));
-    Assert.assertEquals("example.io", url.get(URLUtil.Hostname));
-    Assert.assertEquals("/tmp/test.html", url.get(URLUtil.Path));
-    Assert.assertEquals("p1=hello&p2=world", url.get(URLUtil.Query));
-    Assert.assertEquals(443, url.get(URLUtil.Port));
+    Assert.assertEquals("https", url.get(Dictionary.Scheme));
+    Assert.assertEquals("example.io", url.get(Dictionary.Hostname));
+    Assert.assertEquals("/tmp/test.html", url.get(Dictionary.Path));
+    Assert.assertEquals("p1=hello&p2=world", url.get(Dictionary.Query));
+    Assert.assertEquals(443, url.get(Dictionary.Port));
   }
 
 
@@ -511,7 +512,7 @@ public final class TranslatorTest extends TestCase
     final Map<String, Object> url = Maps.typecast(translated.get("url"));
     Assert.assertNotNull(url);
 
-    Assert.assertEquals("htts:/example.io/tmp/test.html?p1=hello&p2=world", url.get(URLUtil.Text));
+    Assert.assertEquals("htts:/example.io/tmp/test.html?p1=hello&p2=world", url.get(Dictionary.Text));
   }
 
   public void testEmptyUrlText() throws IOException
@@ -525,8 +526,8 @@ public final class TranslatorTest extends TestCase
     final Map<String, Object> url = Maps.typecast(translated.get("url"));
     Assert.assertNotNull(url);
 
-    Assert.assertEquals("", url.get(URLUtil.Text));
-    Assert.assertEquals("", url.get(URLUtil.Scheme));
-    Assert.assertEquals("", url.get(URLUtil.Hostname));
+    Assert.assertEquals("", url.get(Dictionary.Text));
+    Assert.assertEquals("", url.get(Dictionary.Scheme));
+    Assert.assertEquals("", url.get(Dictionary.Hostname));
   }
 }

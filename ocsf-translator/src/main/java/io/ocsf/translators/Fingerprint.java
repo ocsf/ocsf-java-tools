@@ -26,32 +26,18 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * File fingerprints helper functions.
+ * The fingerprint helper functions.
  */
 final class Fingerprint
 {
-  private static final String Fingerprint = "fingerprint";
-
-  // fingerprint attribute names
-  public static final String Fingerprints = "fingerprints";
-  private static final String Algorithm = "algorithm";
-  private static final String AlgorithmID = "algorithm_id";
-  private static final String Value = "value";
-
-  // file hash sizes in bytes
-  private static final int MD5_LEN = 32;
-  private static final int SHA1_LEN = 40;
-  private static final int SHA256_LEN = 64;
-  private static final int SHA512_LEN = 128;
-
   private Fingerprint() {}
 
   static boolean put(final Map<String, Object> translated, final String type, final Object value, final String key)
   {
-    if (Fingerprint.equals(type))
+    if (Dictionary.Fingerprint.equals(type))
     {
       fingerprint((String) value).
-          ifPresent(fp -> Maps.putIn(translated, key + "." + Fingerprints, Collections.singletonList(fp)));
+          ifPresent(fp -> Maps.putIn(translated, key + "." + Dictionary.Fingerprints, Collections.singletonList(fp)));
 
       return true;
     }
@@ -64,6 +50,8 @@ final class Fingerprint
    *
    * @param value the fingerprint hash value
    * @return the fingerprint object
+   *
+   * TODO: add the new algorithms: CTPH, TLSH, and quickXorHash
    */
   static Optional<Map<String, Object>> fingerprint(final String value)
   {
@@ -74,26 +62,26 @@ final class Fingerprint
       final int algorithm_id;
       switch (value.length())
       {
-        case MD5_LEN:
-          algorithm_id = 1;
+        case Dictionary.MD5_LEN:
+          algorithm_id = Dictionary.FPA_ID_MD5;
           break;
-        case SHA1_LEN:
-          algorithm_id = 2;
+        case Dictionary.SHA1_LEN:
+          algorithm_id = Dictionary.FPA_ID_SHA1;
           break;
-        case SHA256_LEN:
-          algorithm_id = 3;
+        case Dictionary.SHA256_LEN:
+          algorithm_id = Dictionary.FPA_ID_SHA256;
           break;
-        case SHA512_LEN:
-          algorithm_id = 4;
+        case Dictionary.SHA512_LEN:
+          algorithm_id = Dictionary.FPA_ID_SHA512;
           break;
         default:
           algorithm_id = Dictionary.OTHER_ID;
-          fingerprint.put(Algorithm, value);
+          fingerprint.put(Dictionary.Algorithm, value);
           break;
       }
 
-      fingerprint.put(AlgorithmID, algorithm_id);
-      fingerprint.put(Value, value);
+      fingerprint.put(Dictionary.AlgorithmID, algorithm_id);
+      fingerprint.put(Dictionary.Value, value);
 
       return Optional.of(fingerprint);
     }

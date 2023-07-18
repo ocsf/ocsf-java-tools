@@ -17,6 +17,7 @@
 
 package io.ocsf.translators;
 
+import io.ocsf.schema.Dictionary;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Strings;
 
@@ -28,17 +29,10 @@ public final class URLUtil
 {
   private URLUtil() {}
 
-  static final String Text = "text";
-  static final String Scheme = "scheme";
-  static final String Hostname = "hostname";
-  static final String Port = "port";
-  static final String Path = "path";
-  static final String Query = "query_string";
-
   static final Map<String, Object> EMPTY = FMap.<String, Object>b()
-    .p(Text, Strings.EMPTY)
-    .p(Scheme, Strings.EMPTY)
-    .p(Hostname, Strings.EMPTY);
+    .p(Dictionary.Text, Strings.EMPTY)
+    .p(Dictionary.Scheme, Strings.EMPTY)
+    .p(Dictionary.Hostname, Strings.EMPTY);
 
   /**
    * Parses a given URL string and extracts the URL components.
@@ -56,12 +50,12 @@ public final class URLUtil
     final URL aURL = new URL(urlStr);
 
     return FMap.<String, Object>b()
-      .p(Text, urlStr)
-      .p(Scheme, aURL.getProtocol())
-      .p(Hostname, aURL.getHost())
-      .p(Port, port(aURL))
-      .p(Path, aURL.getPath())
-      .o(Query, aURL.getQuery());
+      .p(Dictionary.Text, urlStr)
+      .p(Dictionary.Scheme, aURL.getProtocol())
+      .p(Dictionary.Hostname, aURL.getHost())
+      .p(Dictionary.Port, port(aURL))
+      .p(Dictionary.Path, aURL.getPath())
+      .o(Dictionary.Query, aURL.getQuery());
   }
 
   private static Integer port(final URL url)

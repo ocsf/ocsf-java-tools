@@ -17,6 +17,7 @@
 
 package io.ocsf.translators;
 
+import io.ocsf.schema.Dictionary;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
@@ -35,12 +36,12 @@ public class URLUtilTest extends TestCase
     {
       final Map<String, Object> url = URLUtil.toUrl(text);
 
-      Assert.assertEquals(text, url.get(URLUtil.Text));
-      Assert.assertEquals("http", url.get(URLUtil.Scheme));
-      Assert.assertEquals("example.com", url.get(URLUtil.Hostname));
-      Assert.assertEquals(80, url.get(URLUtil.Port));
-      Assert.assertEquals("/docs/books/tutorial/index.html", url.get(URLUtil.Path));
-      Assert.assertEquals("name=networking", url.get(URLUtil.Query));
+      Assert.assertEquals(text, url.get(Dictionary.Text));
+      Assert.assertEquals("http", url.get(Dictionary.Scheme));
+      Assert.assertEquals("example.com", url.get(Dictionary.Hostname));
+      Assert.assertEquals(80, url.get(Dictionary.Port));
+      Assert.assertEquals("/docs/books/tutorial/index.html", url.get(Dictionary.Path));
+      Assert.assertEquals("name=networking", url.get(Dictionary.Query));
     }
     catch (final MalformedURLException e)
     {

@@ -870,7 +870,7 @@ public final class Translator
     catch (final MalformedURLException e)
     {
       logger.warn("Invalid URL string: {}. Error: {}", o, e.getMessage());
-      return FMap.<String, Object>b().p(URLUtil.Text, o.toString());
+      return FMap.<String, Object>b().p(Dictionary.Text, o.toString());
     }
   }
 

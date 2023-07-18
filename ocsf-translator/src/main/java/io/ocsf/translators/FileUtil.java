@@ -17,6 +17,7 @@
 
 package io.ocsf.translators;
 
+import io.ocsf.schema.Dictionary;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Strings;
 
@@ -33,18 +34,18 @@ public final class FileUtil
 
     if (path.isEmpty())
     {
-      file.p("name", path)
-        .p("path", path)
-        .p("type_id", typeId);
+      file.p(Dictionary.Name, path)
+          .p(Dictionary.Path, path)
+          .p(Dictionary.TYPE_ID, typeId);
     }
     else
     {
       final String[] parts = parseFilePath(path);
 
-      file.o("parent_folder", parts[0])
-        .p("name", parts[1])
-        .p("path", path)
-        .p("type_id", typeId);
+      file.o(Dictionary.ParentFolder, parts[0])
+          .p(Dictionary.Name, parts[1])
+          .p(Dictionary.Path, path)
+          .p(Dictionary.TYPE_ID, typeId);
     }
 
     return file;
@@ -88,8 +89,8 @@ public final class FileUtil
     {
       // root path
       return path.length() == 1 ?
-          new String[]{null, path} :
-          new String[]{path.substring(0, next), path.substring(next)};
+             new String[]{null, path} :
+             new String[]{path.substring(0, next), path.substring(next)};
     }
 
     if (next == path.length())

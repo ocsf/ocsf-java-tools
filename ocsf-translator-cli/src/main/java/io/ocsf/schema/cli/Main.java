@@ -683,29 +683,4 @@ public final class Main
     return name.charAt(0) == '/' ? name.substring(1) : name;
   }
 
-  private static void runPerformanceTest(final String home, final String[] args)
-  {
-    System.out.println("Using rules home : " + home);
-
-    try
-    {
-      final Schema schema = new Schema(schemaFile, schemaEnums, observables);
-
-      final LoadRunner runner = new LoadRunner(home, schema);
-      for (final String file : args)
-      {
-        if (file.endsWith(".json"))
-        {
-          System.out.println("Using data file  : " + file);
-          runner.run(file);
-        }
-      }
-
-      runner.printResults();
-    }
-    catch (final IOException ex)
-    {
-      System.err.printf("Performance test failed: %s%n", ex);
-    }
-  }
 }

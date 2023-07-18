@@ -15,7 +15,6 @@ dependencies {
     implementation project(':ocsf-schema')
     implementation project(':ocsf-parsers')
     implementation project(':ocsf-translator')
-    implementation project(':ocsf-translator-svc')
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

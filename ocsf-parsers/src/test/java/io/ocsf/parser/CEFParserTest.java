@@ -17,7 +17,6 @@
 
 package io.ocsf.parser;
 
-import io.ocsf.utils.Json;
 import org.junit.Test;
 
 import java.util.Map;
@@ -28,11 +27,9 @@ public class CEFParserTest
 {
   private static void parse(final String text)
   {
-    final Map<String, Object> data = CEFParser.parse((text));
+    final Map<String, Object> data = CEFParser.parse(text);
 
     assertEquals(8, data.size());
-    System.out.println(Json.format(data));
-
   }
 
   @Test

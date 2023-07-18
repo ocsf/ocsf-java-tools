@@ -33,18 +33,18 @@ public final class ParserFileTest
         System.out.println("Reading file: " + name);
 
         Files.readAllLines(Paths.get(name)).forEach(
-            line -> {
-              try
-              {
-                System.out.printf("'%s' ...", line);
-                ExpressionParser.parse(line);
-                System.out.println(" ok");
-              }
-              catch (final InvalidExpressionException e)
-              {
-                System.out.println(" ERROR: " + e.getMessage());
-              }
+          line -> {
+            try
+            {
+              System.out.printf("'%s' ...", line);
+              ExpressionParser.parse(line);
+              System.out.println(" ok");
             }
+            catch (final InvalidExpressionException e)
+            {
+              System.out.println(" ERROR: " + e.getMessage());
+            }
+          }
         );
 
         System.out.println("All done");

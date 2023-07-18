@@ -53,8 +53,6 @@ public class WinMultiLineParserTest
     Assert.assertEquals("Informational", event.get("Severity"));
     Assert.assertEquals("", event.get("Command Path"));
     Assert.assertEquals("Microsoft.PowerShell", event.get("Shell ID"));
-
-//    System.out.println(Json.format(event));
   }
 
   @Test
@@ -97,8 +95,6 @@ public class WinMultiLineParserTest
     Assert.assertNotNull(event);
     Assert.assertEquals(14, event.size());
     Assert.assertEquals(12, ((List<?>)event.get("Privileges")).size());
-
-//    System.out.println(Json.format(event));
   }
 
   @Test

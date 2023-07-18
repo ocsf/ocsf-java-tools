@@ -17,7 +17,6 @@
 
 package io.ocsf.parser;
 
-import io.ocsf.utils.Json;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -87,8 +86,6 @@ public class PatternParserTest
 
     final Map<String, Object> data = p.parse(text);
     Assert.assertEquals(11, data.size());
-
-    System.out.println(Json.format(data));
   }
 
   @Test
@@ -101,8 +98,6 @@ public class PatternParserTest
 
     final Map<String, Object> data = p.parse(text);
     Assert.assertEquals(14, data.size());
-
-    System.out.println(Json.format(data));
   }
 
   @Test
@@ -115,8 +110,6 @@ public class PatternParserTest
 
     final Map<String, Object> data = p.parse(text);
     Assert.assertEquals(3, data.size());
-
-    System.out.println(Json.format(data));
   }
 
   @Test
@@ -129,8 +122,6 @@ public class PatternParserTest
 
     final Map<String, Object> data = p.parse(text);
     Assert.assertEquals(4, data.size());
-
-    System.out.println(Json.format(data));
   }
 
   @Test
@@ -143,7 +134,5 @@ public class PatternParserTest
 
     final Map<String, Object> data = p.parse(text);
     Assert.assertEquals(45, data.size());
-
-    System.out.println(Json.format(data));
   }
 }

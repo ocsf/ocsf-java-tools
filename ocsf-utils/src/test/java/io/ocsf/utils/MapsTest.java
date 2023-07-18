@@ -24,10 +24,11 @@ import java.util.Map;
 
 public class MapsTest
 {
-  private static final String OBJ = "{\"Process Information\": {\n" +
-      "    \"Process ID\": \"0x0\",\n" +
-      "    \"Process Name\": \"-\"\n" +
-      "  }}";
+  private static final String OBJ =
+    "{\"Process Information\": {\n" +
+    "    \"Process ID\": \"0x0\",\n" +
+    "    \"Process Name\": \"-\"\n" +
+    "  }}";
 
 
   @Test
@@ -65,10 +66,10 @@ public class MapsTest
   public void downcase()
   {
     final Map<String, Object> data = FMap.<String, Object>b()
-        .p("Foo", 1)
-        .p("BOO", FMap.<String, Object>b().p("Greeting", "hello"));
+                                         .p("Foo", 1)
+                                         .p("BOO", FMap.<String, Object>b().p("Greeting", "hello"));
 
-    final Map<String, Object>  map = Maps.downcase(data);
+    final Map<String, Object> map = Maps.downcase(data);
 
     Assert.assertEquals(1, map.get("foo"));
     Assert.assertEquals("hello", Maps.getIn(map, "boo.greeting"));

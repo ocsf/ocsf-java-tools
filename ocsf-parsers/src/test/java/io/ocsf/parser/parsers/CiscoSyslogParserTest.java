@@ -56,8 +56,9 @@ public class CiscoSyslogParserTest
   {
     final String text = "<165>Oct 06 15:02:30: %ASA-5-111008: User 'admin' executed the 'dir disk0:/dap.xml' command.";
 
-    final CiscoSyslogParser parser = new CiscoSyslogParser();
-    System.out.println(parser.parse(text));
+    final CiscoSyslogParser   parser = new CiscoSyslogParser();
+    final Map<String, Object> parsed = parser.parse(text);
+    Assert.assertNull(parsed);
 
   }
 

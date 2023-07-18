@@ -95,8 +95,6 @@ public class WinEventLogParserTest
     Assert.assertEquals(3, ((Map<?, ?>) event.get("Network Information")).size());
     Assert.assertEquals(5, ((Map<?, ?>) event.get("Detailed Authentication Information")).size());
     Assert.assertEquals("0", Maps.getIn(event, "Detailed Authentication Information", "Key Length"));
-
-//    System.out.println(Json.format(event));
   }
 
   @Test
@@ -120,9 +118,6 @@ public class WinEventLogParserTest
     Assert.assertEquals(4, ((Map<?, ?>) event.get("Subject")).size());
     Assert.assertEquals("SESTEST", Maps.getIn(event, "Subject", "Account Domain"));
     Assert.assertEquals("3", event.get("Logon Type"));
-
-//    System.out.println(Event);
-//    System.out.println(Json.format(event));
   }
 
   @Test
@@ -142,8 +137,6 @@ public class WinEventLogParserTest
     Assert.assertEquals("01/31/2022 04:51:46 PM", event.get("ref_time"));
     Assert.assertEquals(4, ((Map<?, ?>) event.get("Subject")).size());
     Assert.assertEquals("", Maps.getIn(event, "Subject", "Logon ID"));
-
-//    System.out.println(Json.format(event));
   }
 
 
@@ -191,7 +184,5 @@ public class WinEventLogParserTest
     Assert.assertEquals(17, event.size());
     Assert.assertEquals("Informational", Maps.getIn(event, "Context", "Severity"));
     Assert.assertEquals("", Maps.get(event, "User Data"));
-
-//    System.out.println(Json.format(event));
   }
 }

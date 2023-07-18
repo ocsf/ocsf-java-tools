@@ -35,8 +35,6 @@ public class RegexParserTest
     final Parser              parser = RegexParser.create(R);
     final Map<String, Object> data   = parser.parse(text);
 
-    System.out.println(Json.format(data));
-
     Assert.assertNotNull(data);
     Assert.assertEquals(Json.format(data), 8, data.size());
     Assert.assertEquals("evcls", "DHCPACK", data.get("evcls"));

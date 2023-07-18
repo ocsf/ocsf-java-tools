@@ -113,7 +113,8 @@ public final class Translators
   }
 
   public void addRule(
-    final String name, final Translator.JsonReader reader, final Map<String, Object> rule) throws IOException
+    final String name, final Translator.JsonReader reader, final Map<String, Object> rule)
+    throws IOException
   {
     put(name, Translator.build(home, reader, rule));
   }
@@ -163,49 +164,9 @@ public final class Translators
    */
   public Map<String, Object> translate(final String name, final Map<String, Object> data)
   {
-    if (data != null)
-    {
-      final Translator.I t = translators.get(name);
+    final Translator.I t = translators.get(name);
 
-      return t != null ? translate(t, data) : null;
-    }
-
-    return null;
-  }
-
-  /**
-   * Translates a single event using the given translator or the default translator.
-   * <p>
-   * The event data will be translated if the rules' <code>when</code> condition evaluates as
-   * <code>true</code>.
-   *
-   * @param name the field to translate to data.
-   * @param data the data to be translated
-   * @return the translated data or null if the event was not translated
-   */
-  public Map<String, Object> translateWithDefault(final String name, final Map<String,
-    Object> data)
-  {
-    if (data != null)
-    {
-      final Translator.I t = translators.get(name);
-      if (t != null)
-      {
-        final Map<String, Object> translated = translate(t, data);
-        if (translated != null)
-        {
-          return Utils.addUuid(translated);
-        }
-      }
-
-      // use the default translator
-      if (translator != null)
-      {
-        return translate(translator, data);
-      }
-    }
-
-    return null;
+    return t != null ? translate(t, data) : null;
   }
 
   /**
@@ -227,7 +188,7 @@ public final class Translators
         final Map<String, Object> translated = translate(t, data);
         if (translated != null)
         {
-          return Utils.addUuid(translated);
+          return translated;
         }
       }
 

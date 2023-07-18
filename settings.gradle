@@ -13,9 +13,10 @@ plugins {
 }
 
 rootProject.name = 'ocsf-java-tools'
+
 include('ocsf-utils')
 include('ocsf-schema')
 include('ocsf-parsers')
-include('ocsf-translator')
-include('ocsf-translator-svc')
-include('ocsf-translator-cli')
+include('ocsf-translators')
+include('ocsf-translators-svc')
+include('ocsf-cli')

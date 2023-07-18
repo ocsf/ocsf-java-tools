@@ -18,8 +18,8 @@
 
 package io.ocsf.translators;
 
-import io.ocsf.parsers.PatternParser;
-import io.ocsf.parsers.RegexParser;
+import io.ocsf.parser.PatternParser;
+import io.ocsf.parser.RegexParser;
 import io.ocsf.schema.Dictionary;
 import io.ocsf.utils.*;
 import org.slf4j.Logger;
@@ -89,7 +89,7 @@ public final class Translator
    * Translator Interface.
    */
   @FunctionalInterface
-  public interface ConditionalTranslator extends I
+  interface ConditionalTranslator extends I
   {
     default boolean hasPredicate() {return true;}
   }
@@ -294,7 +294,7 @@ public final class Translator
   }
 
   private static DataTranslator buildDataTranslator(
-    final Map<String, Object> parser, final Function<io.ocsf.parsers.Parser, DataTranslator> builder)
+    final Map<String, Object> parser, final Function<io.ocsf.parser.Parser, DataTranslator> builder)
   {
     final String pattern = (String) parser.get(PatternField);
     if (Strings.isNotEmpty(pattern))

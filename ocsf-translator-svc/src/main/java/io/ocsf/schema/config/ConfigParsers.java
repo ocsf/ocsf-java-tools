@@ -16,7 +16,8 @@
 
 package io.ocsf.schema.config;
 
-import io.ocsf.parsers.*;
+import io.ocsf.parser.parsers.*;
+import io.ocsf.parser.Parser;
 import io.ocsf.schema.concurrent.MutableProcessorList;
 import io.ocsf.schema.concurrent.ProcessorList;
 

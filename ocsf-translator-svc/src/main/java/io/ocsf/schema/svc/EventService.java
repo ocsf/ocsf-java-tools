@@ -16,7 +16,7 @@
 
 package io.ocsf.schema.svc;
 
-import io.ocsf.parsers.Parser;
+import io.ocsf.parser.Parser;
 import io.ocsf.schema.Event;
 import io.ocsf.schema.RawEvent;
 import io.ocsf.schema.concurrent.ProcessorList;

@@ -16,8 +16,8 @@
 
 package io.ocsf.schema.svc;
 
-import io.ocsf.parsers.WinEventLogParser;
-import io.ocsf.parsers.XmlWinEventLogParser;
+import io.ocsf.parser.parsers.WinEventLogParser;
+import io.ocsf.parser.parsers.XmlWinEventLogParser;
 import io.ocsf.schema.RawEvent;
 import io.ocsf.utils.FMap;
 import org.junit.Assert;

@@ -17,7 +17,7 @@
 
 package io.ocsf.translators;
 
-import io.ocsf.parsers.InfobloxDHCPParser;
+import io.ocsf.parser.parsers.InfobloxDHCPParser;
 import io.ocsf.utils.Maps;
 import org.junit.Assert;
 import org.junit.Test;

@@ -16,7 +16,7 @@
 
 package io.ocsf.schema.cli;
 
-import io.ocsf.parsers.*;
+import io.ocsf.parser.parsers.*;
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Json;
 import io.ocsf.utils.ParserException;

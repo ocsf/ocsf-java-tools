@@ -17,8 +17,8 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.translator.svc.Event;
-import io.ocsf.translator.svc.concurrent.BlockingQueue;
+import io.ocsf.utils.event.EventQueue;
+import io.ocsf.utils.event.Event;
 
 public class Tests
 {
@@ -29,7 +29,7 @@ public class Tests
 
   protected static final int MAX_QUEUE_SIZE = 5;
 
-  protected final BlockingQueue<Event> in  = new BlockingQueue<>(MAX_QUEUE_SIZE);
-  protected final BlockingQueue<Event> out = new BlockingQueue<>(MAX_QUEUE_SIZE);
+  protected final EventQueue<Event> in  = new EventQueue<>(MAX_QUEUE_SIZE);
+  protected final EventQueue<Event> out = new EventQueue<>(MAX_QUEUE_SIZE);
 
 }

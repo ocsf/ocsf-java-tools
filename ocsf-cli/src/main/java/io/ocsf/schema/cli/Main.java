@@ -17,15 +17,15 @@
 package io.ocsf.schema.cli;
 
 import io.ocsf.parsers.*;
-import io.ocsf.utils.Parser;
+import io.ocsf.translator.TranslatorBuilder;
+import io.ocsf.utils.parsers.Parser;
 import io.ocsf.schema.Dictionary;
 import io.ocsf.schema.Utils;
 import io.ocsf.schema.Schema;
 import io.ocsf.schema.cli.CommandLineParser.Argument;
-import io.ocsf.translator.Translator;
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Json;
-import io.ocsf.utils.ParserException;
+import io.ocsf.utils.parsers.ParserException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -335,7 +335,7 @@ public final class Main
     return Optional.empty();
   }
 
-  private static Optional<Translator.I> translator()
+  private static Optional<TranslatorBuilder.Translator> translator()
   {
     final Argument ruleDir  = clp.getArg('R');
     final Argument ruleFile = clp.getArg('r');
@@ -392,7 +392,7 @@ public final class Main
   }
 
   private static void translate(
-    final Translator.I translator, final List<String> files,
+    final TranslatorBuilder.Translator translator, final List<String> files,
     final Consumer<Item> consumer)
   {
     for (final String arg : files)
@@ -463,7 +463,7 @@ public final class Main
   }
 
   private static boolean translate(
-    final Translator.I translator, final Item source, final Consumer<Item> consumer)
+    final TranslatorBuilder.Translator translator, final Item source, final Consumer<Item> consumer)
   {
     if (source.data == null)
     {
@@ -488,7 +488,7 @@ public final class Main
     return false;
   }
 
-  private static Translator.I translator(final String home, final String rule)
+  private static TranslatorBuilder.Translator translator(final String home, final String rule)
   {
     try
     {
@@ -500,8 +500,8 @@ public final class Main
         System.out.println("// rule  file: " + ruleFile);
       }
 
-      final Translator.I translator = Translator.fromFile(Paths.get(home),
-        Paths.get(ruleFile));
+      final TranslatorBuilder.Translator translator = TranslatorBuilder.fromFile(Paths.get(home),
+                                                                                 Paths.get(ruleFile));
 
       if (schemaFile != null)
       {

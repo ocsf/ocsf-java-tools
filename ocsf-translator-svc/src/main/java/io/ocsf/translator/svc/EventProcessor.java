@@ -17,10 +17,11 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.utils.Parser;
-import io.ocsf.translator.svc.concurrent.BlockingQueue;
-import io.ocsf.translator.svc.concurrent.Sink;
-import io.ocsf.translator.svc.concurrent.Source;
+import io.ocsf.utils.event.Event;
+import io.ocsf.utils.parsers.Parser;
+import io.ocsf.utils.event.EventQueue;
+import io.ocsf.utils.event.Sink;
+import io.ocsf.utils.event.Source;
 
 /**
  * The EventProcessor concurrently runs a parser and a normalizer in two separate threads.
@@ -33,10 +34,10 @@ public class EventProcessor
   private final EventNormalizer normalizer;
 
   public EventProcessor(
-      final Parser parser, final Translators translators,
-      final Source<Event> source, final Sink<Event> sink)
+    final Parser parser, final TranslatorsManager translators,
+    final Source<Event> source, final Sink<Event> sink)
   {
-    final BlockingQueue<Event> queue = new BlockingQueue<>(2);
+    final EventQueue<Event> queue = new EventQueue<>(2);
 
     this.parser = new EventParser(parser, source, queue);
     this.normalizer = new EventNormalizer(translators, queue, sink);

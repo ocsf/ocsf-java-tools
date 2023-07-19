@@ -16,10 +16,11 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.utils.Parser;
+import io.ocsf.utils.FuzzyHashMap;
+import io.ocsf.utils.event.Event;
+import io.ocsf.utils.parsers.Parser;
 import io.ocsf.schema.Dictionary;
-import io.ocsf.translator.svc.concurrent.BlockingQueue;
-import io.ocsf.translator.svc.concurrent.MutableProcessorList;
+import io.ocsf.utils.event.EventQueue;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
 import org.junit.After;
@@ -33,35 +34,36 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EventDemuxerTest extends Tests
 {
-  private static final String NAME = "syslog";
+  private static final String NAME  = "syslog";
   private static final String NAME1 = "syslog:1";
   private static final String NAME2 = "syslog:2";
 
   private static final AtomicBoolean done = new AtomicBoolean();
 
   // create a very simple "parser"
-  private final Parser parser = text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
-  private final Translators translators = new Translators("test");
+  private final Parser             parser      =
+    text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
+  private final TranslatorsManager translators = new TranslatorsManager("test");
 
-  private final MutableProcessorList<Parser> parsers = new MutableProcessorList<>(NAME);
-  private final MutableProcessorList<Translators> normalizers = new MutableProcessorList<>(NAME);
+  private final FuzzyHashMap<Parser>             parsers     = new FuzzyHashMap<>(NAME);
+  private final FuzzyHashMap<TranslatorsManager> normalizers = new FuzzyHashMap<>(NAME);
 
-  private final BlockingQueue<Event> rawEventQueue = new BlockingQueue<>();
+  private final EventQueue<Event> rawEventQueue = new EventQueue<>();
 
   @Before
   public void setUp() throws Exception
   {
     translators.put("Transformer", data ->
-        FMap.<String, Object>b()
-            .p(EVENT_ID, data.remove(EVENT_ID))
-            .p(EVENT_ORIGIN, data.remove(EVENT_ORIGIN))
-            .p(Dictionary.RAW_EVENT, data.remove(Dictionary.RAW_EVENT)));
+      FMap.<String, Object>b()
+          .p(EVENT_ID, data.remove(EVENT_ID))
+          .p(EVENT_ORIGIN, data.remove(EVENT_ORIGIN))
+          .p(Dictionary.RAW_EVENT, data.remove(Dictionary.RAW_EVENT)));
 
-    parsers.register(NAME1, parser);
-    normalizers.register(NAME1, translators);
+    parsers.put(NAME1, parser);
+    normalizers.put(NAME1, translators);
 
-    parsers.register(NAME2, parser);
-    normalizers.register(NAME2, translators);
+    parsers.put(NAME2, parser);
+    normalizers.put(NAME2, translators);
 
     new Thread(new EventDemuxer(parsers, normalizers, in, out, rawEventQueue)
     {
@@ -78,16 +80,16 @@ public class EventDemuxerTest extends Tests
     for (int i = 0; i < MAX_QUEUE_SIZE; i++)
     {
       in.put(new Event(
-          FMap.<String, Object>b()
-              .p(Splunk.RAW_EVENT, Integer.toString(i))
-              .p(Splunk.TENANT, "Tenant")
-              .p(Splunk.SOURCE_TYPE, NAME1)));
+        FMap.<String, Object>b()
+            .p(Splunk.RAW_EVENT, Integer.toString(i))
+            .p(Splunk.TENANT, "Tenant")
+            .p(Splunk.SOURCE_TYPE, NAME1)));
 
       in.put(new Event(
-          FMap.<String, Object>b()
-              .p(Splunk.RAW_EVENT, Integer.toString(i))
-              .p(Splunk.TENANT, "Tenant")
-              .p(Splunk.SOURCE_TYPE, NAME2)));
+        FMap.<String, Object>b()
+            .p(Splunk.RAW_EVENT, Integer.toString(i))
+            .p(Splunk.TENANT, "Tenant")
+            .p(Splunk.SOURCE_TYPE, NAME2)));
     }
   }
 
@@ -115,7 +117,8 @@ public class EventDemuxerTest extends Tests
     for (int i = 0; i < 2 * MAX_QUEUE_SIZE; i++)
     {
       final Map<String, Object> data   = out.take().data();
-      final String              source = (String) Maps.getIn(data, new String[]{Dictionary.UNMAPPED, Event.SOURCE_TYPE});
+      final String              source =
+        (String) Maps.getIn(data, new String[]{Dictionary.UNMAPPED, Splunk.CIM_SOURCE_TYPE});
 
       Assert.assertEquals(5, data.size());
       Assert.assertTrue(NAME1.equals(source) || NAME2.equals(source));

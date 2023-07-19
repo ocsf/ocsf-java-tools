@@ -17,6 +17,8 @@
 
 package io.ocsf.utils;
 
+import io.ocsf.utils.parsers.ParserException;
+
 public class InvalidExpressionException extends ParserException
 {
   private static final long serialVersionUID = 1L;

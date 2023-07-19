@@ -18,7 +18,7 @@
 package io.ocsf.translator;
 
 import io.ocsf.utils.Files;
-import io.ocsf.utils.ParserException;
+import io.ocsf.utils.parsers.ParserException;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -58,7 +58,8 @@ public final class PerfTest
         }
       }
 
-      final Translator.I translator = Translator.fromFile(Paths.get(home), Paths.get(rule));
+      final TranslatorBuilder.Translator
+        translator = TranslatorBuilder.fromFile(Paths.get(home), Paths.get(rule));
 
       final long start = System.currentTimeMillis();
       for (int i = 0; i < 100_000; ++i)
@@ -72,7 +73,7 @@ public final class PerfTest
     }
     else
     {
-      System.err.println("Usage: TransformerPerfTest <rules-dir> <rule.jason> <data.json>");
+      System.err.println("Usage: PerfTest <rules-dir> <rule.jason> <data.json>");
     }
   }
 }

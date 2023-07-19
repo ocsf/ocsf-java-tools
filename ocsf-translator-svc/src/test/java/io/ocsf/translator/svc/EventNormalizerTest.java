@@ -17,6 +17,7 @@
 package io.ocsf.translator.svc;
 
 import io.ocsf.utils.FMap;
+import io.ocsf.utils.event.Event;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -28,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EventNormalizerTest extends Tests
 {
-  private final Translators translators = new Translators("test");
+  private final TranslatorsManager translators = new TranslatorsManager("test");
 
   private static final AtomicBoolean done = new AtomicBoolean();
 

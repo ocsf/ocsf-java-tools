@@ -17,7 +17,7 @@
 
 package io.ocsf.parsers;
 
-import io.ocsf.utils.Parser;
+import io.ocsf.utils.parsers.Parser;
 
 import java.util.Map;
 

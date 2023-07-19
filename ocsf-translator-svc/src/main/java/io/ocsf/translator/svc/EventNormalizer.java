@@ -17,9 +17,10 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.translator.svc.concurrent.Sink;
-import io.ocsf.translator.svc.concurrent.Source;
-import io.ocsf.translator.svc.concurrent.Transformer;
+import io.ocsf.utils.event.Sink;
+import io.ocsf.utils.event.Source;
+import io.ocsf.utils.event.Transformer;
+import io.ocsf.utils.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,10 +30,10 @@ public class EventNormalizer extends Transformer
 {
   private static final Logger logger = LoggerFactory.getLogger(EventNormalizer.class);
 
-  private final Translators translators;
+  private final TranslatorsManager translators;
 
   public EventNormalizer(
-      final Translators translators, final Source<Event> source, final Sink<Event> sink)
+    final TranslatorsManager translators, final Source<Event> source, final Sink<Event> sink)
   {
     super(translators.toString(), source, sink);
     this.translators = translators;

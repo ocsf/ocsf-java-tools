@@ -17,8 +17,8 @@
 
 package io.ocsf.utils;
 
-import io.ocsf.utils.Parser;
-import io.ocsf.utils.PatternParser;
+import io.ocsf.utils.parsers.Parser;
+import io.ocsf.utils.parsers.PatternParser;
 import org.junit.Assert;
 import org.junit.Test;
 

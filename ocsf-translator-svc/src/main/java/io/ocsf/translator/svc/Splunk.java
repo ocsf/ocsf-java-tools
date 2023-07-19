@@ -25,6 +25,11 @@ public final class Splunk
   public static final String SOURCE_TYPE = "sourceType";
   public static final String RAW_EVENT = "rawEvent";
   public static final String TENANT = "tenant";
+  /**
+   * The out-of-band attributes, not available in the raw event data.
+   */
+  public static final String CUSTOMER_ID     = "customer_uid";
+  public static final String CIM_SOURCE_TYPE = "source_type";
 
   private Splunk() {}
 }

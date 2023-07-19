@@ -16,6 +16,9 @@
 
 package io.ocsf.utils;
 
+import io.ocsf.utils.parsers.Json5Parser;
+import io.ocsf.utils.parsers.ParserException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

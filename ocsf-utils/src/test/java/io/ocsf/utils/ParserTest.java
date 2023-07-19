@@ -24,7 +24,7 @@ public final class ParserTest
   {
     try
     {
-      final Tree root = ExpressionParser.parse(exp);
+      final Tree root = BooleanExpression.parse(exp);
 
       System.out.println(exp);
       System.out.printf("   => %s%n", root.toString());
@@ -38,12 +38,12 @@ public final class ParserTest
 
   private static void testUnicode()
   {
-    System.out.println(ExpressionParser.parse("name =\"我的公司\""));
-    System.out.println(ExpressionParser.parse("name = \"默认组\""));
-    System.out.println(ExpressionParser.parse("name = '☯☃☠☕♛'"));
-    System.out.println(ExpressionParser.parse("name = '你好，世界'"));
+    System.out.println(BooleanExpression.parse("name =\"我的公司\""));
+    System.out.println(BooleanExpression.parse("name = \"默认组\""));
+    System.out.println(BooleanExpression.parse("name = '☯☃☠☕♛'"));
+    System.out.println(BooleanExpression.parse("name = '你好，世界'"));
 
-    System.out.println(ExpressionParser.parse("name='\\u4F60\\u597D\\uFF0C\\u4E16\\u754C'"));
+    System.out.println(BooleanExpression.parse("name='\\u4F60\\u597D\\uFF0C\\u4E16\\u754C'"));
   }
 
   public static void main(final String[] args)

@@ -17,7 +17,7 @@
 
 package io.ocsf.translator;
 
-import io.ocsf.utils.Json5Parser;
+import io.ocsf.utils.parsers.Json5Parser;
 import io.ocsf.utils.Maps;
 import org.junit.Assert;
 import org.junit.Test;
@@ -244,7 +244,7 @@ public class SyslogDhcpTest
     try
     {
       final Map<String, Object> parsed = Json5Parser.to(Data);
-      final Map<String, Object> translated = Translator
+      final Map<String, Object> translated = TranslatorBuilder
         .fromString(Rule)
         .apply(parsed);
 
@@ -264,7 +264,7 @@ public class SyslogDhcpTest
     try
     {
       final Map<String, Object> parsed = Json5Parser.to(Data);
-      final Map<String, Object> translated = Translator
+      final Map<String, Object> translated = TranslatorBuilder
         .fromString(RegexRule)
         .apply(parsed);
 
@@ -284,7 +284,7 @@ public class SyslogDhcpTest
     try
     {
       final Map<String, Object> parsed = Json5Parser.to(Data);
-      final Map<String, Object> translated = Translator
+      final Map<String, Object> translated = TranslatorBuilder
         .fromString(MultiStageParsingRule)
         .apply(parsed);
 
@@ -310,7 +310,7 @@ public class SyslogDhcpTest
     try
     {
       final Map<String, Object> parsed = Json5Parser.to(RelayData);
-      final Map<String, Object> translated = Translator
+      final Map<String, Object> translated = TranslatorBuilder
         .fromString(MultiStageParsingRegex)
         .apply(parsed);
 

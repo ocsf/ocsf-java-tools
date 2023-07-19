@@ -17,12 +17,13 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.utils.Parser;
-import io.ocsf.translator.svc.concurrent.BlockingQueue;
-import io.ocsf.translator.svc.concurrent.ProcessorList;
-import io.ocsf.translator.svc.concurrent.Sink;
-import io.ocsf.translator.svc.concurrent.Source;
-import io.ocsf.translator.svc.concurrent.Transformer;
+import io.ocsf.utils.event.Event;
+import io.ocsf.utils.parsers.Parser;
+import io.ocsf.utils.event.EventQueue;
+import io.ocsf.utils.FuzzyHashMap;
+import io.ocsf.utils.event.Sink;
+import io.ocsf.utils.event.Source;
+import io.ocsf.utils.event.Transformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,12 +38,12 @@ public class EventDemuxer extends Transformer
 {
   private static final Logger logger = LoggerFactory.getLogger(EventDemuxer.class);
 
-  private final ProcessorList<Parser> parsers;
-  private final ProcessorList<Translators> normalizers;
+  private final FuzzyHashMap<Parser>             parsers;
+  private final FuzzyHashMap<TranslatorsManager> normalizers;
 
   // translated events sink
-  private final Sink<Event> eventSink;
-  private final Map<String, BlockingQueue<Event>> queues;
+  private final Sink<Event>                    eventSink;
+  private final Map<String, EventQueue<Event>> queues;
 
   /**
    * Creates a new event demuxer.
@@ -54,8 +55,8 @@ public class EventDemuxer extends Transformer
    * @param unparsed    the events that were not the parsed and translated
    */
   public EventDemuxer(
-      final ProcessorList<Parser> parsers,
-      final ProcessorList<Translators> normalizers,
+      final FuzzyHashMap<Parser> parsers,
+      final FuzzyHashMap<TranslatorsManager> normalizers,
       final Source<Event> source,
       final Sink<Event> sink,
       final Sink<Event> unparsed)
@@ -85,7 +86,7 @@ public class EventDemuxer extends Transformer
       final Parser parser = parsers.get(source);
       if (parser != null)
       {
-        final Translators translators = normalizers.get(source);
+        final TranslatorsManager translators = normalizers.get(source);
         if (translators != null)
         {
           return EventParser.process(parser, data, translators::translate);
@@ -135,7 +136,7 @@ public class EventDemuxer extends Transformer
     super.terminated();
     try
     {
-      for (final BlockingQueue<Event> queue : queues.values())
+      for (final EventQueue<Event> queue : queues.values())
       {
         queue.put(Event.eos());
       }
@@ -155,12 +156,12 @@ public class EventDemuxer extends Transformer
 
     if (sink == null)
     {
-      final Parser      parser     = parsers.get(source);
-      final Translators normalizer = normalizers.get(source);
+      final Parser             parser     = parsers.get(source);
+      final TranslatorsManager normalizer = normalizers.get(source);
 
       if (parser != null && normalizer != null)
       {
-        final BlockingQueue<Event> queue = new BlockingQueue<>();
+        final EventQueue<Event> queue = new EventQueue<>();
 
         new EventProcessor(parser, normalizer, queue, eventSink).start();
 

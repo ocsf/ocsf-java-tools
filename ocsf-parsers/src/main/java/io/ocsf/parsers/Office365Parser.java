@@ -17,8 +17,8 @@
 
 package io.ocsf.parsers;
 
-import io.ocsf.utils.Parser;
-import io.ocsf.utils.Json5Parser;
+import io.ocsf.utils.parsers.Parser;
+import io.ocsf.utils.parsers.Json5Parser;
 
 import java.util.Map;
 

@@ -18,7 +18,7 @@
 package io.ocsf.parser.parsers;
 
 import io.ocsf.parsers.CiscoSyslogParser;
-import io.ocsf.utils.Syslog;
+import io.ocsf.utils.parsers.Syslog;
 import io.ocsf.utils.Json;
 import org.junit.Assert;
 import org.junit.Test;

@@ -17,11 +17,12 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.translator.svc.concurrent.Sink;
-import io.ocsf.translator.svc.concurrent.Source;
-import io.ocsf.translator.svc.concurrent.Transformer;
+import io.ocsf.utils.event.Sink;
+import io.ocsf.utils.event.Source;
+import io.ocsf.utils.event.Transformer;
 import io.ocsf.utils.Maps;
-import io.ocsf.utils.Parser;
+import io.ocsf.utils.event.Event;
+import io.ocsf.utils.parsers.Parser;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -35,7 +36,7 @@ public class EventParser extends Transformer
   private final Parser parser;
 
   public EventParser(
-      final Parser parser, final Source<Event> source, final Sink<Event> sink)
+    final Parser parser, final Source<Event> source, final Sink<Event> sink)
   {
     super(parser.toString(), source, sink);
     this.parser = parser;
@@ -59,8 +60,8 @@ public class EventParser extends Transformer
         final Map<String, Object> parsed = parser.parse(raw);
         if (parsed != null)
         {
-          Maps.putIn(parsed, Event.CUSTOMER_ID, data.get(Splunk.TENANT));
-          Maps.putIn(parsed, Event.SOURCE_TYPE, data.get(Splunk.SOURCE_TYPE));
+          Maps.putIn(parsed, Splunk.CUSTOMER_ID, data.get(Splunk.TENANT));
+          Maps.putIn(parsed, Splunk.CIM_SOURCE_TYPE, data.get(Splunk.SOURCE_TYPE));
 
 //          parsed.put(Event.RAW_EVENT, raw);
 

@@ -17,7 +17,7 @@
 
 package io.ocsf.translator;
 
-import io.ocsf.utils.Json5Parser;
+import io.ocsf.utils.parsers.Json5Parser;
 import io.ocsf.utils.Maps;
 import org.junit.Assert;
 import org.junit.Test;
@@ -68,7 +68,7 @@ public class SyslogTest
     try
     {
       final Map<String, Object> data = Json5Parser.to(Data);
-      final Map<String, Object> translated = Translator
+      final Map<String, Object> translated = TranslatorBuilder
         .fromString(Rule)
         .apply(data);
 

@@ -37,7 +37,7 @@ public final class ParserFileTest
             try
             {
               System.out.printf("'%s' ...", line);
-              ExpressionParser.parse(line);
+              BooleanExpression.parse(line);
               System.out.println(" ok");
             }
             catch (final InvalidExpressionException e)

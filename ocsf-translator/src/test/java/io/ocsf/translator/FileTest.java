@@ -19,7 +19,7 @@ package io.ocsf.translator;
 
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Json;
-import io.ocsf.utils.ParserException;
+import io.ocsf.utils.parsers.ParserException;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +38,8 @@ public final class FileTest
       final String home     = args[0];
       final String ruleFile = args[1];
 
-      final Translator.I translator = Translator.fromFile(Paths.get(home), Paths.get(ruleFile));
+      final TranslatorBuilder.Translator
+        translator = TranslatorBuilder.fromFile(Paths.get(home), Paths.get(ruleFile));
 
       System.out.println("Using rule file: " + ruleFile);
 
@@ -51,11 +52,11 @@ public final class FileTest
     }
     else
     {
-      System.err.println("Usage TransformerFileTest <rules-dir> <rule.json> <data.json>");
+      System.err.println("Usage FileTest <rules-dir> <rule.json> <data.json>");
     }
   }
 
-  private static void visitAllDirsAndFiles(final Translator.I translator, final File file) throws IOException
+  private static void visitAllDirsAndFiles(final TranslatorBuilder.Translator translator, final File file) throws IOException
   {
     System.out.println("Processing " + file);
 
@@ -75,7 +76,7 @@ public final class FileTest
     }
   }
 
-  private static void transform(final Translator.I translator, final String filename) throws IOException
+  private static void transform(final TranslatorBuilder.Translator translator, final String filename) throws IOException
   {
     try
     {

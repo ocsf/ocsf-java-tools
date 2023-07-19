@@ -17,10 +17,10 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.utils.Parser;
-import io.ocsf.translator.svc.concurrent.ProcessorList;
-import io.ocsf.translator.svc.config.ConfigParsers;
-import io.ocsf.translator.svc.config.ConfigTranslators;
+import io.ocsf.utils.parsers.Parser;
+import io.ocsf.utils.FuzzyHashMap;
+import io.ocsf.parsers.Parsers;
+import io.ocsf.translator.svc.config.TranslatorsLoader;
 import io.ocsf.utils.Maps;
 
 import java.io.IOException;
@@ -33,8 +33,8 @@ import java.util.Map;
  */
 public class EventService
 {
-  private final ProcessorList<Parser> parsers;
-  private final ProcessorList<Translators> normalizers;
+  private final FuzzyHashMap<Parser>             parsers;
+  private final FuzzyHashMap<TranslatorsManager> normalizers;
 
   /**
    * Creates a new event service that parses and translates events in a blocking call;
@@ -44,8 +44,8 @@ public class EventService
    */
   public EventService(final String rules) throws IOException
   {
-    this.parsers = ConfigParsers.parsers();
-    this.normalizers = ConfigTranslators.load(rules);
+    this.parsers = Parsers.parsers();
+    this.normalizers = TranslatorsLoader.load(rules);
   }
 
   /**
@@ -71,7 +71,7 @@ public class EventService
       throw new TranslatorException(TranslatorException.Reason.NoParser);
     }
 
-    final Translators translators = normalizers.get(source);
+    final TranslatorsManager translators = normalizers.get(source);
     if (translators == null)
     {
       throw new TranslatorException(TranslatorException.Reason.NoTranslator);
@@ -98,8 +98,8 @@ public class EventService
       throw new TranslatorException(TranslatorException.Reason.UnsupportedEvent);
     }
 
-    Maps.putIn(parsed, Event.CUSTOMER_ID, data.get(Splunk.TENANT));
-    Maps.putIn(parsed, Event.SOURCE_TYPE, data.get(Splunk.SOURCE_TYPE));
+    Maps.putIn(parsed, Splunk.CUSTOMER_ID, data.get(Splunk.TENANT));
+    Maps.putIn(parsed, Splunk.CIM_SOURCE_TYPE, data.get(Splunk.SOURCE_TYPE));
 
     final Map<String, Object> translated;
     try

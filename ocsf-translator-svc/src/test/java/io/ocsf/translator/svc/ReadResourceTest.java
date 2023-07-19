@@ -17,7 +17,7 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.translator.Translator;
+import io.ocsf.translator.TranslatorBuilder;
 import io.ocsf.utils.Files;
 import junit.framework.TestCase;
 import org.junit.Assert;
@@ -41,23 +41,23 @@ public class ReadResourceTest extends TestCase
   {
     final Path rules = Paths.get("rules");
 
-    Assert.assertNotNull(Translator.fromResource(
+    Assert.assertNotNull(TranslatorBuilder.fromResource(
         rules,
         Paths.get("microsoft/windows/security/xml/translate-4688.json")));
-    Assert.assertNotNull(Translator.fromResource(
+    Assert.assertNotNull(TranslatorBuilder.fromResource(
         rules,
         Paths.get("microsoft/windows/security/xml/translate-4624.json")));
-    Assert.assertNotNull(Translator.fromResource(
+    Assert.assertNotNull(TranslatorBuilder.fromResource(
         rules,
         Paths.get("microsoft/windows/security/xml/translate-4625.json")));
-    Assert.assertNotNull(Translator.fromResource(
+    Assert.assertNotNull(TranslatorBuilder.fromResource(
         rules,
         Paths.get("cisco/111010.json")));
   }
 
   public void testTranslators() throws IOException
   {
-    final Translators translators = new Translators("rules");
+    final TranslatorsManager translators = new TranslatorsManager("rules");
 
     translators.addResource("4688", Paths.get("microsoft/windows/security/xml/translate-4688.json"));
     translators.addResource("4624", Paths.get("microsoft/windows/security/xml/translate-4624.json"));

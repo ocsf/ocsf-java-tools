@@ -16,6 +16,7 @@
 
 package io.ocsf.utils;
 
+import io.ocsf.utils.parsers.Json5Parser;
 import org.junit.Assert;
 import org.junit.Test;
 

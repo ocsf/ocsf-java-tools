@@ -17,7 +17,7 @@
 
 package io.ocsf.utils;
 
-import io.ocsf.utils.NameValueParser;
+import io.ocsf.utils.parsers.NameValueParser;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

@@ -17,7 +17,7 @@
 
 package io.ocsf.utils;
 
-import io.ocsf.utils.CEFParser;
+import io.ocsf.utils.parsers.CEFParser;
 import org.junit.Test;
 
 import java.util.Map;

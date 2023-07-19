@@ -16,7 +16,8 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.utils.Parser;
+import io.ocsf.utils.event.Event;
+import io.ocsf.utils.parsers.Parser;
 import io.ocsf.schema.Dictionary;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
@@ -33,7 +34,7 @@ public class EventProcessorTest extends Tests
   // create a very simple "parser"
   private final Parser parser = text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
 
-  private final Translators translators = new Translators(Strings.EMPTY);
+  private final TranslatorsManager translators = new TranslatorsManager(Strings.EMPTY);
 
   @Before
   public void setUp() throws Exception
@@ -75,7 +76,7 @@ public class EventProcessorTest extends Tests
 
       Assert.assertEquals(5, data.size());
       Assert.assertEquals(i, data.get(EVENT_ID));
-      Assert.assertEquals(TEST_MESSAGE, Maps.getIn(data, Dictionary.UNMAPPED, Event.SOURCE_TYPE));
+      Assert.assertEquals(TEST_MESSAGE, Maps.getIn(data, Dictionary.UNMAPPED, Splunk.CIM_SOURCE_TYPE));
     }
 
     Assert.assertEquals(0, out.available());

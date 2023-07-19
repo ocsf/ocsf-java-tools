@@ -17,13 +17,16 @@
 
 package io.ocsf.translator.svc.concurrent;
 
-import io.ocsf.utils.Parser;
-import io.ocsf.translator.svc.Event;
+import io.ocsf.translator.svc.TranslatorsManager;
+import io.ocsf.utils.FuzzyHashMap;
+import io.ocsf.utils.event.Sink;
+import io.ocsf.utils.event.Source;
+import io.ocsf.utils.parsers.Parser;
+import io.ocsf.utils.event.Event;
 
-import io.ocsf.translator.svc.config.ConfigParsers;
-import io.ocsf.translator.svc.config.ConfigTranslators;
+import io.ocsf.parsers.Parsers;
+import io.ocsf.translator.svc.config.TranslatorsLoader;
 import io.ocsf.translator.svc.EventDemuxer;
-import io.ocsf.translator.svc.Translators;
 
 import java.io.IOException;
 
@@ -37,8 +40,8 @@ public class EventService implements Runnable
       final Sink<Event> out,
       final Sink<Event> raw) throws IOException
   {
-    final ProcessorList<Parser>      parsers      = ConfigParsers.parsers();
-    final ProcessorList<Translators> transformers = ConfigTranslators.load(rules);
+    final FuzzyHashMap<Parser>             parsers      = Parsers.parsers();
+    final FuzzyHashMap<TranslatorsManager> transformers = TranslatorsLoader.load(rules);
 
     demuxer = new EventDemuxer(parsers, transformers, in, out, raw);
   }

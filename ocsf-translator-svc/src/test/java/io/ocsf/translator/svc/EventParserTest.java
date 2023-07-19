@@ -18,7 +18,8 @@ package io.ocsf.translator.svc;
 
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
-import io.ocsf.utils.Parser;
+import io.ocsf.utils.event.Event;
+import io.ocsf.utils.parsers.Parser;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -86,7 +87,7 @@ public class EventParserTest extends Tests
 
       Assert.assertEquals(3, data.size());
       Assert.assertEquals(i, data.get(EVENT_ID));
-      Assert.assertEquals(TEST_MESSAGE, Maps.getIn(data, Event.SOURCE_TYPE));
+      Assert.assertEquals(TEST_MESSAGE, Maps.getIn(data, Splunk.CIM_SOURCE_TYPE));
     }
 
     Assert.assertEquals(0, out.available());

@@ -1,0 +1,11 @@
+plugins {
+    id 'io-ocsf.library-conventions'
+}
+
+group = project['artifactGroup'] + '.translator'
+version = project['artifactVersion']
+
+dependencies {
+    implementation project(':ocsf-utils')
+    implementation project(':ocsf-schema')
+}

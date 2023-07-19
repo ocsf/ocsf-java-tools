@@ -17,6 +17,7 @@
 
 package io.ocsf.parser.parsers;
 
+import io.ocsf.parsers.WinEventLogParser;
 import io.ocsf.utils.Maps;
 import org.junit.Assert;
 import org.junit.Test;

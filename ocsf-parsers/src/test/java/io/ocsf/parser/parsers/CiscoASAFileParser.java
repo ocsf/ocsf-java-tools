@@ -17,6 +17,7 @@
 
 package io.ocsf.parser.parsers;
 
+import io.ocsf.parsers.CiscoSyslogParser;
 import io.ocsf.utils.Json;
 
 import java.nio.file.Files;

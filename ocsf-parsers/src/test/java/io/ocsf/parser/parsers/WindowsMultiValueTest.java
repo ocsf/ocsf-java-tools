@@ -17,6 +17,7 @@
 
 package io.ocsf.parser.parsers;
 
+import io.ocsf.parsers.WinMultiLineParser;
 import io.ocsf.utils.Json;
 
 import java.util.Map;

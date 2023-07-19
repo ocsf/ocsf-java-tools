@@ -16,10 +16,6 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.translator.svc.Event;
-import io.ocsf.translator.svc.Splunk;
-import io.ocsf.translator.svc.Tests;
-import io.ocsf.translator.svc.EventParser;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.Parser;

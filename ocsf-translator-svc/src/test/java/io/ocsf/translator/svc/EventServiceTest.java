@@ -18,9 +18,6 @@ package io.ocsf.translator.svc;
 
 import io.ocsf.parsers.WinEventLogParser;
 import io.ocsf.parsers.XmlWinEventLogParser;
-import io.ocsf.translator.svc.Splunk;
-import io.ocsf.translator.svc.EventService;
-import io.ocsf.translator.svc.TranslatorException;
 import io.ocsf.utils.FMap;
 import org.junit.Assert;
 import org.junit.Before;

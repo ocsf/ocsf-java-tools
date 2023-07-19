@@ -16,8 +16,6 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.translator.svc.Event;
-import io.ocsf.translator.svc.Tests;
 import io.ocsf.translator.svc.concurrent.Sink;
 import io.ocsf.translator.svc.concurrent.Source;
 import io.ocsf.translator.svc.concurrent.Transformer;

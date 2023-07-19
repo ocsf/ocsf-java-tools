@@ -17,8 +17,8 @@
 
 package io.ocsf.parsers;
 
-import io.ocsf.utils.parsers.Parser;
 import io.ocsf.utils.FuzzyHashMap;
+import io.ocsf.utils.parsers.Parser;
 
 /**
  * Initializes all parsers.

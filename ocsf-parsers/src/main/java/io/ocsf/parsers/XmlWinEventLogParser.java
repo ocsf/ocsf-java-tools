@@ -17,8 +17,8 @@
 
 package io.ocsf.parsers;
 
-import io.ocsf.utils.parsers.Parser;
 import io.ocsf.utils.Maps;
+import io.ocsf.utils.parsers.Parser;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -32,12 +32,12 @@ public class XmlWinEventLogParser implements Parser
   public static final String SourceType = "XmlWinEventLog";
 
   private static final String RenderingInfo = "RenderingInfo";
-  private static final String EventData = "EventData";
-  private static final String EmptyValue = "-";
+  private static final String EventData     = "EventData";
+  private static final String EmptyValue    = "-";
 
   // special handling for ContextInfo in event 4103
-  private static final String Event4103 = "4103";
-  private static final String EventID = "EventID";
+  private static final String Event4103   = "4103";
+  private static final String EventID     = "EventID";
   private static final String ContextInfo = "ContextInfo";
 
   private final XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
@@ -45,7 +45,8 @@ public class XmlWinEventLogParser implements Parser
   @Override
   public Map<String, Object> parse(final String text) throws Exception
   {
-    final XMLStreamReader     reader = xmlInputFactory.createXMLStreamReader(new StringReader(text));
+    final XMLStreamReader     reader =
+      xmlInputFactory.createXMLStreamReader(new StringReader(text));
     final Map<String, Object> event  = new HashMap<>();
     final StringBuilder       buf    = new StringBuilder();
 
@@ -63,7 +64,7 @@ public class XmlWinEventLogParser implements Parser
           {
             final Map<String, Object> data = new HashMap<>();
             for (int i = 0; i < n; ++i)
-              put(data, reader.getAttributeLocalName(i), reader.getAttributeValue(i));
+                 put(data, reader.getAttributeLocalName(i), reader.getAttributeValue(i));
 
             event.put(name, data);
 
@@ -74,7 +75,8 @@ public class XmlWinEventLogParser implements Parser
                 // skip the RenderingInfo data, which is redundant (see Payload)
                 while (reader.hasNext() && reader.next() != XMLStreamConstants.END_DOCUMENT)
                 {
-                  if (reader.getEventType() == XMLStreamConstants.END_ELEMENT && RenderingInfo.equals(reader.getLocalName()))
+                  if (reader.getEventType() == XMLStreamConstants.END_ELEMENT &&
+                      RenderingInfo.equals(reader.getLocalName()))
                     break;
                 }
               }
@@ -114,7 +116,8 @@ public class XmlWinEventLogParser implements Parser
     return cleanup(event);
   }
 
-  private static Map<String, Object> parse(final XMLStreamReader reader, final String end) throws Exception
+  private static Map<String, Object> parse(final XMLStreamReader reader, final String end)
+    throws Exception
   {
     final Map<String, Object> data = new HashMap<>();
     final StringBuilder       buf  = new StringBuilder();
@@ -160,7 +163,8 @@ public class XmlWinEventLogParser implements Parser
     return data;
   }
 
-  private static final void put(final Map<String, Object> data, final String name, final String text)
+  private static final void put(
+    final Map<String, Object> data, final String name, final String text)
   {
     final String value = text.trim();
     if (!EmptyValue.equals(value))

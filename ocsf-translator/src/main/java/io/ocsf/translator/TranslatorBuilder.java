@@ -18,15 +18,15 @@
 
 package io.ocsf.translator;
 
+import io.ocsf.schema.Dictionary;
 import io.ocsf.translator.util.FileObj;
 import io.ocsf.translator.util.FingerprintObj;
 import io.ocsf.translator.util.URLObj;
+import io.ocsf.utils.*;
 import io.ocsf.utils.parsers.Json5Parser;
 import io.ocsf.utils.parsers.ParserException;
 import io.ocsf.utils.parsers.PatternParser;
 import io.ocsf.utils.parsers.RegexParser;
-import io.ocsf.schema.Dictionary;
-import io.ocsf.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -301,7 +301,8 @@ public final class TranslatorBuilder
   }
 
   private static DataTranslator buildDataTranslator(
-    final Map<String, Object> parser, final Function<io.ocsf.utils.parsers.Parser, DataTranslator> builder)
+    final Map<String, Object> parser,
+    final Function<io.ocsf.utils.parsers.Parser, DataTranslator> builder)
   {
     final String pattern = (String) parser.get(PatternField);
     if (Strings.isNotEmpty(pattern))
@@ -388,7 +389,8 @@ public final class TranslatorBuilder
         final Map<String, Object> data,
         final Map<String, Object> translated)
       {
-        return p.test(data) ? TranslatorBuilder.apply(compiled, translator.parse(data), translated) :
+        return p.test(data) ?
+               TranslatorBuilder.apply(compiled, translator.parse(data), translated) :
                translator.parse(data);
       }
     };

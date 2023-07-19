@@ -6,7 +6,8 @@ This document describes the supported translation rules.
 
 ### Move
 
-Move a field from the source data to the translated data. Note, the translated field name can be the same or different than the input field name. The field is removed from the source data.
+Move a field from the source data to the translated data. Note, the translated field name can be the same or different
+than the input field name. The field is removed from the source data.
 
 #### Short Format
 
@@ -127,7 +128,8 @@ Use a comma-separated fields to join data from multiple fields.
 
 ### Copy
 
-Copy a field from the source data to the translated data. Note, the translated field name can be the same or different than the source field name. The source data is not affected.
+Copy a field from the source data to the translated data. Note, the translated field name can be the same or different
+than the source field name. The source data is not affected.
 
 #### Short Format
 
@@ -200,7 +202,8 @@ Remove a field from the source data.
 
 #### Value
 
-Set a field in the translated data to the specified value. The value type can be any valid JSON type. The source data is not affected. 
+Set a field in the translated data to the specified value. The value type can be any valid JSON type. The source data is
+not affected.
 
 #### Format
 
@@ -213,6 +216,7 @@ Set a field in the translated data to the specified value. The value type can be
 ```
 
 ##### Example
+
 ```json5
 {
     "_": {
@@ -228,6 +232,7 @@ Set a field in the translated data to the specified value. The value type can be
     }
 }
 ```
+
 Input data:
 
 ```json5
@@ -340,30 +345,33 @@ The `lookup` translation rule creates enum value from raw data values. The sourc
 
 ## Type conversions
 
-You can use the `type` to translate the value data to another type, for example from string to integer. The following types are supported: string, integer, long, float, double, timestamp, time, path, downcase, and upcase.
+You can use the `type` to translate the value data to another type, for example from string to integer. The following
+types are supported: string, integer, long, float, double, timestamp, time, path, downcase, and upcase.
 
 ### timestamp
 
-Translates a string to a timestamp, using a parser to parse local, zoned, or  ISO-like date-time with the offset and zone if available, such as: 
-    `2011-12-03T10:15:30`
-    `2011-12-03T10:15:30+01:00`
-    `2011-12-03T10:15:30+01:00[Europe/Paris]`
+Translates a string to a timestamp, using a parser to parse local, zoned, or ISO-like date-time with the offset and zone
+if available, such as:
+`2011-12-03T10:15:30`
+`2011-12-03T10:15:30+01:00`
+`2011-12-03T10:15:30+01:00[Europe/Paris]`
 
 Other supported formats:
-    Local date-time:    `MM/dd/yy HH:mm:ss`
-    Zoned date-time:    `MM/dd/yy HH:mm:ss z`
-    Long number:        `1681160562325` // UTC time in ms
+Local date-time:    `MM/dd/yy HH:mm:ss`
+Zoned date-time:    `MM/dd/yy HH:mm:ss z`
+Long number:        `1681160562325` // UTC time in ms
 
-Note, if the value is `null`, an empty string, or invalid time, then the translated field is set to the current system time in UTC milliseconds.
+Note, if the value is `null`, an empty string, or invalid time, then the translated field is set to the current system
+time in UTC milliseconds.
 
 ### path
 
-Translates a string containing a file path to a File object. Both Windows and Unix name separators are supported. 
+Translates a string containing a file path to a File object. Both Windows and Unix name separators are supported.
 
 If the value contain a file path then the following File attributes are set:
-    path:              the value
-    name:              the name element of the path
-    parent_folder:     the parent path
+path:              the value
+name:              the name element of the path
+parent_folder:     the parent path
 
 If the value does not contain a path name, then only the `path` attribute of the file object is set.
 

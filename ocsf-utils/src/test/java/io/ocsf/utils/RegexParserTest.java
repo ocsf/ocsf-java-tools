@@ -26,12 +26,17 @@ import java.util.Map;
 
 public class RegexParserTest
 {
-  private static final String R = "(?<evcls>DHCPACK)\\s+on\\s+(?<ip>\\S+)\\s+to\\s+(?<mac>\\S+)(?:\\s+\\((?<host>.+?)\\))?\\s+via\\s+(?<interface>.*)\\s+relay\\s+(?<relay>\\S+)\\s+lease-duration\\s+(?<duration>\\d+).*?(?:uid\\s+(?<uid>.+))?";
+  private static final String R =
+    "(?<evcls>DHCPACK)\\s+on\\s+(?<ip>\\S+)\\s+to\\s+(?<mac>\\S+)(?:\\s+\\((?<host>.+?)\\))" +
+    "?\\s+via\\s+(?<interface>.*)\\s+relay\\s+(?<relay>\\S+)\\s+lease-duration\\s+" +
+    "(?<duration>\\d+).*?(?:uid\\s+(?<uid>.+))?";
 
   @Test
   public void parse() throws Exception
   {
-    final String text = "DHCPACK on 10.127.16.36 to 00:e0:4c:08:00:7e (PF345215) via eth2 relay 10.127.16.1 lease-duration 43200 (RENEW) uid 01:00:e0:4c:08:00:7e";
+    final String text =
+      "DHCPACK on 10.127.16.36 to 00:e0:4c:08:00:7e (PF345215) via eth2 relay 10.127.16.1 " +
+      "lease-duration 43200 (RENEW) uid 01:00:e0:4c:08:00:7e";
 
     final Parser              parser = RegexParser.create(R);
     final Map<String, Object> data   = parser.parse(text);

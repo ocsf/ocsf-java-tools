@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.ocsf.schema.Schema.*;
+import static io.ocsf.schema.Schema.TYPE_ID;
 
 /**
  * A helper class to query and manipulate the observable data associate with an event.
@@ -59,8 +59,9 @@ public final class Observables
    * @param event the event data
    * @return a map of observables
    */
-  public static Optional<Map<String, Map<String, Object>>> getObservables(final Map<String,
-    Object> event)
+  public static Optional<Map<String, Map<String, Object>>> getObservables(
+    final Map<String,
+      Object> event)
   {
     final List<Map<String, Object>> observables = Maps.typecast(event.get(Dictionary.OBSERVABLES));
 

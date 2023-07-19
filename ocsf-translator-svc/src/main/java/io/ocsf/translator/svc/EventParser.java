@@ -17,14 +17,14 @@
 
 package io.ocsf.translator.svc;
 
+import io.ocsf.utils.Maps;
+import io.ocsf.utils.event.Event;
 import io.ocsf.utils.event.Sink;
 import io.ocsf.utils.event.Source;
 import io.ocsf.utils.event.Transformer;
-import io.ocsf.utils.Maps;
-import io.ocsf.utils.event.Event;
 import io.ocsf.utils.parsers.Parser;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -49,7 +49,8 @@ public class EventParser extends Transformer
   }
 
   public static <T> T process(
-      final Parser parser, final Map<String, Object> data, final Function<Map<String, Object>, T> normalize)
+    final Parser parser, final Map<String, Object> data,
+    final Function<Map<String, Object>, T> normalize)
   {
     final String raw = (String) data.get(Splunk.RAW_EVENT);
 

@@ -24,8 +24,8 @@ package io.ocsf.utils;
  */
 public class IllegalCharacterException extends InvalidExpressionException
 {
-  private static final long serialVersionUID = 1L;
-  private static final String Message = "Illegal character (%s) at %d";
+  private static final long   serialVersionUID = 1L;
+  private static final String Message          = "Illegal character (%s) at %d";
 
   /**
    * Constructs a new exception with the specified char and position.

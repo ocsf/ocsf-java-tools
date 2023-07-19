@@ -32,7 +32,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class EventParserTest extends Tests
 {
   // create a very simple "parser"
-  private final Parser parser = text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
+  private final Parser parser =
+    text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
 
   private static final AtomicBoolean done = new AtomicBoolean();
 
@@ -53,10 +54,10 @@ public class EventParserTest extends Tests
     for (int i = 0; i < MAX_QUEUE_SIZE; i++)
     {
       in.put(new Event(
-          FMap.<String, Object>b()
-              .p(Splunk.RAW_EVENT, Integer.toString(i))
-              .p(Splunk.TENANT, "Tenant")
-              .p(Splunk.SOURCE_TYPE, TEST_MESSAGE)));
+        FMap.<String, Object>b()
+            .p(Splunk.RAW_EVENT, Integer.toString(i))
+            .p(Splunk.TENANT, "Tenant")
+            .p(Splunk.SOURCE_TYPE, TEST_MESSAGE)));
     }
   }
 

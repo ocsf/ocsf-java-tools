@@ -1,6 +1,7 @@
 {
   "desc": "Translation rule examples",
-  "when": "type == 'some type'", // example: EventCode == '4624'
+  "when": "type == 'some type'",
+  // example: EventCode == '4624'
 
   "rules": [
     // ---

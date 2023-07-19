@@ -91,11 +91,12 @@ public final class Strings
     return collator.getCollationElementIterator(source);
   }
 
-  private static boolean match(final CollationElementIterator text, final CollationElementIterator pattern)
+  private static boolean match(
+    final CollationElementIterator text, final CollationElementIterator pattern)
   {
     do
     {
-      final int i      = pattern.next() & Strings.mask;
+      final int i = pattern.next() & Strings.mask;
       final int target = text.next() & Strings.mask;
 
       if (i == Strings.mask)

@@ -63,10 +63,10 @@ public final class PerfTest
 
       final long start = System.currentTimeMillis();
       for (int i = 0; i < 100_000; ++i)
-        data.forEach(e -> {
-          if (translator.apply(e) == null)
-            System.err.append("should not happened");
-        });
+           data.forEach(e -> {
+             if (translator.apply(e) == null)
+               System.err.append("should not happened");
+           });
 
       System.out.printf("Elapsed: %,d ms%n", System.currentTimeMillis() - start);
 

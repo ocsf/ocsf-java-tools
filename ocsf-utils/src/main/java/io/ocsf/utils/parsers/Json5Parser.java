@@ -45,7 +45,8 @@ public final class Json5Parser
   private final StringBuilder sb = new StringBuilder(32);
 
   /**
-   * Return the next JSON value. The value can be a Boolean, Double, Integer, Long, String, List, Map, or null.
+   * Return the next JSON value. The value can be a Boolean, Double, Integer, Long, String, List,
+   * Map, or null.
    *
    * <p>This method can be used to parse multiple JSON values in the buffer.
    *
@@ -73,13 +74,13 @@ public final class Json5Parser
 
   @SuppressWarnings("unchecked")
   public static <T> T to(final byte[] bytes, final int offset, final int length)
-      throws ParserException
+    throws ParserException
   {
     if (bytes == null || bytes.length == 0) return null;
 
     // String constructor will validate offset and length against bytes
     return (T) new Json5Parser(
-        new String(bytes, offset, length, StandardCharsets.UTF_8).toCharArray()).parse();
+      new String(bytes, offset, length, StandardCharsets.UTF_8).toCharArray()).parse();
   }
 
   /**
@@ -105,12 +106,12 @@ public final class Json5Parser
     if (bytes.length == 0) return Strings.EMPTY;
 
     return new Json5Parser(
-        new String(bytes, StandardCharsets.UTF_8).toCharArray()).parse();
+      new String(bytes, StandardCharsets.UTF_8).toCharArray()).parse();
   }
 
   /**
-   * Parses the string and returns a JSON value. The value can be a Boolean, Double, Integer, Long, String, List, Map,
-   * or null.
+   * Parses the string and returns a JSON value. The value can be a Boolean, Double, Integer, Long,
+   * String, List, Map, or null.
    *
    * @return A JSON value.
    * @throws ParserException If syntax error.
@@ -133,7 +134,8 @@ public final class Json5Parser
   }
 
   /**
-   * Get the next value. The value can be a Boolean, Double, Integer, List, Map, Long, String, or null.
+   * Get the next value. The value can be a Boolean, Double, Integer, List, Map, Long, String, or
+   * null.
    *
    * @return An object.
    * @throws ParserException If syntax error.
@@ -169,8 +171,9 @@ public final class Json5Parser
   }
 
   /**
-   * Returns the characters up to the next close quote character. Backslash processing is done. The formal JSON format
-   * does not allow strings in single quotes, but an implementation is allowed to accept them.
+   * Returns the characters up to the next close quote character. Backslash processing is done. The
+   * formal JSON format does not allow strings in single quotes, but an implementation is allowed to
+   * accept them.
    *
    * @return A String.
    * @throws ParserException Unterminated string.
@@ -406,8 +409,8 @@ public final class Json5Parser
   }
 
   /**
-   * Skip all white-spaces, returns the position of first non-white-space char or 'len' if end of the buffer is
-   * reached.
+   * Skip all white-spaces, returns the position of first non-white-space char or 'len' if end of
+   * the buffer is reached.
    */
   private static int skip(final char[] buf, final int pos, final int len)
   {
@@ -462,8 +465,8 @@ public final class Json5Parser
   }
 
   /**
-   * Returns a symbol size in a number of chars, starting from the current position, or 0 if end of the buffer is
-   * reached.
+   * Returns a symbol size in a number of chars, starting from the current position, or 0 if end of
+   * the buffer is reached.
    */
   private static int getSymbolSize(final char[] buf, final int pos, final int len)
   {
@@ -478,7 +481,7 @@ public final class Json5Parser
 
   private static boolean isSymbolChar(final int ch)
   {
-    return !Character.isWhitespace(ch) && ",:]}/\\\"[{;=#".indexOf(ch) < 0;
+    return !Character.isWhitespace(ch) && ",:]}/\\\"[{;=#" .indexOf(ch) < 0;
   }
 
   private char getEscapeChar() throws ParserException
@@ -562,9 +565,9 @@ public final class Json5Parser
     if (pos < buf.length)
     {
       return
-          new ParserException(
-              message + " at " + pos + ", found: '" + buf[pos] + '\'' + " " + Integer
-                  .toHexString(buf[pos] & 0x0ffff));
+        new ParserException(
+          message + " at " + pos + ", found: '" + buf[pos] + '\'' + " " + Integer
+            .toHexString(buf[pos] & 0x0ffff));
     }
 
     return new ParserException(message + " at the end");
@@ -572,6 +575,7 @@ public final class Json5Parser
 
   private static ParserException syntaxError(final int ch, final int pos)
   {
-    return new ParserException("Illegal escape at " + pos + ": 0x" + Integer.toHexString(ch & 0x0ffff));
+    return new ParserException(
+      "Illegal escape at " + pos + ": 0x" + Integer.toHexString(ch & 0x0ffff));
   }
 }

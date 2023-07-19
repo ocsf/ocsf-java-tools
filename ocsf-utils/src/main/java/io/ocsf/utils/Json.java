@@ -23,7 +23,11 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * A helper class to translate a Java object to a string. It supports two formats: compact and
@@ -36,13 +40,15 @@ public final class Json
   private Json() {}
 
   // ISO 8601 data/time format used for <code>Date</code> fields
-  private static final String ISO8601 = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+  private static final String            ISO8601        = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
   private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(ISO8601);
 
   // Avoid scientific notation when encoding doubles. See:
   // https://stackoverflow.com/questions/16098046/how-do-i-print-a-double-value-without-scientific-notation-using-java
-  // Scientific notation isn't parsed by Splunk, despite being legal JSON (at least for the indexed time field).
+  // Scientific notation isn't parsed by Splunk, despite being legal JSON (at least for the
+  // indexed time field).
   private static final DecimalFormat DECIMAL_FORMAT;
+
   static
   {
     // Using English locale to get dot (.) as decimal separator, which is required by JSON
@@ -52,13 +58,13 @@ public final class Json
   }
 
   private static final String NULL_STRING = null;
-  private static final char[] COMMA = ", ".toCharArray();
-  private static final char[] EMPTY_ARRAY = "[]".toCharArray();
+  private static final char[] COMMA       = ", " .toCharArray();
+  private static final char[] EMPTY_ARRAY = "[]" .toCharArray();
 
   private static final String EMPTY_OBJECT_STR = "{}";
-  private static final char[] EMPTY_OBJECT = EMPTY_OBJECT_STR.toCharArray();
+  private static final char[] EMPTY_OBJECT     = EMPTY_OBJECT_STR.toCharArray();
 
-  private static final int INDENT = 2;
+  private static final int INDENT           = 2;
   private static final int INIT_BUFFER_SIZE = 1024;
 
   /**
@@ -347,7 +353,8 @@ public final class Json
     return sb;
   }
 
-  private static StringBuilder mapToString(final int indent, final Map<String, Object> map,
+  private static StringBuilder mapToString(
+    final int indent, final Map<String, Object> map,
     final StringBuilder sb)
   {
     if (map.isEmpty())
@@ -488,7 +495,8 @@ public final class Json
     }
   }
 
-  private static void collArrayToString(final int indent, final Collection<Object>[] a,
+  private static void collArrayToString(
+    final int indent, final Collection<Object>[] a,
     final StringBuilder sb)
   {
     if (a.length == 0)
@@ -541,7 +549,7 @@ public final class Json
         throw new IllegalArgumentException("JSON does not allow non-finite numbers.");
       }
 
-      return Float.toString((float)num);
+      return Float.toString((float) num);
     }
 
     return num.toString();
@@ -627,7 +635,8 @@ public final class Json
     }
   }
 
-  private static void mapArrayToString(final int indent, final Map<String, Object>[] a,
+  private static void mapArrayToString(
+    final int indent, final Map<String, Object>[] a,
     final StringBuilder sb)
   {
     if (a.length == 0)
@@ -669,7 +678,8 @@ public final class Json
     return sb;
   }
 
-  private static StringBuilder collToString(final int indent, final Collection<Object> col,
+  private static StringBuilder collToString(
+    final int indent, final Collection<Object> col,
     final StringBuilder sb)
   {
     if (col.isEmpty())

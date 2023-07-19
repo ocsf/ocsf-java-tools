@@ -31,21 +31,23 @@ import java.util.concurrent.TimeUnit;
  */
 public final class Times
 {
-  private static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
-  private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ISO8601_DATE_FORMAT);
+  private static final String            ISO8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+  private static final DateTimeFormatter formatter           =
+    DateTimeFormatter.ofPattern(ISO8601_DATE_FORMAT);
 
   private static final int Iso8601Marker = 10; // position of the time marker 'T'
 
-  private static final String ZONED_FORMAT = "MM/dd/yy HH:mm:ss z";
-  private static final DateTimeFormatter zoned_df = DateTimeFormatter.ofPattern(ZONED_FORMAT);
+  private static final String            ZONED_FORMAT = "MM/dd/yy HH:mm:ss z";
+  private static final DateTimeFormatter zoned_df     = DateTimeFormatter.ofPattern(ZONED_FORMAT);
 
-  private static final String LOCAL_FORMAT = "MM/dd/yy HH:mm:ss";
-  private static final DateTimeFormatter local_df = DateTimeFormatter.ofPattern(LOCAL_FORMAT);
-  private static final int local_date_len = LOCAL_FORMAT.length();
+  private static final String            LOCAL_FORMAT   = "MM/dd/yy HH:mm:ss";
+  private static final DateTimeFormatter local_df       = DateTimeFormatter.ofPattern(LOCAL_FORMAT);
+  private static final int               local_date_len = LOCAL_FORMAT.length();
 
-  private static final String LOCAL_12H_FORMAT = "MM/dd/yyyy hh:mm:ss a";
-  private static final DateTimeFormatter local_12h_df = DateTimeFormatter.ofPattern(LOCAL_12H_FORMAT);
-  private static final int local_12h_date_len = LOCAL_12H_FORMAT.length() + 1;
+  private static final String            LOCAL_12H_FORMAT   = "MM/dd/yyyy hh:mm:ss a";
+  private static final DateTimeFormatter local_12h_df       =
+    DateTimeFormatter.ofPattern(LOCAL_12H_FORMAT);
+  private static final int               local_12h_date_len = LOCAL_12H_FORMAT.length() + 1;
 
   private Times() {}
 
@@ -89,7 +91,8 @@ public final class Times
 
   private static TemporalAccessor parseBest(final String text)
   {
-    return DateTimeFormatter.ISO_DATE_TIME.parseBest(text, ZonedDateTime::from, LocalDateTime::from);
+    return DateTimeFormatter.ISO_DATE_TIME.parseBest(
+      text, ZonedDateTime::from, LocalDateTime::from);
   }
 
   private static long parseTimeUnits(final String arg)
@@ -123,10 +126,13 @@ public final class Times
       return Long.parseLong(value);
 
     if (len == local_date_len)
-      return Instant.from(local_df.parse(value, LocalDateTime::from).atZone(ZoneId.systemDefault())).toEpochMilli();
+      return Instant.from(local_df.parse(value, LocalDateTime::from).atZone(ZoneId.systemDefault()))
+                    .toEpochMilli();
 
     if (len == local_12h_date_len)
-      return Instant.from(local_12h_df.parse(value, LocalDateTime::from).atZone(ZoneId.systemDefault())).toEpochMilli();
+      return Instant
+        .from(local_12h_df.parse(value, LocalDateTime::from).atZone(ZoneId.systemDefault()))
+        .toEpochMilli();
 
     return Instant.from(zoned_df.parse(value, ZonedDateTime::from)).toEpochMilli();
   }

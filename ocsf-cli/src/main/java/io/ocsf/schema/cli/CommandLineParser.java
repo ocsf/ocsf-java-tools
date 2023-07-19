@@ -32,7 +32,7 @@ public class CommandLineParser
 
   public static class Argument
   {
-    public final char opt;
+    public final char   opt;
     public final String long_opt;
 
     public final String name;
@@ -49,7 +49,8 @@ public class CommandLineParser
      * @param desc     - used for the help message
      * @throws IllegalArgumentException if arg values are malformed
      */
-    Argument(final char opt,
+    Argument(
+      final char opt,
       final String long_opt,
       final String name,
       final String desc) throws IllegalArgumentException
@@ -80,7 +81,7 @@ public class CommandLineParser
         this.long_opt = null;
       }
 
-      this.opt = opt;
+      this.opt  = opt;
       this.name = Strings.isEmpty(name) ? null : name;
       this.desc = desc;
 
@@ -94,11 +95,11 @@ public class CommandLineParser
      */
     Argument(final String msg)
     {
-      this.opt = MESSAGE_OPT;
+      this.opt      = MESSAGE_OPT;
       this.long_opt = null;
-      this.name = null;
-      this.value = null;
-      this.desc = msg;
+      this.name     = null;
+      this.value    = null;
+      this.desc     = msg;
     }
 
     /**
@@ -111,7 +112,8 @@ public class CommandLineParser
     {
       if (name == null)
       {
-        throw new IllegalArgumentException(String.format("flag -%c does not take an argument",
+        throw new IllegalArgumentException(String.format(
+          "flag -%c does not take an argument",
           opt));
       }
       this.value = value;
@@ -151,7 +153,7 @@ public class CommandLineParser
 
   private final String help;
 
-  private final List<Argument> arguments = new ArrayList<>();
+  private final List<Argument>    arguments = new ArrayList<>();
   private final ArrayList<String> extraArgs = new ArrayList<>();
 
   private char helpOption = 0;
@@ -239,9 +241,9 @@ public class CommandLineParser
     final StringBuilder help = new StringBuilder();
 
     help.append("Usage: ")
-      .append(this.name)
-      .append(" <options> <files>\n")
-      .append(this.help);
+        .append(this.name)
+        .append(" <options> <files>\n")
+        .append(this.help);
 
     for (final Argument arg : arguments)
     {
@@ -328,7 +330,7 @@ public class CommandLineParser
     }
 
     for (; i < argv.length; ++i)
-      extraArgs.add(argv[i]);
+         extraArgs.add(argv[i]);
   }
 
   /**

@@ -38,7 +38,8 @@ public final class FingerprintObj
     if (Dictionary.Fingerprint.equals(type))
     {
       fingerprint((String) value).
-          ifPresent(fp -> Maps.putIn(translated, key + "." + Dictionary.Fingerprints, Collections.singletonList(fp)));
+        ifPresent(fp -> Maps.putIn(translated, key + "." + Dictionary.Fingerprints,
+                                   Collections.singletonList(fp)));
 
       return true;
     }
@@ -51,7 +52,7 @@ public final class FingerprintObj
    *
    * @param value the fingerprint hash value
    * @return the fingerprint object
-   *
+   * <p>
    * TODO: add the new algorithms: CTPH, TLSH, and quickXorHash
    */
   static Optional<Map<String, Object>> fingerprint(final String value)

@@ -31,29 +31,29 @@ public final class Tree
 
   Tree(final Token o, final Tree l, final Tree r)
   {
-    op = o;
-    left = l;
+    op    = o;
+    left  = l;
     right = r;
   }
 
   Tree(final Token t, final Token f, final Tree r)
   {
-    op = t;
-    left = new Tree(f);
+    op    = t;
+    left  = new Tree(f);
     right = r;
   }
 
   Tree(final Token t, final Token f, final Token v)
   {
-    op = t;
-    left = new Tree(f);
+    op    = t;
+    left  = new Tree(f);
     right = new Tree(v);
   }
 
   // creates a leaf node
   Tree(final Token o)
   {
-    op = o;
+    op   = o;
     left = right = null;
   }
 

@@ -21,11 +21,11 @@ import java.util.Map;
 
 public class FMap<K, V> extends HashMap<K, V> implements Maps.Supplier<V>
 {
-  public FMap() {}
+  public FMap()                                      {}
 
   public FMap(final Map<? extends K, ? extends V> m) {super(m);}
 
-  public FMap(final K key, final V value) {put(key, value);}
+  public FMap(final K key, final V value)            {put(key, value);}
 
   public FMap<K, V> p(final K key, final V value)
   {
@@ -39,9 +39,9 @@ public class FMap<K, V> extends HashMap<K, V> implements Maps.Supplier<V>
     return this;
   }
 
-  public static <K, V> FMap<K, V> b() {return new FMap<>();}
+  public static <K, V> FMap<K, V> b()                           {return new FMap<>();}
 
-  public static <K, V> FMap<K, V> b(final Map<K, V> map) {return new FMap<>(map);}
+  public static <K, V> FMap<K, V> b(final Map<K, V> map)        {return new FMap<>(map);}
 
   public static <K, V> FMap<K, V> s(final K key, final V value) {return new FMap<>(key, value);}
 

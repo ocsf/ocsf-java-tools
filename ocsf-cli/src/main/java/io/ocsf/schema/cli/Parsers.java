@@ -17,8 +17,8 @@
 package io.ocsf.schema.cli;
 
 import io.ocsf.utils.parsers.Parser;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Collections;

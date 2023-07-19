@@ -17,8 +17,6 @@
 
 package io.ocsf.utils.event;
 
-import io.ocsf.utils.event.Event;
-
 public interface Source<T extends Event>
 {
   T take() throws InterruptedException;

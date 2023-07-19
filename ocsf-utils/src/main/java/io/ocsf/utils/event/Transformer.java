@@ -17,22 +17,22 @@
 
 package io.ocsf.utils.event;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class Transformer implements Runnable
 {
   private static final Logger logger = LoggerFactory.getLogger(Transformer.class);
 
-  private final String name;
+  private final String        name;
   private final Source<Event> source;
-  private final Sink<Event> sink;
+  private final Sink<Event>   sink;
 
   public Transformer(final String name, final Source<Event> source, final Sink<Event> sink)
   {
-    this.name = name;
+    this.name   = name;
     this.source = source;
-    this.sink = sink;
+    this.sink   = sink;
 
     logger.info("{}: new instance", this);
   }

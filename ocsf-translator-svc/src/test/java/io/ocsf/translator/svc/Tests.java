@@ -17,14 +17,14 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.utils.event.EventQueue;
 import io.ocsf.utils.event.Event;
+import io.ocsf.utils.event.EventQueue;
 
 public class Tests
 {
-  protected static final String EVENT_ID = "id";
+  protected static final String EVENT_ID     = "id";
   protected static final String EVENT_ORIGIN = "origin";
-  protected static final String MESSAGE = "message";
+  protected static final String MESSAGE      = "message";
   protected static final String TEST_MESSAGE = "hello there";
 
   protected static final int MAX_QUEUE_SIZE = 5;

@@ -37,9 +37,9 @@ public class EventNormalizerTest extends Tests
   public void setUp() throws Exception
   {
     translators.put("Transformer", data ->
-        FMap.<String, Object>b()
-            .o(EVENT_ID, data.remove(EVENT_ID))
-            .o(MESSAGE, data.remove(MESSAGE)));
+      FMap.<String, Object>b()
+          .o(EVENT_ID, data.remove(EVENT_ID))
+          .o(MESSAGE, data.remove(MESSAGE)));
 
     new Thread(new EventNormalizer(translators, in, out)
     {
@@ -55,9 +55,9 @@ public class EventNormalizerTest extends Tests
     for (int i = 0; i < MAX_QUEUE_SIZE; i++)
     {
       in.put(new Event(
-          FMap.<String, Object>b()
-              .p(EVENT_ID, i)
-              .p(MESSAGE, TEST_MESSAGE)));
+        FMap.<String, Object>b()
+            .p(EVENT_ID, i)
+            .p(MESSAGE, TEST_MESSAGE)));
     }
   }
 

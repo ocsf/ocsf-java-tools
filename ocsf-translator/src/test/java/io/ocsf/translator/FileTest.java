@@ -35,7 +35,7 @@ public final class FileTest
   {
     if (args.length > 1)
     {
-      final String home     = args[0];
+      final String home = args[0];
       final String ruleFile = args[1];
 
       final TranslatorBuilder.Translator
@@ -56,11 +56,13 @@ public final class FileTest
     }
   }
 
-  private static void visitAllDirsAndFiles(final TranslatorBuilder.Translator translator, final File file) throws IOException
+  private static void visitAllDirsAndFiles(
+    final TranslatorBuilder.Translator translator, final File file) throws IOException
   {
     System.out.println("Processing " + file);
 
-    final BasicFileAttributes basicFileAttributes = java.nio.file.Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+    final BasicFileAttributes basicFileAttributes =
+      java.nio.file.Files.readAttributes(file.toPath(), BasicFileAttributes.class);
 
     if (basicFileAttributes.isRegularFile())
     {
@@ -76,7 +78,8 @@ public final class FileTest
     }
   }
 
-  private static void transform(final TranslatorBuilder.Translator translator, final String filename) throws IOException
+  private static void transform(
+    final TranslatorBuilder.Translator translator, final String filename) throws IOException
   {
     try
     {

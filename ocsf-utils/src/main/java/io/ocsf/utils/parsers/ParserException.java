@@ -26,7 +26,7 @@ public class ParserException extends RuntimeException
    * @param message the detail message. The detail message is saved for later retrieval by the
    *                {@link #getMessage()} method.
    */
-  public ParserException(final String message) { super(message);}
+  public ParserException(final String message) {super(message);}
 
   public ParserException(final String message, final Throwable cause)
   {
@@ -40,5 +40,5 @@ public class ParserException extends RuntimeException
    * @see Throwable#printStackTrace()
    */
   @Override
-  public Throwable fillInStackTrace() { return this;}
+  public Throwable fillInStackTrace() {return this;}
 }

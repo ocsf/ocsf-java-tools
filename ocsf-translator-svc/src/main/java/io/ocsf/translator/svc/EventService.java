@@ -17,11 +17,11 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.utils.parsers.Parser;
-import io.ocsf.utils.FuzzyHashMap;
 import io.ocsf.parsers.Parsers;
 import io.ocsf.translator.svc.config.TranslatorsLoader;
+import io.ocsf.utils.FuzzyHashMap;
 import io.ocsf.utils.Maps;
+import io.ocsf.utils.parsers.Parser;
 
 import java.io.IOException;
 import java.util.Map;
@@ -44,7 +44,7 @@ public class EventService
    */
   public EventService(final String rules) throws IOException
   {
-    this.parsers = Parsers.parsers();
+    this.parsers     = Parsers.parsers();
     this.normalizers = TranslatorsLoader.load(rules);
   }
 

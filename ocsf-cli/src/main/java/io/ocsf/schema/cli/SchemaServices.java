@@ -16,8 +16,8 @@
 
 package io.ocsf.schema.cli;
 
-import io.ocsf.utils.parsers.Json5Parser;
 import io.ocsf.utils.Strings;
+import io.ocsf.utils.parsers.Json5Parser;
 
 import java.io.IOException;
 import java.net.URI;
@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class SchemaServices
 {
-  public static final String SCHEMA_URL = "https://schema.ocsf.io";
+  public static final String SCHEMA_URL    = "https://schema.ocsf.io";
   public static final String VALIDATE_PATH = "/api/validate";
 
   private final String url;
@@ -52,8 +52,8 @@ public class SchemaServices
    * Posts jsonContent to the event-schema validation service.
    *
    * @param data - json content to be validated.
-   * @return The jsonObject of the return results. An empty Map signified success. Otherwise, the Json map has the
-   * detailed info on why validation failed.
+   * @return The jsonObject of the return results. An empty Map signified success. Otherwise, the
+   * Json map has the detailed info on why validation failed.
    * @throws IOException          on http connection failures.
    * @throws InterruptedException on http connection failures
    */
@@ -64,14 +64,15 @@ public class SchemaServices
     final HttpRequest.BodyPublisher bp           = HttpRequest.BodyPublishers.ofString(data);
 
     final HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create(validate_url))
-        .header("Content-Type", "application/json")
-        .header("Accept", "application/json")
-        .version(HttpClient.Version.HTTP_1_1)
-        .POST(bp)
-        .build();
+                                           .uri(URI.create(validate_url))
+                                           .header("Content-Type", "application/json")
+                                           .header("Accept", "application/json")
+                                           .version(HttpClient.Version.HTTP_1_1)
+                                           .POST(bp)
+                                           .build();
 
-    final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    final HttpResponse<String> response =
+      client.send(request, HttpResponse.BodyHandlers.ofString());
 
     final Map<String, Object> jsonObj;
     if (response.statusCode() != 200)

@@ -48,7 +48,7 @@ public final class BooleanExpression
   private static final String ERR_MSG = "Expected %s, but found '%s'";
 
   private final char[] buf;
-  private int pos = -1;
+  private       int    pos = -1;
 
   // last successfully parsed token
   private Token token;
@@ -196,7 +196,8 @@ public final class BooleanExpression
         if (stack.isEmpty())
         {
           if (token == Token.Eol)
-            throw new InvalidExpressionException(String.format(ERR_MSG, "expression or value", token));
+            throw new InvalidExpressionException(
+              String.format(ERR_MSG, "expression or value", token));
 
           stack.push(new Tree(op, field, token));
           nextToken();
@@ -294,10 +295,10 @@ public final class BooleanExpression
   private static boolean isField(final Token token)
   {
     return token == null
-        || token == Token.And
-        || token == Token.Or
-        || token == Token.Contains
-        || token == Token.LBracket;
+           || token == Token.And
+           || token == Token.Or
+           || token == Token.Contains
+           || token == Token.LBracket;
   }
 
   private boolean isEqualSign()
@@ -408,8 +409,8 @@ public final class BooleanExpression
 
 
   /**
-   * Skip all white-spaces, returns the position of first non-white-space char or 'len' if end of the buffer is
-   * reached.
+   * Skip all white-spaces, returns the position of first non-white-space char or 'len' if end of
+   * the buffer is reached.
    */
   private static int skip(final char[] buf, final int pos, final int len)
   {
@@ -452,7 +453,8 @@ public final class BooleanExpression
    * Get the next 4 characters as string, containing a unicode number.
    *
    * @return A string of n characters.
-   * @throws InvalidExpressionException if there are not n characters remaining in the source string.
+   * @throws InvalidExpressionException if there are not n characters remaining in the source
+   *                                    string.
    */
   private String getUnicode() throws InvalidExpressionException
   {
@@ -465,25 +467,27 @@ public final class BooleanExpression
   }
 
   /**
-   * Returns a symbol size, in number of chars, starting from the current position, or 0 if end of the buffer is
-   * reached.
+   * Returns a symbol size, in number of chars, starting from the current position, or 0 if end of
+   * the buffer is reached.
    */
   private static int getSymbolSize(final char[] buf, final int pos, final int len)
   {
     int size = 0;
     for (int i = pos; i < len && isSymbolChar(buf[i]); ++i)
-      ++size;
+         ++size;
 
     return size;
   }
 
-  private static final char[] validChars = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '#', '$', 0, 0, 0, 0,
-      0, 0, 0, 0, '-', '.', 0, '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', 0, 0,
-      0, 0, '?', '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-      'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 0, 0, 0, 0, '_', 0,
-      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-      'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+  private static final char[] validChars = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '#', '$', 0, 0, 0, 0,
+    0, 0, 0, 0, '-', '.', 0, '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', 0, 0,
+    0, 0, '?', '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 0, 0, 0, 0, '_', 0,
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
+    'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+  };
 
   private static boolean isSymbolChar(final int ch)
   {
@@ -611,8 +615,9 @@ public final class BooleanExpression
   }
 
   /**
-   * Returns the characters up to the next close quote character. Backslash processing is done. The formal JSON format
-   * does not allow strings in single quotes, but an implementation is allowed to accept them.
+   * Returns the characters up to the next close quote character. Backslash processing is done. The
+   * formal JSON format does not allow strings in single quotes, but an implementation is allowed to
+   * accept them.
    *
    * @return a string.
    * @throws InvalidExpressionException Unterminated string.
@@ -680,7 +685,7 @@ public final class BooleanExpression
   private InvalidExpressionException syntaxError(final String message)
   {
     return pos < buf.length ?
-        new InvalidExpressionException(message + " at " + pos + ": '" + buf[pos] + '\'') :
-        new InvalidExpressionException(message + " at the end");
+           new InvalidExpressionException(message + " at " + pos + ": '" + buf[pos] + '\'') :
+           new InvalidExpressionException(message + " at the end");
   }
 }

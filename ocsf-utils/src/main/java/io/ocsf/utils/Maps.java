@@ -16,7 +16,12 @@
 
 package io.ocsf.utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Utility class with Map function helpers.
@@ -97,7 +102,8 @@ public final class Maps
     return downcase(data, new HashMap<>(data.size()));
   }
 
-  private static Map<String, Object> downcase(final Map<String, Object> data, final Map<String, Object> acc)
+  private static Map<String, Object> downcase(
+    final Map<String, Object> data, final Map<String, Object> acc)
   {
     for (final Map.Entry<String, Object> entry : data.entrySet())
     {
@@ -137,13 +143,15 @@ public final class Maps
   }
 
   public static void move(
-      final Map<String, Object> src, final String srcName, final Map<String, Object> dst, final String dstName)
+    final Map<String, Object> src, final String srcName, final Map<String, Object> dst,
+    final String dstName)
   {
     put(dst, dstName, src.remove(srcName));
   }
 
   public static void moveIn(
-      final Map<String, Object> src, final String srcName, final Map<String, Object> dst, final String dstName)
+    final Map<String, Object> src, final String srcName, final Map<String, Object> dst,
+    final String dstName)
   {
     putIn(dst, dstName, removeIn(src, srcName));
   }
@@ -154,7 +162,7 @@ public final class Maps
   }
 
   public static void put(
-      final Map<String, Object> map, final String name, final Object value, final Object defaultValue)
+    final Map<String, Object> map, final String name, final Object value, final Object defaultValue)
   {
     if (value != null)
       map.put(name, value);
@@ -163,24 +171,26 @@ public final class Maps
   }
 
   /**
-   * Puts a value in a nested map via the given path, using the <code>map.path.to.value</code> notation.
+   * Puts a value in a nested map via the given path, using the <code>map.path.to.value</code>
+   * notation.
    *
    * @param map   map to which the specified path/value is to be added
    * @param path  path with which the specified value is to be associated
    * @param value value to be associated with the specified key
    * @return the previous value associated with <code>key</code>, or
    * <code>null</code> if there was no mapping for <code>key</code>.
-   * (A <code>null</code> return can also indicate that the map previously associated <code>null</code> with
+   * (A <code>null</code> return can also indicate that the map previously associated
+   * <code>null</code> with
    * <code>key</code>, if the implementation supports <code>null</code> values.)
    */
   public static Object putIn(
-      final Map<String, Object> map, final String[] path, final Object value)
+    final Map<String, Object> map, final String[] path, final Object value)
   {
     return value != null ? updateIn(map, path, value) : null;
   }
 
   public static Object putIn(
-      final Map<String, Object> map, final String[] path, final Object value, final boolean overwrite)
+    final Map<String, Object> map, final String[] path, final Object value, final boolean overwrite)
   {
     if (value != null)
       return overwrite ? updateIn(map, path, value) : putInIfAbsent(map, path, value);
@@ -189,7 +199,7 @@ public final class Maps
   }
 
   public static void putIn(
-      final Map<String, Object> map, final String path, final Object value)
+    final Map<String, Object> map, final String path, final Object value)
   {
     if (value != null)
     {
@@ -201,7 +211,7 @@ public final class Maps
   }
 
   public static void putIn(
-      final Map<String, Object> map, final String path, final Object value, final boolean overwrite)
+    final Map<String, Object> map, final String path, final Object value, final boolean overwrite)
   {
     if (value != null)
     {
@@ -238,13 +248,14 @@ public final class Maps
   }
 
   /**
-   * Returns the value to which the specified path is mapped, using the <code>map.path.to.value</code> notation, or
-   * {@code null} if this map contains no mapping for the path.
+   * Returns the value to which the specified path is mapped, using the
+   * <code>map.path.to.value</code> notation, or {@code null} if this map contains no mapping for
+   * the path.
    *
    * @param map  the map from which the value associated with the specified path is to be returned
    * @param path the path whose associated value is to be returned
-   * @return the value to which the specified path is mapped, or {@code null} if this map contains no mapping for the
-   * path
+   * @return the value to which the specified path is mapped, or {@code null} if this map contains
+   * no mapping for the path
    */
   public static Object getIn(final Map<String, Object> map, final String... path)
   {
@@ -252,13 +263,14 @@ public final class Maps
   }
 
   /**
-   * Returns the value to which the specified path is mapped, using the <code>map.path.to.value</code> notation, or
-   * {@code null} if this map contains no mapping for the path.
+   * Returns the value to which the specified path is mapped, using the
+   * <code>map.path.to.value</code> notation, or {@code null} if this map contains no mapping for
+   * the path.
    *
    * @param map  the map from which the value associated with the specified path is to be returned
    * @param path the path whose associated value is to be returned
-   * @return the value to which the specified path is mapped, or {@code null} if this map contains no mapping for the
-   * path
+   * @return the value to which the specified path is mapped, or {@code null} if this map contains
+   * no mapping for the path
    */
   public static Object getIn(final Map<String, Object> map, final String path)
   {
@@ -271,12 +283,13 @@ public final class Maps
   }
 
   /**
-   * Deletes a value from a nested map via the given path, using the <code>map.path.to.value</code> notation.
+   * Deletes a value from a nested map via the given path, using the <code>map.path.to.value</code>
+   * notation.
    *
    * @param map  the map from which the value associated with the specified path is to be removed
    * @param path the path whose mapping is to be removed from the map
-   * @return the previous value associated with <code>path</code>, or {@code null} if this map contains no mapping for
-   * the path
+   * @return the previous value associated with <code>path</code>, or {@code null} if this map
+   * contains no mapping for the path
    */
   public static Object removeIn(final Map<String, Object> map, final String path)
   {
@@ -329,7 +342,8 @@ public final class Maps
     return map.remove(keys[last]);
   }
 
-  private static Object putInIfAbsent(Map<String, Object> map, final String[] keys, final Object value)
+  private static Object putInIfAbsent(
+    Map<String, Object> map, final String[] keys, final Object value)
   {
     final int last = keys.length - 1;
 

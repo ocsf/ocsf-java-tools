@@ -46,22 +46,22 @@ import java.util.Map;
  */
 public final class WinMultiLineParser
 {
-  private static final int Comment = '#';
+  private static final int Comment    = '#';
   private static final int Separator1 = ':';
   private static final int Separator2 = '=';
-  private static final int CR = '\r';
-  private static final int LF = '\n';
-  private static final int TAB = '\t';
-  private static final int SPC = ' ';
+  private static final int CR         = '\r';
+  private static final int LF         = '\n';
+  private static final int TAB        = '\t';
+  private static final int SPC        = ' ';
 
-  private static final String Message = "Message";
-  private static final String EventCode = "EventCode";
-  private static final String Context = "Context:";
+  private static final String Message       = "Message";
+  private static final String EventCode     = "EventCode";
+  private static final String Context       = "Context:";
   private static final String ScriptBlockID = "ScriptBlock ID:";
 
   private final char[] buf;
 
-  private int pos = 0;
+  private int pos     = 0;
   private int dataPos = 0;
   private int namePos = 0;
   private int eventID = 0;
@@ -308,7 +308,8 @@ public final class WinMultiLineParser
     return readLine();
   }
 
-  private static void multiLineValue(final Map<String, Object> event, final String name,
+  private static void multiLineValue(
+    final Map<String, Object> event, final String name,
     final String text)
   {
     final Object last = event.get(name);
@@ -399,7 +400,8 @@ public final class WinMultiLineParser
     0, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
     'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 0, 0, 0, 0, '_',
     0, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-    'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 0, 0, 0, 0, 0};
+    'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 0, 0, 0, 0, 0
+  };
 
   private static boolean isLegalChar(final int ch)
   {

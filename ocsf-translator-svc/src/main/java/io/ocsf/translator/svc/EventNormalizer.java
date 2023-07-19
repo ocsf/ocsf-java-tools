@@ -17,10 +17,10 @@
 
 package io.ocsf.translator.svc;
 
+import io.ocsf.utils.event.Event;
 import io.ocsf.utils.event.Sink;
 import io.ocsf.utils.event.Source;
 import io.ocsf.utils.event.Transformer;
-import io.ocsf.utils.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -17,14 +17,14 @@
 package io.ocsf.schema.cli;
 
 import io.ocsf.parsers.*;
-import io.ocsf.translator.TranslatorBuilder;
-import io.ocsf.utils.parsers.Parser;
 import io.ocsf.schema.Dictionary;
-import io.ocsf.schema.Utils;
 import io.ocsf.schema.Schema;
+import io.ocsf.schema.Utils;
 import io.ocsf.schema.cli.CommandLineParser.Argument;
+import io.ocsf.translator.TranslatorBuilder;
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Json;
+import io.ocsf.utils.parsers.Parser;
 import io.ocsf.utils.parsers.ParserException;
 
 import java.io.File;
@@ -56,10 +56,10 @@ public final class Main
   private static String schemaUrl = SchemaServices.SCHEMA_URL;
 
   // the path to the schema file
-  private static Path schemaFile = null;
-  private static boolean schemaEnums = false;
-  private static boolean observables = false;
-  private static String writeResultDir = null;
+  private static Path    schemaFile     = null;
+  private static boolean schemaEnums    = false;
+  private static boolean observables    = false;
+  private static String  writeResultDir = null;
 
   private static boolean verbose = false;
 
@@ -67,25 +67,25 @@ public final class Main
 
   private static final class Item
   {
-    final File source;
+    final File                source;
     final Map<String, Object> data;
-    final String task;  // used for creating file name.
+    final String              task;  // used for creating file name.
 
     private boolean printed;
 
     Item()
     {
-      this.source = null;
-      this.data = null;
-      this.task = null;
+      this.source  = null;
+      this.data    = null;
+      this.task    = null;
       this.printed = true;
     }
 
     Item(final File source, final Map<String, Object> data, final String task)
     {
-      this.source = source;
-      this.data = data;
-      this.task = task;
+      this.source  = source;
+      this.data    = data;
+      this.task    = task;
       this.printed = false;
     }
 
@@ -141,7 +141,7 @@ public final class Main
         catch (FileNotFoundException e)
         {
           System.err.printf("Failed to write result for %s: %s",
-            path, e.getMessage());
+                            path, e.getMessage());
         }
       }
     }
@@ -157,8 +157,9 @@ public final class Main
   static
   {
     final String helpMsg = "\n" +
-      "OCSF command line tool for parsing, translating, and validating events.\n\n" +
-      "Where possible options include:\n";
+                           "OCSF command line tool for parsing, translating, and validating " +
+                           "events.\n\n" +
+                           "Where possible options include:\n";
 
     clp = new CommandLineParser(Name, helpMsg);
 
@@ -178,7 +179,7 @@ public final class Main
     clp.add("Event validating options:\n");
     clp.add('v', "validate", null, "validate one or more events");
     clp.add('u', "url", "url",
-      "specify the OCSF schema server URL, default: " + SchemaServices.SCHEMA_URL);
+            "specify the OCSF schema server URL, default: " + SchemaServices.SCHEMA_URL);
 
     clp.add("Other options:\n");
     clp.add('W', "write", "dir", "write result as {process}-filename.json to directory 'dir'");
@@ -187,43 +188,43 @@ public final class Main
 
     clp.add("Usage examples:");
     clp.add("   Parse a single event                        " + ANSI_CODE + "schema-cli -p " +
-      "WinEventLog 4103.event" + ANSI_RESET);
+            "WinEventLog 4103.event" + ANSI_RESET);
     clp.add("   Parse multiple events                       " + ANSI_CODE + "schema-cli -p " +
-      "WinEventLog 4103-1.event 4103-2.event" + ANSI_RESET);
+            "WinEventLog 4103-1.event 4103-2.event" + ANSI_RESET);
     clp.add("   Parse all events in a folder                " + ANSI_CODE + "schema-cli -p " +
-      "WinEventLog data" + ANSI_RESET + "\n");
+            "WinEventLog data" + ANSI_RESET + "\n");
 
     clp.add("   Translate a single event                    " + ANSI_CODE + "schema-cli -R rules " +
-      "-r rule-4103-m parsed-4103.json" + ANSI_RESET);
+            "-r rule-4103-m parsed-4103.json" + ANSI_RESET);
     clp.add("   Translate multiple events                   " + ANSI_CODE + "schema-cli -R rules " +
-      "-r rule-4103-m parsed-4103-1.json parsed-4103-2.json" + ANSI_RESET);
+            "-r rule-4103-m parsed-4103-1.json parsed-4103-2.json" + ANSI_RESET);
     clp.add("   Translate all events in a folder            " + ANSI_CODE + "schema-cli -R rules " +
-      "-r rule-4103-m parsed" + ANSI_RESET);
+            "-r rule-4103-m parsed" + ANSI_RESET);
     clp.add("   Translate a single event, add type_uid      " + ANSI_CODE + "schema-cli -R rules " +
-      "-r rule-4103-m -s schema.json parsed-4103.json" + ANSI_RESET + "\n");
+            "-r rule-4103-m -s schema.json parsed-4103.json" + ANSI_RESET + "\n");
     clp.add("   Translate a single event, add enum text     " + ANSI_CODE + "schema-cli -R rules " +
-      "-r rule-4103-m -S schema.json parsed-4103.json" + ANSI_RESET + "\n");
+            "-r rule-4103-m -S schema.json parsed-4103.json" + ANSI_RESET + "\n");
 
     clp.add("   Validate a single event                     " + ANSI_CODE + "schema-cli -v " +
-      "translated-4103.json" + ANSI_RESET);
+            "translated-4103.json" + ANSI_RESET);
     clp.add("   Validate multiple events                    " + ANSI_CODE + "schema-cli -v " +
-      "translated-4103-1.json translated-4103-2.json" + ANSI_RESET);
+            "translated-4103-1.json translated-4103-2.json" + ANSI_RESET);
     clp.add("   Validate all events in a folder             " + ANSI_CODE + "schema-cli -v " +
-      "translated" + ANSI_RESET + "\n");
+            "translated" + ANSI_RESET + "\n");
 
     clp.add("   Parse and translate a single event          " + ANSI_CODE + "schema-cli -p " +
-      "WinEventLog -R rules -r rule-4103-m 4103.event" + ANSI_RESET);
+            "WinEventLog -R rules -r rule-4103-m 4103.event" + ANSI_RESET);
     clp.add("   Parse, translate, and validate an event     " + ANSI_CODE + "schema-cli -p " +
-      "WinEventLog -R rules -r rule-4103-m -v 4103.event" + ANSI_RESET);
+            "WinEventLog -R rules -r rule-4103-m -v 4103.event" + ANSI_RESET);
     clp.add("   Parse, translate, add enums, and validate   " + ANSI_CODE + "schema-cli -p " +
-      "WinEventLog -R rules -r rule-4103-m -S schema.json -v 4103.event" + ANSI_RESET + "\n");
+            "WinEventLog -R rules -r rule-4103-m -S schema.json -v 4103.event" + ANSI_RESET + "\n");
   }
 
   public static void main(final String... args)
   {
     clp.parseCommandLine(args);
 
-    verbose = clp.getArg('V').isSet();
+    verbose        = clp.getArg('V').isSet();
     writeResultDir = clp.getArg('W').value();
 
     printHelp();
@@ -302,7 +303,7 @@ public final class Main
       arg = clp.getArg('S');
       if (arg.isSet())
       {
-        schemaFile = Paths.get(arg.value());
+        schemaFile  = Paths.get(arg.value());
         schemaEnums = true;
       }
     }
@@ -341,17 +342,18 @@ public final class Main
     final Argument ruleFile = clp.getArg('r');
 
     return ruleDir.isSet() && ruleFile.isSet() ?
-      Optional.ofNullable(translator(ruleDir.value(), ruleFile.value())) :
-      Optional.empty();
+           Optional.ofNullable(translator(ruleDir.value(), ruleFile.value())) :
+           Optional.empty();
   }
 
   private static Optional<SchemaServices> validator()
   {
     return clp.getArg('v').isSet() ?
-      Optional.of(new SchemaServices(schemaUrl)) : Optional.empty();
+           Optional.of(new SchemaServices(schemaUrl)) : Optional.empty();
   }
 
-  private static void parse(final Parser parser, final List<String> files,
+  private static void parse(
+    final Parser parser, final List<String> files,
     final Consumer<Item> consumer)
   {
     for (final String arg : files)
@@ -440,7 +442,7 @@ public final class Main
         catch (final IOException e)
         {
           System.err.printf("Validate: unable to read file %s: %s%n", file.getName(),
-            e.getMessage());
+                            e.getMessage());
         }
       });
     }
@@ -500,8 +502,9 @@ public final class Main
         System.out.println("// rule  file: " + ruleFile);
       }
 
-      final TranslatorBuilder.Translator translator = TranslatorBuilder.fromFile(Paths.get(home),
-                                                                                 Paths.get(ruleFile));
+      final TranslatorBuilder.Translator translator = TranslatorBuilder.fromFile(
+        Paths.get(home),
+        Paths.get(ruleFile));
 
       if (schemaFile != null)
       {
@@ -625,7 +628,8 @@ public final class Main
    * @param ruleName - full path to rule, relative path of rule, or base name of rule
    * @return - the relative path of rule
    */
-  private static String resolveRuleFile(final String rulePath, final String ruleName) throws NotDirectoryException, FileNotFoundException
+  private static String resolveRuleFile(final String rulePath, final String ruleName)
+    throws NotDirectoryException, FileNotFoundException
   {
     final File baseDir = new File(rulePath);
     if (!baseDir.isDirectory())
@@ -654,7 +658,7 @@ public final class Main
     // 3. the hard part.  Scan for rule name - assuming it's a file basename identifier.
     final List<String> matches = new ArrayList<>();
     final String matchRe = String.format("^(.*-%s|%s|%s-.*).json$", ruleName, ruleName,
-      ruleName);
+                                         ruleName);
 
     visitAllDirsAndFiles(baseDir, file ->
     {
@@ -669,7 +673,7 @@ public final class Main
     {
       // came up short - didn't find anything.
       throw new FileNotFoundException(String.format("Cannot find a rule with rule-dir %s and " +
-        "ruleName %s", rulePath, ruleName));
+                                                    "ruleName %s", rulePath, ruleName));
     }
 
     if (matches.size() > 1)

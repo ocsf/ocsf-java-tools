@@ -17,8 +17,6 @@
 
 package io.ocsf.utils.event;
 
-import io.ocsf.utils.event.Event;
-
 public interface Sink<T extends Event>
 {
   void put(final T t) throws InterruptedException;

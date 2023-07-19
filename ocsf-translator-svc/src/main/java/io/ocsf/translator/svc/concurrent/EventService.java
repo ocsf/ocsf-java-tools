@@ -17,16 +17,15 @@
 
 package io.ocsf.translator.svc.concurrent;
 
+import io.ocsf.parsers.Parsers;
+import io.ocsf.translator.svc.EventDemuxer;
 import io.ocsf.translator.svc.TranslatorsManager;
+import io.ocsf.translator.svc.config.TranslatorsLoader;
 import io.ocsf.utils.FuzzyHashMap;
+import io.ocsf.utils.event.Event;
 import io.ocsf.utils.event.Sink;
 import io.ocsf.utils.event.Source;
 import io.ocsf.utils.parsers.Parser;
-import io.ocsf.utils.event.Event;
-
-import io.ocsf.parsers.Parsers;
-import io.ocsf.translator.svc.config.TranslatorsLoader;
-import io.ocsf.translator.svc.EventDemuxer;
 
 import java.io.IOException;
 
@@ -35,10 +34,10 @@ public class EventService implements Runnable
   private final EventDemuxer demuxer;
 
   public EventService(
-      final String rules,
-      final Source<Event> in,
-      final Sink<Event> out,
-      final Sink<Event> raw) throws IOException
+    final String rules,
+    final Source<Event> in,
+    final Sink<Event> out,
+    final Sink<Event> raw) throws IOException
   {
     final FuzzyHashMap<Parser>             parsers      = Parsers.parsers();
     final FuzzyHashMap<TranslatorsManager> transformers = TranslatorsLoader.load(rules);
@@ -47,8 +46,8 @@ public class EventService implements Runnable
   }
 
   /**
-   * When an object implementing interface <code>Runnable</code> is used to create a thread, starting the thread causes
-   * the object's
+   * When an object implementing interface <code>Runnable</code> is used to create a thread,
+   * starting the thread causes the object's
    * <code>run</code> method to be called in that separately executing thread.
    * <p>
    * The general contract of the method <code>run</code> is that it may take any action whatsoever.

@@ -37,7 +37,8 @@ public final class Syslog
   private static final int RFC3164_TIME1_LEN = RFC3164_TIME1.length();
   private static final int RFC3164_TIME2_LEN = RFC3164_TIME2.length();
 
-  public static Map<String, Object> decodePriority(final Integer priority, final Map<String, Object> data)
+  public static Map<String, Object> decodePriority(
+    final Integer priority, final Map<String, Object> data)
   {
     if (priority != null)
     {

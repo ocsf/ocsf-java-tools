@@ -18,19 +18,20 @@
 package io.ocsf.translator.svc;
 
 import io.ocsf.utils.event.Event;
-import io.ocsf.utils.parsers.Parser;
 import io.ocsf.utils.event.EventQueue;
 import io.ocsf.utils.event.Sink;
 import io.ocsf.utils.event.Source;
+import io.ocsf.utils.parsers.Parser;
 
 /**
  * The EventProcessor concurrently runs a parser and a normalizer in two separate threads.
  * <p>
- * Note, the parser and the normalizer are connected with a small queue (keeps the memory usage low).
+ * Note, the parser and the normalizer are connected with a small queue (keeps the memory usage
+ * low).
  */
 public class EventProcessor
 {
-  private final EventParser parser;
+  private final EventParser     parser;
   private final EventNormalizer normalizer;
 
   public EventProcessor(
@@ -39,7 +40,7 @@ public class EventProcessor
   {
     final EventQueue<Event> queue = new EventQueue<>(2);
 
-    this.parser = new EventParser(parser, source, queue);
+    this.parser     = new EventParser(parser, source, queue);
     this.normalizer = new EventNormalizer(translators, queue, sink);
   }
 

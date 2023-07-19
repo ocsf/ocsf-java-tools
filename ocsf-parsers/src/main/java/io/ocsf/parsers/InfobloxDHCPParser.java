@@ -24,7 +24,8 @@ import io.ocsf.utils.parsers.Syslog;
 import java.util.Map;
 
 /**
- * Infoblox DHCP syslog parser. It parses and extracts the syslog header fields and the message text.
+ * Infoblox DHCP syslog parser. It parses and extracts the syslog header fields and the message
+ * text.
  * <p>
  * Sample events:
  * <pre>
@@ -40,7 +41,8 @@ public class InfobloxDHCPParser implements Parser
   protected static final String Priority = "priority";
 
   private static final String Pattern =
-      "<#{priority: integer}>#{timestamp: string(syslog-time)} #{server_ip} dhcpd[#{pid}]: #{message}";
+    "<#{priority: integer}>#{timestamp: string(syslog-time)} #{server_ip} dhcpd[#{pid}]: " +
+    "#{message}";
 
   private final Parser parser;
 

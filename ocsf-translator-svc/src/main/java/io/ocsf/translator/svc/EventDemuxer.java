@@ -17,13 +17,13 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.utils.event.Event;
-import io.ocsf.utils.parsers.Parser;
-import io.ocsf.utils.event.EventQueue;
 import io.ocsf.utils.FuzzyHashMap;
+import io.ocsf.utils.event.Event;
+import io.ocsf.utils.event.EventQueue;
 import io.ocsf.utils.event.Sink;
 import io.ocsf.utils.event.Source;
 import io.ocsf.utils.event.Transformer;
+import io.ocsf.utils.parsers.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,8 +31,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The EventDemuxer is a helper class to de-multiplex the incoming raw event stream into multiple streams using on the
- * event source type (sourceType).
+ * The EventDemuxer is a helper class to de-multiplex the incoming raw event stream into multiple
+ * streams using on the event source type (sourceType).
  */
 public class EventDemuxer extends Transformer
 {
@@ -55,17 +55,17 @@ public class EventDemuxer extends Transformer
    * @param unparsed    the events that were not the parsed and translated
    */
   public EventDemuxer(
-      final FuzzyHashMap<Parser> parsers,
-      final FuzzyHashMap<TranslatorsManager> normalizers,
-      final Source<Event> source,
-      final Sink<Event> sink,
-      final Sink<Event> unparsed)
+    final FuzzyHashMap<Parser> parsers,
+    final FuzzyHashMap<TranslatorsManager> normalizers,
+    final Source<Event> source,
+    final Sink<Event> sink,
+    final Sink<Event> unparsed)
   {
     super(EventDemuxer.class.getName(), source, unparsed);
 
-    this.parsers = parsers;
+    this.parsers     = parsers;
     this.normalizers = normalizers;
-    this.eventSink = sink;
+    this.eventSink   = sink;
 
     final int size = parsers.size() + 1;
     this.queues = new HashMap<>(size);

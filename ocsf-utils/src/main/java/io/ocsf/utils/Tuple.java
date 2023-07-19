@@ -27,7 +27,7 @@ public final class Tuple<Name, Value>
 
   public Tuple(final Name name, final Value value)
   {
-    this.name = name;
+    this.name  = name;
     this.value = value;
   }
 

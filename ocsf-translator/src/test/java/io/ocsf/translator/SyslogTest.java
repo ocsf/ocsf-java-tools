@@ -17,8 +17,8 @@
 
 package io.ocsf.translator;
 
-import io.ocsf.utils.parsers.Json5Parser;
 import io.ocsf.utils.Maps;
+import io.ocsf.utils.parsers.Json5Parser;
 import org.junit.Assert;
 import org.junit.Test;
 

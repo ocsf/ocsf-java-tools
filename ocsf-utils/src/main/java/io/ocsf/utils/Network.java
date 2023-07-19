@@ -27,8 +27,8 @@ package io.ocsf.utils;
 public final class Network implements Comparable<Network>
 {
   private transient String string;
-  private final int maskedBits;
-  private final int address;
+  private final     int    maskedBits;
+  private final     int    address;
 
   public Network(final String mask) throws IllegalArgumentException
   {
@@ -52,10 +52,11 @@ public final class Network implements Comparable<Network>
 
     if (bits == 32)
       bits = 0;
-    else if (bits <= 0 || bits > 31) throw new IllegalArgumentException("Illegal number of bits in the mask");
+    else if (bits <= 0 || bits > 31)
+      throw new IllegalArgumentException("Illegal number of bits in the mask");
 
     maskedBits = bits;
-    address = addr & MASKS[bits];
+    address    = addr & MASKS[bits];
   }
 
   private static int parse(final String addr, final int length)
@@ -156,9 +157,9 @@ public final class Network implements Comparable<Network>
     int m = 0;
     for (int i = 1; i < MASKS.length; i++)
     {
-      m |= 0x80000000;
+                 m |= 0x80000000;
       MASKS[i] = m;
-      m >>= 1;
+                 m >>= 1;
     }
   }
 
@@ -198,8 +199,8 @@ public final class Network implements Comparable<Network>
   /**
    * Convert an integer IP address to dot-separated string form.
    */
-  private static final char[] digits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-  private static final int[] sizeTable = {9, 99, 999};
+  private static final char[] digits    = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+  private static final int[]  sizeTable = {9, 99, 999};
 
   // Requires positive x
   private static int stringSize(final int x)
@@ -220,7 +221,7 @@ public final class Network implements Comparable<Network>
       final int q = (i * 52429) >>> (16 + 3);
       final int r = i - ((q << 3) + (q << 1)); // r = i-(q*10) ...
       buf[--index] = digits[r];
-      i = q;
+      i            = q;
     }
     while (i != 0);
   }

@@ -42,7 +42,7 @@ public final class BooleanEvaluator
     {
       if (node.right != null)
         return evaluate(
-            node.op.token, data.get(node.left.op.name()), node.right.op);
+          node.op.token, data.get(node.left.op.name()), node.right.op);
     }
 
     switch (node.op.token)
@@ -75,149 +75,151 @@ public final class BooleanEvaluator
   }
 
   private static final Operator[] operations = {
-      // NE
-      (field, value) -> compare(field, value) != 0,
-      // EQ
-      (field, value) -> compare(field, value) == 0,
-      // Like
-      (field, value) -> {
-        if (field == null)
-          return value.token == Token.NULL;
+    // NE
+    (field, value) -> compare(field, value) != 0,
+    // EQ
+    (field, value) -> compare(field, value) == 0,
+    // Like
+    (field, value) -> {
+      if (field == null)
+        return value.token == Token.NULL;
 
-        return value.token != Token.NULL &&
-            Strings.search(field.toString(), value.value().toString()) > -1;
-      },
-      // NotLike
-      (field, value) -> {
-        if (field == null)
-          return value.token != Token.NULL;
+      return value.token != Token.NULL &&
+             Strings.search(field.toString(), value.value().toString()) > -1;
+    },
+    // NotLike
+    (field, value) -> {
+      if (field == null)
+        return value.token != Token.NULL;
 
-        return value.token == Token.NULL ||
-            Strings.search(field.toString(), value.value().toString()) == -1;
-      },
-      // GE
-      (field, value) -> compare(field, value) >= 0,
-      // GT
-      (field, value) -> compare(field, value) > 0,
-      // LE
-      (field, value) -> compare(field, value) <= 0,
-      // LT
-      (field, value) -> compare(field, value) < 0,
-      // MATCH
-      (field, value) ->
+      return value.token == Token.NULL ||
+             Strings.search(field.toString(), value.value().toString()) == -1;
+    },
+    // GE
+    (field, value) -> compare(field, value) >= 0,
+    // GT
+    (field, value) -> compare(field, value) > 0,
+    // LE
+    (field, value) -> compare(field, value) <= 0,
+    // LT
+    (field, value) -> compare(field, value) < 0,
+    // MATCH
+    (field, value) ->
+    {
+      if (field == null)
+        return value.token == Token.NULL;
+
+      if (value.token == Token.STRING)
       {
-        if (field == null)
-          return value.token == Token.NULL;
-
-        if (value.token == Token.STRING)
+        try
         {
-          try
-          {
-            final Pattern p = Pattern.compile(value.value(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-            return p.matcher(field.toString()).find();
-          }
-          catch (final PatternSyntaxException ignore)
-          {
-            return false;
-          }
+          final Pattern p =
+            Pattern.compile(value.value(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+          return p.matcher(field.toString()).find();
+        }
+        catch (final PatternSyntaxException ignore)
+        {
+          return false;
+        }
+      }
+
+      return compare(field, value) == 0;
+    },
+    // NOT_MATCH
+    (field, value) ->
+    {
+      if (field == null)
+        return value.token != Token.NULL;
+
+      if (value.token == Token.STRING)
+      {
+        try
+        {
+          final Pattern p =
+            Pattern.compile(value.value(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+          return !p.matcher(field.toString()).find();
+        }
+        catch (final PatternSyntaxException ignore)
+        {
+          return true;
+        }
+      }
+
+      return compare(field, value) != 0;
+    },
+    // Starts With
+    (field, value) -> {
+      if (field == null)
+        return value.token == Token.NULL;
+
+      return value.token != Token.NULL &&
+             Strings.startsWith(field.toString(), value.value().toString());
+    },
+    // Ends With
+    (field, value) -> {
+      if (field == null)
+        return value.token == Token.NULL;
+
+      return value.token != Token.NULL &&
+             Strings.endsWith(field.toString(), value.value().toString());
+    },
+    // In
+    (field, value) ->
+    {
+      switch (value.token)
+      {
+        case Token.SET:
+        {
+          final Set<Object> set = value.value();
+          return set.contains(field);
         }
 
-        return compare(field, value) == 0;
-      },
-      // NOT_MATCH
-      (field, value) ->
-      {
-        if (field == null)
-          return value.token != Token.NULL;
-
-        if (value.token == Token.STRING)
+        case Token.IPMASK:
         {
-          try
-          {
-            final Pattern p = Pattern.compile(value.value(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-            return !p.matcher(field.toString()).find();
-          }
-          catch (final PatternSyntaxException ignore)
-          {
-            return true;
-          }
+          final Network mask = value.value();
+          if (field instanceof String)
+            return mask.hasMember((String) field);
+
+          if (field instanceof Integer)
+            return mask.hasMember((Integer) field);
+
+          if (field instanceof Long)
+            return mask.hasMember((Long) field);
+        }
+      }
+      return compare(field, value) == 0;
+    },
+    // NotIn
+    (field, value) ->
+    {
+      switch (value.token)
+      {
+        case Token.SET:
+        {
+          final Set<Object> set = value.value();
+          return !set.contains(field);
         }
 
-        return compare(field, value) != 0;
-      },
-      // Starts With
-      (field, value) -> {
-        if (field == null)
-          return value.token == Token.NULL;
-
-        return value.token != Token.NULL &&
-            Strings.startsWith(field.toString(), value.value().toString());
-      },
-      // Ends With
-      (field, value) -> {
-        if (field == null)
-          return value.token == Token.NULL;
-
-        return value.token != Token.NULL &&
-            Strings.endsWith(field.toString(), value.value().toString());
-      },
-      // In
-      (field, value) ->
-      {
-        switch (value.token)
+        case Token.IPMASK:
         {
-          case Token.SET:
-          {
-            final Set<Object> set = value.value();
-            return set.contains(field);
-          }
+          final Network mask = value.value();
+          if (field instanceof String)
+            return !mask.hasMember((String) field);
 
-          case Token.IPMASK:
-          {
-            final Network mask = value.value();
-            if (field instanceof String)
-              return mask.hasMember((String) field);
+          if (field instanceof Integer)
+            return !mask.hasMember((Integer) field);
 
-            if (field instanceof Integer)
-              return mask.hasMember((Integer) field);
-
-            if (field instanceof Long)
-              return mask.hasMember((Long) field);
-          }
+          if (field instanceof Long)
+            return !mask.hasMember((Long) field);
         }
-        return compare(field, value) == 0;
-      },
-      // NotIn
-      (field, value) ->
-      {
-        switch (value.token)
-        {
-          case Token.SET:
-          {
-            final Set<Object> set = value.value();
-            return !set.contains(field);
-          }
+      }
 
-          case Token.IPMASK:
-          {
-            final Network mask = value.value();
-            if (field instanceof String)
-              return !mask.hasMember((String) field);
-
-            if (field instanceof Integer)
-              return !mask.hasMember((Integer) field);
-
-            if (field instanceof Long)
-              return !mask.hasMember((Long) field);
-          }
-        }
-
-        return compare(field, value) != 0;
-      },
-      // IS_NULL
-      (field, value) -> field == null,
-      // IS_NOT_NULL
-      (field, value) -> field != null
+      return compare(field, value) != 0;
+    },
+    // IS_NULL
+    (field, value) -> field == null,
+    // IS_NOT_NULL
+    (field, value) -> field != null
   };
 
   @SuppressWarnings("unchecked")
@@ -235,7 +237,8 @@ public final class BooleanEvaluator
     else if (data instanceof Collection<?>)
     {
       for (final Object datum : ((Collection<Object>) data))
-        if (datum instanceof Map<?, ?> && evaluate(node, key -> Maps.getIn((Map<String, Object>) datum, key)))
+        if (datum instanceof Map<?, ?> &&
+            evaluate(node, key -> Maps.getIn((Map<String, Object>) datum, key)))
           return true;
     }
     else if (data instanceof Map<?, ?>)

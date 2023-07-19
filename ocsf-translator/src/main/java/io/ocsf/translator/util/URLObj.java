@@ -32,9 +32,9 @@ public final class URLObj
   private URLObj() {}
 
   static final Map<String, Object> EMPTY = FMap.<String, Object>b()
-    .p(Dictionary.Text, Strings.EMPTY)
-    .p(Dictionary.Scheme, Strings.EMPTY)
-    .p(Dictionary.Hostname, Strings.EMPTY);
+                                               .p(Dictionary.Text, Strings.EMPTY)
+                                               .p(Dictionary.Scheme, Strings.EMPTY)
+                                               .p(Dictionary.Hostname, Strings.EMPTY);
 
   /**
    * Parses a given URL string and extracts the URL components.
@@ -52,12 +52,12 @@ public final class URLObj
     final java.net.URL aURL = new java.net.URL(urlStr);
 
     return FMap.<String, Object>b()
-      .p(Dictionary.Text, urlStr)
-      .p(Dictionary.Scheme, aURL.getProtocol())
-      .p(Dictionary.Hostname, aURL.getHost())
-      .p(Dictionary.Port, port(aURL))
-      .p(Dictionary.Path, aURL.getPath())
-      .o(Dictionary.Query, aURL.getQuery());
+               .p(Dictionary.Text, urlStr)
+               .p(Dictionary.Scheme, aURL.getProtocol())
+               .p(Dictionary.Hostname, aURL.getHost())
+               .p(Dictionary.Port, port(aURL))
+               .p(Dictionary.Path, aURL.getPath())
+               .o(Dictionary.Query, aURL.getQuery());
   }
 
   private static Integer port(final java.net.URL url)

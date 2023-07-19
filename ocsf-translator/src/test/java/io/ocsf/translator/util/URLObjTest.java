@@ -18,7 +18,6 @@
 package io.ocsf.translator.util;
 
 import io.ocsf.schema.Dictionary;
-import io.ocsf.translator.util.URLObj;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
@@ -31,7 +30,7 @@ public class URLObjTest extends TestCase
   public void testToFile()
   {
     final String text = "http://example.com:80/docs/books/tutorial/index" +
-      ".html?name=networking#DOWNLOADING";
+                        ".html?name=networking#DOWNLOADING";
 
     try
     {

@@ -18,8 +18,8 @@
 package io.ocsf.translator;
 
 import io.ocsf.schema.Dictionary;
-import io.ocsf.utils.parsers.Json5Parser;
 import io.ocsf.utils.Maps;
+import io.ocsf.utils.parsers.Json5Parser;
 import io.ocsf.utils.parsers.ParserException;
 import junit.framework.TestCase;
 import org.junit.Assert;
@@ -32,7 +32,7 @@ import java.util.Map;
 public final class TranslatorBuilderTest extends TestCase
 {
   private static final String JsonData = "{name: 'foo', port:42, rule: 'test data'}";
-  private Map<String, Object> data;
+  private              Map<String, Object> data;
 
   @Override
   public void setUp() throws ParserException
@@ -50,8 +50,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testSetValue() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@value: 22}}]}")
-        .apply(new HashMap<>());
+      .fromString("{rules: [{port: {@value: 22}}]}")
+      .apply(new HashMap<>());
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals(22, translated.get("port"));
@@ -60,8 +60,9 @@ public final class TranslatorBuilderTest extends TestCase
   public void testSetValueEx() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@value: 22}}, {port: {@value: {value: 42, overwrite: false}}}]}")
-        .apply(new HashMap<>());
+      .fromString(
+        "{rules: [{port: {@value: 22}}, {port: {@value: {value: 42, overwrite: false}}}]}")
+      .apply(new HashMap<>());
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals(22, translated.get("port"));
@@ -70,8 +71,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCondSetValue1() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@value: {value: 22, overwrite: false, when: 'port = 42'}}}]}")
-        .apply(data);
+      .fromString("{rules: [{port: {@value: {value: 22, overwrite: false, when: 'port = 42'}}}]}")
+      .apply(data);
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals(22, translated.get("port"));
@@ -80,8 +81,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCondSetValue2() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@value: {value: 22, when: 'port != 42'}}}]}")
-        .apply(data);
+      .fromString("{rules: [{port: {@value: {value: 22, when: 'port != 42'}}}]}")
+      .apply(data);
 
     Assert.assertEquals(0, translated.size());
     Assert.assertNull(translated.get("port"));
@@ -90,8 +91,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testClone() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@value: 22}}, {port: {@clone: 'dst.port'}}]}")
-        .apply(new HashMap<>());
+      .fromString("{rules: [{port: {@value: 22}}, {port: {@clone: 'dst.port'}}]}")
+      .apply(new HashMap<>());
 
     Assert.assertEquals(2, translated.size());
     Assert.assertEquals(22, translated.get("port"));
@@ -101,8 +102,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCloneEx() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@value: 22}}, {port: {@clone: {name: 'dst.port'}}}]}")
-        .apply(new HashMap<>());
+      .fromString("{rules: [{port: {@value: 22}}, {port: {@clone: {name: 'dst.port'}}}]}")
+      .apply(new HashMap<>());
 
     Assert.assertEquals(2, translated.size());
     Assert.assertEquals(22, translated.get("port"));
@@ -112,8 +113,9 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCondClone1() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@value: 22}}, {port: {@clone: {name: 'dst.port', when: 'port = 42'}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules: [{port: {@value: 22}}, {port: {@clone: {name: 'dst.port', when: 'port = 42'}}}]}")
+      .apply(data);
 
     Assert.assertEquals(3, data.size());
     Assert.assertEquals(42, data.get("port"));
@@ -125,8 +127,9 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCondClone2() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@value: 22}}, {port: {@clone: {name: 'dst.port', when: 'port = 22'}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules: [{port: {@value: 22}}, {port: {@clone: {name: 'dst.port', when: 'port = 22'}}}]}")
+      .apply(data);
 
     Assert.assertEquals(3, data.size());
     Assert.assertEquals(42, data.get("port"));
@@ -138,8 +141,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testMoveValue() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@move: 'port'}}]}")
-        .apply(data);
+      .fromString("{rules: [{port: {@move: 'port'}}]}")
+      .apply(data);
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals(42, translated.get("port"));
@@ -149,8 +152,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCondMoveValue1() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@move: {name: 'port', when: 'port = 42'}}}]}")
-        .apply(data);
+      .fromString("{rules: [{port: {@move: {name: 'port', when: 'port = 42'}}}]}")
+      .apply(data);
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals(42, translated.get("port"));
@@ -160,8 +163,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCondMoveValue2() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@move: {name: 'port', when: 'port != 42'}}}]}")
-        .apply(data);
+      .fromString("{rules: [{port: {@move: {name: 'port', when: 'port != 42'}}}]}")
+      .apply(data);
 
     Assert.assertEquals(0, translated.size());
   }
@@ -179,8 +182,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCopyValue() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@copy: 'port'}}]}")
-        .apply(data);
+      .fromString("{rules: [{port: {@copy: 'port'}}]}")
+      .apply(data);
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals(42, translated.get("port"));
@@ -190,8 +193,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCondCopyValue1() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@copy: {name: 'port', when: 'port = 42'}}}]}")
-        .apply(data);
+      .fromString("{rules: [{port: {@copy: {name: 'port', when: 'port = 42'}}}]}")
+      .apply(data);
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals(42, translated.get("port"));
@@ -201,8 +204,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCondCopyValue2() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@copy: {name: 'port', when: 'port != 42'}}}]}")
-        .apply(data);
+      .fromString("{rules: [{port: {@copy: {name: 'port', when: 'port != 42'}}}]}")
+      .apply(data);
 
     Assert.assertNull(translated.get("port"));
     Assert.assertEquals(0, translated.size());
@@ -222,8 +225,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testRemoveValue() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@remove: 'port'}}]}")
-        .apply(data);
+      .fromString("{rules: [{port: {@remove: 'port'}}]}")
+      .apply(data);
 
     Assert.assertEquals(0, translated.size());
     Assert.assertNull(data.get("port"));
@@ -232,8 +235,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCondRemoveValue1() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@remove: 'port', when: 'port = 42'}}]}")
-        .apply(data);
+      .fromString("{rules: [{port: {@remove: 'port', when: 'port = 42'}}]}")
+      .apply(data);
 
     Assert.assertNull(data.get("port"));
     Assert.assertEquals(2, data.size());
@@ -243,8 +246,8 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCondRemoveValue2() throws IOException
   {
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules: [{port: {@remove: {when: 'port != 42'}}}]}")
-        .apply(data);
+      .fromString("{rules: [{port: {@remove: {when: 'port != 42'}}}]}")
+      .apply(data);
 
     Assert.assertNotNull(data.get("port"));
     Assert.assertEquals(3, data.size());
@@ -254,23 +257,28 @@ public final class TranslatorBuilderTest extends TestCase
   public void testEnumValue() throws IOException
   {
     Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{Opcode:{@enum: {name: 'id', default: 0, other: 'status', values: {'0':1, '1':2 }}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules:[{Opcode:{@enum: {name: 'id', default: 0, other: 'status', values: {'0':1, '1':2 " +
+        "}}}}]}")
+      .apply(data);
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals(0, translated.get("id"));
 
     translated = TranslatorBuilder
-        .fromString("{rules:[{name:{@enum: {name: 'name', default: 'none', values: {'Foo':'boo', 'hello':'there' }}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules:[{name:{@enum: {name: 'name', default: 'none', values: {'Foo':'boo', " +
+        "'hello':'there' }}}}]}")
+      .apply(data);
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals("boo", translated.get("name"));
     Assert.assertNull(data.get("name"));
 
     translated = TranslatorBuilder
-        .fromString("{rules:[{port:{@enum: {name: 'src_port', default: 22, values: {42:80, 41:8080 }}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules:[{port:{@enum: {name: 'src_port', default: 22, values: {42:80, 41:8080 }}}}]}")
+      .apply(data);
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals(80, translated.get("src_port"));
@@ -280,23 +288,29 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCondEnumValue1() throws IOException
   {
     Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{Opcode:{@enum: {when: 'port = 42', name: 'id', default: 0, other: 'status', values: {'0':1, '1':2 }}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules:[{Opcode:{@enum: {when: 'port = 42', name: 'id', default: 0, other: 'status', " +
+        "values: {'0':1, '1':2 }}}}]}")
+      .apply(data);
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals(0, translated.get("id"));
 
     translated = TranslatorBuilder
-        .fromString("{rules:[{name:{@enum: {when: 'name = \"foo\"', name: 'name', default: 'none', values: {'Foo':'boo', 'hello':'there' }}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules:[{name:{@enum: {when: 'name = \"foo\"', name: 'name', default: 'none', values: " +
+        "{'Foo':'boo', 'hello':'there' }}}}]}")
+      .apply(data);
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals("boo", translated.get("name"));
     Assert.assertNull(data.get("name"));
 
     translated = TranslatorBuilder
-        .fromString("{rules:[{port:{@enum: {when: 'port = 42', name: 'src_port', default: 22, values: {42:80, 41:8080 }}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules:[{port:{@enum: {when: 'port = 42', name: 'src_port', default: 22, values: {42:80," +
+        " 41:8080 }}}}]}")
+      .apply(data);
 
     Assert.assertEquals(1, translated.size());
     Assert.assertEquals(80, translated.get("src_port"));
@@ -306,22 +320,28 @@ public final class TranslatorBuilderTest extends TestCase
   public void testCondEnumValue2() throws IOException
   {
     Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{Opcode:{@enum: {when: 'port != 42', name: 'id', default: 0, other: 'status', values: {'0':1, '1':2 }}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules:[{Opcode:{@enum: {when: 'port != 42', name: 'id', default: 0, other: 'status', " +
+        "values: {'0':1, '1':2 }}}}]}")
+      .apply(data);
 
     Assert.assertEquals(3, data.size());
     Assert.assertEquals(0, translated.size());
 
     translated = TranslatorBuilder
-        .fromString("{rules:[{name:{@enum: {when: 'name != \"foo\"', name: 'name', default: 'none', values: {'Foo':'boo', 'hello':'there' }}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules:[{name:{@enum: {when: 'name != \"foo\"', name: 'name', default: 'none', values: " +
+        "{'Foo':'boo', 'hello':'there' }}}}]}")
+      .apply(data);
 
     Assert.assertEquals(3, data.size());
     Assert.assertEquals(0, translated.size());
 
     translated = TranslatorBuilder
-        .fromString("{rules:[{port:{@enum: {when: 'port != 42', name: 'src_port', default: 22, values: {42:80, 41:8080 }}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules:[{port:{@enum: {when: 'port != 42', name: 'src_port', default: 22, values: " +
+        "{42:80, 41:8080 }}}}]}")
+      .apply(data);
 
     Assert.assertEquals(3, data.size());
     Assert.assertEquals(0, translated.size());
@@ -331,8 +351,8 @@ public final class TranslatorBuilderTest extends TestCase
   {
     final Map<String, Object> data = Json5Parser.to("{'path': '/tmp/test.txt'}");
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{path:{@move: {name: 'file', type: 'path'}}}]}")
-        .apply(data);
+      .fromString("{rules:[{path:{@move: {name: 'file', type: 'path'}}}]}")
+      .apply(data);
     Assert.assertNotNull(translated);
 
     final Map<String, Object> file = Maps.typecast(translated.get("file"));
@@ -347,8 +367,8 @@ public final class TranslatorBuilderTest extends TestCase
   {
     final Map<String, Object> data = Json5Parser.to("{'path': 'test.txt'}");
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{path:{@move: {name: 'file', type: 'path'}}}]}")
-        .apply(data);
+      .fromString("{rules:[{path:{@move: {name: 'file', type: 'path'}}}]}")
+      .apply(data);
 
     Assert.assertNotNull(translated);
 
@@ -364,8 +384,8 @@ public final class TranslatorBuilderTest extends TestCase
   {
     final Map<String, Object> data = Json5Parser.to("{'foo': 'test.txt'}");
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{path:{@move: {name: 'file', type: 'path'}}}]}")
-        .apply(data);
+      .fromString("{rules:[{path:{@move: {name: 'file', type: 'path'}}}]}")
+      .apply(data);
 
     Assert.assertNotNull(translated);
     Assert.assertNull(Maps.typecast(translated.get("file")));
@@ -375,8 +395,8 @@ public final class TranslatorBuilderTest extends TestCase
   {
     final Map<String, Object> data = Json5Parser.to("{'path': '/test.txt'}");
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{path:{@move: {name: 'file', type: 'path'}}}]}")
-        .apply(data);
+      .fromString("{rules:[{path:{@move: {name: 'file', type: 'path'}}}]}")
+      .apply(data);
     Assert.assertNotNull(translated);
 
     final Map<String, Object> file = Maps.typecast(translated.get("file"));
@@ -391,8 +411,8 @@ public final class TranslatorBuilderTest extends TestCase
   {
     final Map<String, Object> data = Json5Parser.to("{'path': '/'}");
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{path:{@move: {name: 'file', type: 'path'}}}]}")
-        .apply(data);
+      .fromString("{rules:[{path:{@move: {name: 'file', type: 'path'}}}]}")
+      .apply(data);
     Assert.assertNotNull(translated);
 
     final Map<String, Object> file = Maps.typecast(translated.get("file"));
@@ -407,8 +427,8 @@ public final class TranslatorBuilderTest extends TestCase
   {
     final Map<String, Object> data = Json5Parser.to("{'path': ''}");
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{path:{@move: {name: 'file', type: 'path:1'}}}]}")
-        .apply(data);
+      .fromString("{rules:[{path:{@move: {name: 'file', type: 'path:1'}}}]}")
+      .apply(data);
     Assert.assertNotNull(translated);
 
     final Map<String, Object> file = Maps.typecast(translated.get("file"));
@@ -423,8 +443,10 @@ public final class TranslatorBuilderTest extends TestCase
   {
     final Map<String, Object> data = Json5Parser.to("{'cmd': 'hello.exe'}");
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{cmd: {@move: 'actor.process.cmd_line'}},{path:{@move: {name: 'actor.process.file', type: 'path'}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules:[{cmd: {@move: 'actor.process.cmd_line'}},{path:{@move: {name: 'actor.process" +
+        ".file', type: 'path'}}}]}")
+      .apply(data);
     Assert.assertNotNull(translated);
 
     final Map<String, Object> file = Maps.typecast(Maps.getIn(translated, "actor.process.file"));
@@ -435,8 +457,10 @@ public final class TranslatorBuilderTest extends TestCase
   {
     final Map<String, Object> data = Json5Parser.to("{file: {name: '/tmp/test.txt', size: 42}}");
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{file: [{name:{@move: {name: 'file', type: 'path'}}},{size:{@move: {name: 'file.size'}}}]}]}")
-        .apply(data);
+      .fromString(
+        "{rules:[{file: [{name:{@move: {name: 'file', type: 'path'}}},{size:{@move: {name: 'file" +
+        ".size'}}}]}]}")
+      .apply(data);
     Assert.assertNotNull(translated);
 
     final Map<String, Object> file = Maps.typecast(translated.get("file"));
@@ -452,8 +476,8 @@ public final class TranslatorBuilderTest extends TestCase
   {
     final Map<String, Object> data = Json5Parser.to("{path: '/tmp', name: 'test'}");
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{'path,name':{@move: {separator: '/', name: 'file', type: 'path:1'}}}]}")
-        .apply(data);
+      .fromString("{rules:[{'path,name':{@move: {separator: '/', name: 'file', type: 'path:1'}}}]}")
+      .apply(data);
     Assert.assertNotNull(translated);
 
     final Map<String, Object> file = Maps.typecast(translated.get("file"));
@@ -469,8 +493,9 @@ public final class TranslatorBuilderTest extends TestCase
   {
     final Map<String, Object> data = Json5Parser.to("{path: '/tmp', name: 'test'}");
     final Map<String, Object> translated = TranslatorBuilder
-        .fromString("{rules:[{'path, name':{@copy: {separator: '/', name: 'file', type: 'path:1'}}}]}")
-        .apply(data);
+      .fromString(
+        "{rules:[{'path, name':{@copy: {separator: '/', name: 'file', type: 'path:1'}}}]}")
+      .apply(data);
     Assert.assertNotNull(translated);
 
     final Map<String, Object> file = Maps.typecast(translated.get("file"));
@@ -484,7 +509,8 @@ public final class TranslatorBuilderTest extends TestCase
 
   public void testUrlText() throws IOException
   {
-    final Map<String, Object> data = Json5Parser.to("{'text': 'https://example.io/tmp/test.html?p1=hello&p2=world'}");
+    final Map<String, Object> data =
+      Json5Parser.to("{'text': 'https://example.io/tmp/test.html?p1=hello&p2=world'}");
     final Map<String, Object> translated = TranslatorBuilder
       .fromString("{rules:[{text:{@move: {name: 'url', type: 'url'}}}]}")
       .apply(data);
@@ -503,7 +529,8 @@ public final class TranslatorBuilderTest extends TestCase
 
   public void testBadUrlText() throws IOException
   {
-    final Map<String, Object> data = Json5Parser.to("{'text': 'htts:/example.io/tmp/test.html?p1=hello&p2=world'}");
+    final Map<String, Object> data =
+      Json5Parser.to("{'text': 'htts:/example.io/tmp/test.html?p1=hello&p2=world'}");
     final Map<String, Object> translated = TranslatorBuilder
       .fromString("{rules:[{text:{@move: {name: 'url', type: 'url'}}}]}")
       .apply(data);
@@ -512,7 +539,8 @@ public final class TranslatorBuilderTest extends TestCase
     final Map<String, Object> url = Maps.typecast(translated.get("url"));
     Assert.assertNotNull(url);
 
-    Assert.assertEquals("htts:/example.io/tmp/test.html?p1=hello&p2=world", url.get(Dictionary.Text));
+    Assert.assertEquals(
+      "htts:/example.io/tmp/test.html?p1=hello&p2=world", url.get(Dictionary.Text));
   }
 
   public void testEmptyUrlText() throws IOException

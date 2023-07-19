@@ -42,17 +42,17 @@ public class ReadFileTest extends TestCase
     final Path path = Paths.get("src/test/resources/rules");
 
     Assert.assertNotNull(TranslatorBuilder.fromFile(
-        path,
-        Paths.get("microsoft/windows/security/xml/translate-4688.json")));
+      path,
+      Paths.get("microsoft/windows/security/xml/translate-4688.json")));
     Assert.assertNotNull(TranslatorBuilder.fromFile(
-        path,
-        Paths.get("microsoft/windows/security/xml/translate-4624.json")));
+      path,
+      Paths.get("microsoft/windows/security/xml/translate-4624.json")));
     Assert.assertNotNull(TranslatorBuilder.fromFile(
-        path,
-        Paths.get("microsoft/windows/security/xml/translate-4625.json")));
+      path,
+      Paths.get("microsoft/windows/security/xml/translate-4625.json")));
     Assert.assertNotNull(TranslatorBuilder.fromFile(
-        path,
-        Paths.get("cisco/111010.json")));
+      path,
+      Paths.get("cisco/111010.json")));
   }
 
   public void testTranslators() throws IOException

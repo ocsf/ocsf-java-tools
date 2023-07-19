@@ -51,8 +51,8 @@ public final class Files
   }
 
   /**
-   * Reads a JSON object from a file. The method ensures that the file is closed when all bytes have been read or an I/O
-   * error, or other runtime exception, is thrown.
+   * Reads a JSON object from a file. The method ensures that the file is closed when all bytes have
+   * been read or an I/O error, or other runtime exception, is thrown.
    *
    * @param path the path to the JSON file
    * @param <T>  the type of the parsed JSON data
@@ -80,11 +80,13 @@ public final class Files
    */
   public static void write(final Path path, final byte[] bytes) throws IOException
   {
-    java.nio.file.Files.write(path, bytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+    java.nio.file.Files.write(
+      path, bytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
   }
 
   /**
-   * Encodes the object as JSON and writes to a file. If the file already exists, then the file will be overwritten.
+   * Encodes the object as JSON and writes to a file. If the file already exists, then the file will
+   * be overwritten.
    *
    * @param path the path to the file
    * @param obj  the object to write
@@ -96,18 +98,22 @@ public final class Files
   }
 
   /**
-   * Encodes the object as JSON and writes to a file. If the file already exists, then the file will be overwritten.
+   * Encodes the object as JSON and writes to a file. If the file already exists, then the file will
+   * be overwritten.
    *
    * @param path   the path to the file
    * @param obj    the object to write
    * @param pretty the JSON format flag
    * @throws IOException if an I/O error occurs writing to or creating the file
    */
-  public static void writeJson(final Path path, final Object obj, final boolean pretty) throws IOException
+  public static void writeJson(final Path path, final Object obj, final boolean pretty)
+    throws IOException
   {
-    final byte[] bytes = (pretty ? Json.format(obj) : Json.toString(obj)).getBytes(StandardCharsets.UTF_8);
+    final byte[] bytes =
+      (pretty ? Json.format(obj) : Json.toString(obj)).getBytes(StandardCharsets.UTF_8);
 
-    java.nio.file.Files.write(path, bytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+    java.nio.file.Files.write(
+      path, bytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
   }
 
   public static void writeJson(final String filename, final Object obj) throws IOException
@@ -115,7 +121,8 @@ public final class Files
     writeJson(Paths.get(filename), obj);
   }
 
-  public static void writeJson(final String filename, final Object obj, final boolean pretty) throws IOException
+  public static void writeJson(final String filename, final Object obj, final boolean pretty)
+    throws IOException
   {
     writeJson(Paths.get(filename), obj, pretty);
   }

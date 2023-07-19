@@ -17,7 +17,6 @@
 
 package io.ocsf.translator.util;
 
-import io.ocsf.translator.util.FileObj;
 import org.junit.Assert;
 import org.junit.Test;
 

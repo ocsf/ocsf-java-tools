@@ -32,6 +32,6 @@ public class WinEventLogParser implements Parser
   }
 
   @Override
-  public String toString() { return SourceType; }
+  public String toString() {return SourceType;}
 
 }

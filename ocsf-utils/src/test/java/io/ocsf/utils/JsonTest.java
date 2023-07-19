@@ -21,66 +21,66 @@ import org.junit.Test;
 
 public class JsonTest
 {
-    @Test
-    public void encodeDouble()
-    {
-        // Check that double encoding does not use scientific notation
-        final double v = 1681419369.997d;
-        final String s = Json.toString(v);
-        Assert.assertEquals("1681419369.997", s);
-    }
+  @Test
+  public void encodeDouble()
+  {
+    // Check that double encoding does not use scientific notation
+    final double v = 1681419369.997d;
+    final String s = Json.toString(v);
+    Assert.assertEquals("1681419369.997", s);
+  }
 
-    @Test
-    public void encodeDoubleSmall()
-    {
-        // Check that double encoding does not use scientific notation
-        final double v = 0.00000021d;
-        final String s = Json.toString(v);
-        Assert.assertEquals("0.00000021", s);
-    }
+  @Test
+  public void encodeDoubleSmall()
+  {
+    // Check that double encoding does not use scientific notation
+    final double v = 0.00000021d;
+    final String s = Json.toString(v);
+    Assert.assertEquals("0.00000021", s);
+  }
 
-    @Test
-    public void encodeDoubleNoFraction()
-    {
-        // Check that double encoding does not use scientific notation
-        final double v = 1681419280.0d;
-        final String s = Json.toString(v);
-        Assert.assertEquals("1681419280.0", s);
-    }
+  @Test
+  public void encodeDoubleNoFraction()
+  {
+    // Check that double encoding does not use scientific notation
+    final double v = 1681419280.0d;
+    final String s = Json.toString(v);
+    Assert.assertEquals("1681419280.0", s);
+  }
 
-    @Test
-    public void encodeFloat()
-    {
-        // Check that double encoding does not use scientific notation
-        final float v = 16814.1f;
-        final String s = Json.toString(v);
-        Assert.assertEquals("16814.1", s);
-    }
+  @Test
+  public void encodeFloat()
+  {
+    // Check that double encoding does not use scientific notation
+    final float  v = 16814.1f;
+    final String s = Json.toString(v);
+    Assert.assertEquals("16814.1", s);
+  }
 
-    @Test
-    public void encodeFloatNoFraction()
-    {
-        // Check that double encoding does not use scientific notation
-        final float v = 1681410.0f;
-        final String s = Json.toString(v);
-        Assert.assertEquals("1681410.0", s);
-    }
+  @Test
+  public void encodeFloatNoFraction()
+  {
+    // Check that double encoding does not use scientific notation
+    final float  v = 1681410.0f;
+    final String s = Json.toString(v);
+    Assert.assertEquals("1681410.0", s);
+  }
 
-    @Test
-    public void encodeFloatSmall()
-    {
-        // Check that double encoding does not use scientific notation
-        final float v = 0.00000021f;
-        final String s = Json.toString(v);
-        Assert.assertEquals("2.1E-7", s);
-    }
+  @Test
+  public void encodeFloatSmall()
+  {
+    // Check that double encoding does not use scientific notation
+    final float  v = 0.00000021f;
+    final String s = Json.toString(v);
+    Assert.assertEquals("2.1E-7", s);
+  }
 
-    @Test
-    public void encodeFloatTrailingZeros()
-    {
-        // Check that double encoding does not use scientific notation
-        final float v = 16_800_000.0f;
-        final String s = Json.toString(v);
-        Assert.assertEquals("1.68E7", s);
-    }
+  @Test
+  public void encodeFloatTrailingZeros()
+  {
+    // Check that double encoding does not use scientific notation
+    final float  v = 16_800_000.0f;
+    final String s = Json.toString(v);
+    Assert.assertEquals("1.68E7", s);
+  }
 }

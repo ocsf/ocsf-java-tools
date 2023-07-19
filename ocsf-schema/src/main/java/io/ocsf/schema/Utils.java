@@ -16,10 +16,10 @@
 
 package io.ocsf.schema;
 
+import io.ocsf.utils.Maps;
+
 import java.util.Map;
 import java.util.UUID;
-
-import io.ocsf.utils.Maps;
 
 /**
  * Schema utility function.

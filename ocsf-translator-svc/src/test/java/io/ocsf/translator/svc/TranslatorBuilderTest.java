@@ -16,11 +16,11 @@
 
 package io.ocsf.translator.svc;
 
+import io.ocsf.utils.FMap;
+import io.ocsf.utils.event.Event;
 import io.ocsf.utils.event.Sink;
 import io.ocsf.utils.event.Source;
 import io.ocsf.utils.event.Transformer;
-import io.ocsf.utils.FMap;
-import io.ocsf.utils.event.Event;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;

@@ -32,13 +32,13 @@ import java.util.Map;
 /**
  * Single line event parser and data extractor.
  * <p>
- * The parser extracts structured data out of a single text line using a pattern. The pattern is defined by the parts of
- * the string that will be discarded.
+ * The parser extracts structured data out of a single text line using a pattern. The pattern is
+ * defined by the parts of the string that will be discarded.
  * <p>
- * A successful match requires all keys in a pattern to have a value. If any of the #{key} defined in the pattern do not
- * have a value, then an exception is thrown and may be handled by the on_failure directive. An empty key %{} or a key
- * starting with '_' can be used to match and exclude values from the final data. All matched values are represented as
- * string data types.
+ * A successful match requires all keys in a pattern to have a value. If any of the #{key} defined
+ * in the pattern do not have a value, then an exception is thrown and may be handled by the
+ * on_failure directive. An empty key %{} or a key starting with '_' can be used to match and
+ * exclude values from the final data. All matched values are represented as string data types.
  * <p>
  * The pattern options:
  * <pre>
@@ -169,7 +169,7 @@ public final class PatternParser
       }
       else if (ch == '}' && inField)
       {
-        field = field(sb.toString());
+        field   = field(sb.toString());
         inField = false;
         sb.setLength(0);
       }
@@ -292,11 +292,11 @@ public final class PatternParser
   {
     final String name;
 
-    Field(final String name) {this.name = name;}
+    Field(final String name)            {this.name = name;}
 
-    boolean ignore() {return name.charAt(0) == '_';}
+    boolean ignore()                    {return name.charAt(0) == '_';}
 
-    int length() {return 0;}
+    int length()                        {return 0;}
 
     Object typecast(final String value) {return value;}
   }
@@ -314,7 +314,8 @@ public final class PatternParser
         this.len = Integer.parseInt(text);
 
         if (len <= 0 || len > MaxStrLen)
-          throw new ParserException("Invalid string length: " + text + ". Valid range is: 1-" + MaxStrLen);
+          throw new ParserException(
+            "Invalid string length: " + text + ". Valid range is: 1-" + MaxStrLen);
       }
       catch (final NumberFormatException ex)
       {
@@ -472,7 +473,7 @@ public final class PatternParser
   private static class SyslogTimeStringField extends Field
   {
     static final String Type = "syslog-time";
-    static final int ID = -1;
+    static final int    ID   = -1;
 
     SyslogTimeStringField(final String name)
     {
@@ -494,14 +495,14 @@ public final class PatternParser
   private static class Recognizer
   {
     private final String line;
-    private final int len;
-    private int pos;
+    private final int    len;
+    private       int    pos;
 
     Recognizer(final String line)
     {
       this.line = line;
-      this.len = line.length();
-      this.pos = 0;
+      this.len  = line.length();
+      this.pos  = 0;
     }
 
     boolean skip(final String str)

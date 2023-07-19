@@ -200,8 +200,8 @@ public final class NameValueParser
   }
 
   /**
-   * Skip all white-spaces, returns the position of first non-white-space char or 'len' if end of the buffer is
-   * reached.
+   * Skip all white-spaces, returns the position of first non-white-space char or 'len' if end of
+   * the buffer is reached.
    */
   private static int skip(final char[] buf, final int pos, final int len)
   {
@@ -315,7 +315,8 @@ public final class NameValueParser
     if (pos < buf.length)
     {
       return new ParserException(
-          message + " at " + pos + ", found: '" + buf[pos] + '\'' + " " + Integer.toHexString(buf[pos] & 0x0ffff));
+        message + " at " + pos + ", found: '" + buf[pos] + '\'' + " " +
+        Integer.toHexString(buf[pos] & 0x0ffff));
     }
 
     return new ParserException(message + " at the end");
@@ -323,6 +324,7 @@ public final class NameValueParser
 
   private static ParserException syntaxError(final int ch, final int pos)
   {
-    return new ParserException("Illegal escape char at " + pos + ": 0x" + Integer.toHexString(ch & 0x0ffff));
+    return new ParserException(
+      "Illegal escape char at " + pos + ": 0x" + Integer.toHexString(ch & 0x0ffff));
   }
 }

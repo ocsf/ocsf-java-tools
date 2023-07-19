@@ -16,13 +16,13 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.utils.FuzzyHashMap;
-import io.ocsf.utils.event.Event;
-import io.ocsf.utils.parsers.Parser;
 import io.ocsf.schema.Dictionary;
-import io.ocsf.utils.event.EventQueue;
 import io.ocsf.utils.FMap;
+import io.ocsf.utils.FuzzyHashMap;
 import io.ocsf.utils.Maps;
+import io.ocsf.utils.event.Event;
+import io.ocsf.utils.event.EventQueue;
+import io.ocsf.utils.parsers.Parser;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -116,8 +116,8 @@ public class EventDemuxerTest extends Tests
   {
     for (int i = 0; i < 2 * MAX_QUEUE_SIZE; i++)
     {
-      final Map<String, Object> data   = out.take().data();
-      final String              source =
+      final Map<String, Object> data = out.take().data();
+      final String source =
         (String) Maps.getIn(data, new String[]{Dictionary.UNMAPPED, Splunk.CIM_SOURCE_TYPE});
 
       Assert.assertEquals(5, data.size());

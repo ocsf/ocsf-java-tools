@@ -52,7 +52,9 @@ public final class ParserTest
 
     System.out.println();
 
-    test("peripheral_device.name = \"USBSTOR\\\\Disk&Ven_General&Prod_UDisk&Rev_5.00\\\\1312290111142051606211&0\"");
+    test(
+      "peripheral_device.name = \"USBSTOR\\\\Disk&Ven_General&Prod_UDisk&Rev_5" +
+      ".00\\\\1312290111142051606211&0\"");
     test("file.name match \".*\\\\?.*\"");
 
     test("id in [ 1,2,3,4 ] and type_id = 9000 and id is_not null");
@@ -76,7 +78,9 @@ public final class ParserTest
     test("port >= 1024");
     test("port >= 80 and ip = \"192.168.1.19\"");
     test("((port >= 80) and ((ip = \"192.168.1.19\") or (host = 'test')))");
-    test("((port >= 80) and ((ip = \"192.168.1.19\") or (host = \"test\"))) and ((port = -1) and ((ip > 123456) or (host == \"test\")))");
+    test(
+      "((port >= 80) and ((ip = \"192.168.1.19\") or (host = \"test\"))) and ((port = -1) and (" +
+      "(ip > 123456) or (host == \"test\")))");
     test("(port = -1) and ((ip > 123456) or (host is null))");
     test("((port == 88) and (ip=\"192.168.0.0\"))");
     test("time > `09/21/07 14:18:57`");
@@ -88,7 +92,9 @@ public final class ParserTest
 
     test("array contains 22");
     test("array contains 22 and 'first name' != 'Joe'");
-    test("((list contains 'Employee Id' = 20) or (list contains 'Employee Id' = 20)) and (list contains Company is_not null)");
+    test(
+      "((list contains 'Employee Id' = 20) or (list contains 'Employee Id' = 20)) and (list " +
+      "contains Company is_not null)");
 
     test("'file size' = 22");
     test("'file.size' = 22");

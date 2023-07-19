@@ -19,8 +19,8 @@ package io.ocsf.schema;
 
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -56,25 +56,25 @@ public final class Schema
   private static final Logger logger = LoggerFactory.getLogger(Schema.class);
 
   // Schema metadata/attribute property names
-  private static final String TYPES = "types";
+  private static final String TYPES   = "types";
   private static final String OBJECTS = "objects";
   private static final String CLASSES = "classes";
 
   static final String ATTRIBUTES = "attributes";
 
-  static final String ENUM = "enum";
+  static final String ENUM         = "enum";
   static final String ENUM_SIBLING = "sibling";
-  static final String ENUM_SUFFIX = "_id";
+  static final String ENUM_SUFFIX  = "_id";
 
-  static final String UID = "uid";
-  static final String NAME = "name";
-  static final String CAPTION = "caption";
-  static final String TYPE = "type";
-  static final String TYPE_ID = "type_id";
-  static final String VALUE = "value";
-  static final String IS_ARRAY = "is_array";
+  static final String UID         = "uid";
+  static final String NAME        = "name";
+  static final String CAPTION     = "caption";
+  static final String TYPE        = "type";
+  static final String TYPE_ID     = "type_id";
+  static final String VALUE       = "value";
+  static final String IS_ARRAY    = "is_array";
   static final String OBJECT_TYPE = "object_type";
-  static final String OBSERVABLE = "observable";
+  static final String OBSERVABLE  = "observable";
 
   // All event classes: class_id -> class
   private final Map<Integer, Map<String, Object>> classes;
@@ -121,7 +121,7 @@ public final class Schema
   public Schema(final Path path, final boolean siblings, final boolean observables)
   {
     this.addEnumSiblings = siblings;
-    this.addObservables = observables;
+    this.addObservables  = observables;
 
     if (path != null)
     {
@@ -133,12 +133,12 @@ public final class Schema
         {
           final Map<String, Map<String, Object>> schema = readJson(path);
 
-          this.objects = objects(schema);
-          this.classes = classes(schema);
-          this.types = types(schema);
+          this.objects         = objects(schema);
+          this.classes         = classes(schema);
+          this.types           = types(schema);
           this.observableTypes = observableTypes(objects.get(OBSERVABLE));
-          this.observables = observables(classes);
-          this.schemaLoaded = true;
+          this.observables     = observables(classes);
+          this.schemaLoaded    = true;
           return;
         }
         catch (final IOException e)
@@ -156,12 +156,12 @@ public final class Schema
       logger.info("No schema file");
     }
 
-    this.objects = Collections.emptyMap();
-    this.classes = Collections.emptyMap();
-    this.types = Collections.emptyMap();
+    this.objects         = Collections.emptyMap();
+    this.classes         = Collections.emptyMap();
+    this.types           = Collections.emptyMap();
     this.observableTypes = Collections.emptyMap();
-    this.observables = Collections.emptyMap();
-    this.schemaLoaded = false;
+    this.observables     = Collections.emptyMap();
+    this.schemaLoaded    = false;
   }
 
   /**
@@ -227,7 +227,8 @@ public final class Schema
    * @param typeId  the observable type ID as defined in the schema
    * @return a list of observables
    */
-  public Optional<Map<String, Map<String, Object>>> getObservables(final int classId,
+  public Optional<Map<String, Map<String, Object>>> getObservables(
+    final int classId,
     final int typeId)
   {
     return Observables.filter(observables.get(classId), typeId);
@@ -244,17 +245,20 @@ public final class Schema
     return Optional.ofNullable(objects.get(name));
   }
 
-  private static Map<String, Map<String, Object>> types(final Map<String, Map<String, Object>> schema)
+  private static Map<String, Map<String, Object>> types(
+    final Map<String, Map<String, Object>> schema)
   {
     return Maps.typecast(schema.get(TYPES));
   }
 
-  private static Map<String, Map<String, Object>> objects(final Map<String, Map<String, Object>> schema)
+  private static Map<String, Map<String, Object>> objects(
+    final Map<String, Map<String, Object>> schema)
   {
     return Maps.typecast(schema.get(OBJECTS));
   }
 
-  private static Map<Integer, Map<String, Object>> classes(final Map<String, Map<String, Object>> map)
+  private static Map<Integer, Map<String, Object>> classes(
+    final Map<String, Map<String, Object>> map)
   {
     final Map<String, Map<String, Object>>  schema  = Maps.typecast(map.get(CLASSES));
     final Map<Integer, Map<String, Object>> classes = new HashMap<>(schema.size());
@@ -277,7 +281,8 @@ public final class Schema
   private static Map<Integer, String> observableTypes(final Map<String, Object> observable)
   {
     final Map<String, Map<String, Object>> types = Maps.typecast(Maps.getIn(observable,
-      ATTRIBUTES, TYPE_ID, ENUM));
+                                                                            ATTRIBUTES, TYPE_ID,
+                                                                            ENUM));
 
     final Map<Integer, String> map = new HashMap<>(types.size());
 
@@ -315,7 +320,8 @@ public final class Schema
   {
     final int classId = (int) type.get(UID);
 
-    final Integer activity = (Integer) data.getOrDefault(Dictionary.ACTIVITY_ID,
+    final Integer activity = (Integer) data.getOrDefault(
+      Dictionary.ACTIVITY_ID,
       Dictionary.UNKNOWN_ID);
 
     final int uid = Utils.typeUid(classId, activity);
@@ -372,7 +378,7 @@ public final class Schema
           if (Boolean.TRUE.equals(attribute.get(IS_ARRAY)))
           {
             value = enrichEmbeddedArray(path, (String) attribute.get(OBJECT_TYPE),
-              (List<Object>) value);
+                                        (List<Object>) value);
           }
           else
           {
@@ -419,7 +425,7 @@ public final class Schema
           if (Boolean.TRUE.equals(attribute.get(IS_ARRAY)))
           {
             value = enrichEmbeddedArray(path, (String) attribute.get(OBJECT_TYPE),
-              (List<Object>) value, observables);
+                                        (List<Object>) value, observables);
           }
           else
           {
@@ -439,13 +445,13 @@ public final class Schema
             else
             {
               logger.warn("SCHEMA: Attribute '{}' in class {} has an invalid type: {}", name,
-                type.get(CAPTION), attrType);
+                          type.get(CAPTION), attrType);
             }
           }
           else
           {
             logger.warn("SCHEMA: Attribute '{}' in class {} does not have type", name,
-              type.get(CAPTION));
+                        type.get(CAPTION));
           }
         }
       }
@@ -622,7 +628,8 @@ public final class Schema
   }
 
   private Map<Integer, List<Map<String, Object>>>
-  observables(final Map<Integer, Map<String, Object>> classes
+  observables(
+    final Map<Integer, Map<String, Object>> classes
   )
   {
     final Map<Integer, List<Map<String, Object>>> observables = new HashMap<>();
@@ -674,13 +681,13 @@ public final class Schema
             else
             {
               logger.warn("SCHEMA: Attribute '{}' in class {} has an invalid type: {}", name,
-                type.get(Schema.CAPTION), attrType);
+                          type.get(Schema.CAPTION), attrType);
             }
           }
           else
           {
             logger.warn("SCHEMA: Attribute '{}' in class {} does not have type", name,
-              type.get(Schema.CAPTION));
+                        type.get(Schema.CAPTION));
           }
         }
       }
@@ -716,9 +723,11 @@ public final class Schema
     if (typeId != null)
     {
       final FMap<String, Object> observable = FMap.<String, Object>b()
-        .p(NAME, name)
-        .p(TYPE, observableTypes.getOrDefault(typeId, Dictionary.OTHER))
-        .p(TYPE_ID, typeId);
+                                                  .p(NAME, name)
+                                                  .p(
+                                                    TYPE, observableTypes.getOrDefault(typeId,
+                                                                                       Dictionary.OTHER))
+                                                  .p(TYPE_ID, typeId);
 
       observables.add(observable);
     }
@@ -731,10 +740,12 @@ public final class Schema
     if (typeId != null)
     {
       final FMap<String, Object> observable = FMap.<String, Object>b()
-        .p(NAME, name)
-        .p(TYPE, observableTypes.getOrDefault(typeId, "Other"))
-        .p(TYPE_ID, typeId)
-        .p(VALUE, value);
+                                                  .p(NAME, name)
+                                                  .p(
+                                                    TYPE,
+                                                    observableTypes.getOrDefault(typeId, "Other"))
+                                                  .p(TYPE_ID, typeId)
+                                                  .p(VALUE, value);
 
       observables.add(observable);
     }

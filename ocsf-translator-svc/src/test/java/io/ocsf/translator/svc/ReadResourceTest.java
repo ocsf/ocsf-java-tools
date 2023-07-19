@@ -42,26 +42,29 @@ public class ReadResourceTest extends TestCase
     final Path rules = Paths.get("rules");
 
     Assert.assertNotNull(TranslatorBuilder.fromResource(
-        rules,
-        Paths.get("microsoft/windows/security/xml/translate-4688.json")));
+      rules,
+      Paths.get("microsoft/windows/security/xml/translate-4688.json")));
     Assert.assertNotNull(TranslatorBuilder.fromResource(
-        rules,
-        Paths.get("microsoft/windows/security/xml/translate-4624.json")));
+      rules,
+      Paths.get("microsoft/windows/security/xml/translate-4624.json")));
     Assert.assertNotNull(TranslatorBuilder.fromResource(
-        rules,
-        Paths.get("microsoft/windows/security/xml/translate-4625.json")));
+      rules,
+      Paths.get("microsoft/windows/security/xml/translate-4625.json")));
     Assert.assertNotNull(TranslatorBuilder.fromResource(
-        rules,
-        Paths.get("cisco/111010.json")));
+      rules,
+      Paths.get("cisco/111010.json")));
   }
 
   public void testTranslators() throws IOException
   {
     final TranslatorsManager translators = new TranslatorsManager("rules");
 
-    translators.addResource("4688", Paths.get("microsoft/windows/security/xml/translate-4688.json"));
-    translators.addResource("4624", Paths.get("microsoft/windows/security/xml/translate-4624.json"));
-    translators.addResource("4625", Paths.get("microsoft/windows/security/xml/translate-4625.json"));
+    translators.addResource(
+      "4688", Paths.get("microsoft/windows/security/xml/translate-4688.json"));
+    translators.addResource(
+      "4624", Paths.get("microsoft/windows/security/xml/translate-4624.json"));
+    translators.addResource(
+      "4625", Paths.get("microsoft/windows/security/xml/translate-4625.json"));
     translators.addResource("111010", Paths.get("cisco/111010.json"));
 
     assertEquals(4, translators.size());

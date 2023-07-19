@@ -18,8 +18,8 @@
 package io.ocsf.parser.parsers;
 
 import io.ocsf.parsers.CiscoSyslogParser;
-import io.ocsf.utils.parsers.Syslog;
 import io.ocsf.utils.Json;
+import io.ocsf.utils.parsers.Syslog;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -55,7 +55,9 @@ public class CiscoSyslogParserTest
   @Test
   public void parseMissingHost() throws Exception
   {
-    final String text = "<165>Oct 06 15:02:30: %ASA-5-111008: User 'admin' executed the 'dir disk0:/dap.xml' command.";
+    final String text =
+      "<165>Oct 06 15:02:30: %ASA-5-111008: User 'admin' executed the 'dir disk0:/dap.xml' " +
+      "command.";
 
     final CiscoSyslogParser   parser = new CiscoSyslogParser();
     final Map<String, Object> parsed = parser.parse(text);
@@ -67,8 +69,8 @@ public class CiscoSyslogParserTest
   public void timeLength()
   {
     Arrays.stream(CiscoSyslogData.Data)
-        .map(s -> Syslog.timeLength(s, s.indexOf('>') + 1))
-        .forEach(n -> Assert.assertTrue(n > 0));
+          .map(s -> Syslog.timeLength(s, s.indexOf('>') + 1))
+          .forEach(n -> Assert.assertTrue(n > 0));
   }
 
 }

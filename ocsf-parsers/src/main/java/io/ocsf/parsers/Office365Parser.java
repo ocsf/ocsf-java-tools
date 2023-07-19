@@ -17,8 +17,8 @@
 
 package io.ocsf.parsers;
 
-import io.ocsf.utils.parsers.Parser;
 import io.ocsf.utils.parsers.Json5Parser;
+import io.ocsf.utils.parsers.Parser;
 
 import java.util.Map;
 
@@ -36,5 +36,5 @@ public class Office365Parser implements Parser
   }
 
   @Override
-  public String toString() { return SourceType; }
+  public String toString() {return SourceType;}
 }

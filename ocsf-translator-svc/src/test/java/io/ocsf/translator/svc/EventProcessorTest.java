@@ -16,12 +16,12 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.utils.event.Event;
-import io.ocsf.utils.parsers.Parser;
 import io.ocsf.schema.Dictionary;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.Strings;
+import io.ocsf.utils.event.Event;
+import io.ocsf.utils.parsers.Parser;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,7 +32,8 @@ import java.util.Map;
 public class EventProcessorTest extends Tests
 {
   // create a very simple "parser"
-  private final Parser parser = text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
+  private final Parser parser =
+    text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
 
   private final TranslatorsManager translators = new TranslatorsManager(Strings.EMPTY);
 
@@ -42,10 +43,10 @@ public class EventProcessorTest extends Tests
     final EventProcessor processor = new EventProcessor(parser, translators, in, out);
 
     translators.put("Transformer", data ->
-        FMap.<String, Object>b()
-            .p(EVENT_ID, data.remove(EVENT_ID))
-            .p(EVENT_ORIGIN, data.remove(EVENT_ORIGIN))
-            .p(Dictionary.RAW_EVENT, data.remove(Dictionary.RAW_EVENT)));
+      FMap.<String, Object>b()
+          .p(EVENT_ID, data.remove(EVENT_ID))
+          .p(EVENT_ORIGIN, data.remove(EVENT_ORIGIN))
+          .p(Dictionary.RAW_EVENT, data.remove(Dictionary.RAW_EVENT)));
 
     processor.start();
 
@@ -53,10 +54,10 @@ public class EventProcessorTest extends Tests
     for (int i = 0; i < MAX_QUEUE_SIZE; i++)
     {
       in.put(new Event(
-          FMap.<String, Object>b()
-              .p(Splunk.RAW_EVENT, Integer.toString(i))
-              .p(Splunk.TENANT, "Tenant")
-              .p(Splunk.SOURCE_TYPE, TEST_MESSAGE)));
+        FMap.<String, Object>b()
+            .p(Splunk.RAW_EVENT, Integer.toString(i))
+            .p(Splunk.TENANT, "Tenant")
+            .p(Splunk.SOURCE_TYPE, TEST_MESSAGE)));
     }
   }
 
@@ -76,7 +77,8 @@ public class EventProcessorTest extends Tests
 
       Assert.assertEquals(5, data.size());
       Assert.assertEquals(i, data.get(EVENT_ID));
-      Assert.assertEquals(TEST_MESSAGE, Maps.getIn(data, Dictionary.UNMAPPED, Splunk.CIM_SOURCE_TYPE));
+      Assert.assertEquals(
+        TEST_MESSAGE, Maps.getIn(data, Dictionary.UNMAPPED, Splunk.CIM_SOURCE_TYPE));
     }
 
     Assert.assertEquals(0, out.available());

@@ -21,7 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ArcSight Common Event Format (CEF) parser. For more information see doc/CEF_White_Paper_20100722.pdf.
+ * ArcSight Common Event Format (CEF) parser. For more information see
+ * doc/CEF_White_Paper_20100722.pdf.
  * <p>
  * NOTE: This class is intended for use in a single thread.
  *
@@ -29,18 +30,18 @@ import java.util.Map;
  */
 public final class CEFParser
 {
-  public static final String CEF_PREFIX = "CEF:";
-  private static final int CEF_PREFIX_LEN = CEF_PREFIX.length();
+  public static final  String CEF_PREFIX     = "CEF:";
+  private static final int    CEF_PREFIX_LEN = CEF_PREFIX.length();
 
   // CEF Prefix Fields
-  public static final String VERSION = "Version";
-  public static final String DEVICE_VENDOR = "DeviceVendor";
+  public static final String VERSION        = "Version";
+  public static final String DEVICE_VENDOR  = "DeviceVendor";
   public static final String DEVICE_PRODUCT = "DeviceProduct";
   public static final String DEVICE_VERSION = "DeviceVersion";
-  public static final String SIGNATURE_ID = "SignatureID";
-  public static final String NAME = "Name";
-  public static final String SEVERITY = "Severity";
-  public static final String EXTENSION = "Extension";
+  public static final String SIGNATURE_ID   = "SignatureID";
+  public static final String NAME           = "Name";
+  public static final String SEVERITY       = "Severity";
+  public static final String EXTENSION      = "Extension";
 
   private CEFParser() {}
 

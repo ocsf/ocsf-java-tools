@@ -110,7 +110,8 @@ public final class TranslatorsManager
    * @throws IOException     unable to read the resource
    */
   public void add(
-    final String name, final Path path, final TranslatorBuilder.JsonReader reader) throws IOException
+    final String name, final Path path, final TranslatorBuilder.JsonReader reader)
+    throws IOException
   {
     put(name, TranslatorBuilder.build(home, reader, Maps.typecast(reader.read(validate(path)))));
   }

@@ -28,10 +28,10 @@ public final class TestBooleanEvaluator extends TestCase
   public void testEvaluateFlat_BasicOperators()
   {
     final FMap<String, Object> data = FMap.<String, Object>b()
-        .p("k1", "v1")
-        .p("k2", 2)
-        .p("k3.x", false)
-        .p("k4", null);
+                                          .p("k1", "v1")
+                                          .p("k2", 2)
+                                          .p("k3.x", false)
+                                          .p("k4", null);
 
     Tree node = BooleanExpression.parse("k1 = 'v1'");
     Assert.assertTrue(BooleanEvaluator.evaluate(node, data));
@@ -72,18 +72,22 @@ public final class TestBooleanEvaluator extends TestCase
     // Note: the node can be of type Date, long or String to do the comparison. However,
     // to get to the comparison code block, the field has to be type Date
     final Date t3 = new Date();
-    final Date t4 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").parse("2016-11-06T15:07:36.665-08:00");
+    final Date t4 =
+      new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").parse("2016-11-06T15:07:36.665-08:00");
 
     final FMap<String, Object> map = FMap.<String, Object>b()
-        .p("top", FMap.b()
-            .p("k1", "jane_do@server.com")
-            .p("k2", f1)
-            .p("k3", f2))
-        .p("middle", FMap.b()
-            .p("k1", t1)    // just a value long
-            .p("k2", t2)    // +/-[mdh] +3m, -2d, +5h
-            .p("k3", t3)    // system's current millis
-            .p("k4", t4)); // negative integer, -30000, 30 seconds ago
+                                         .p("top", FMap.b()
+                                                       .p("k1", "jane_do@server.com")
+                                                       .p("k2", f1)
+                                                       .p("k3", f2))
+                                         .p("middle", FMap.b()
+                                                          .p("k1", t1)    // just a value long
+                                                          .p("k2", t2)    // +/-[mdh] +3m, -2d, +5h
+                                                          .p("k3", t3)    // system's current millis
+                                                          .p(
+                                                            "k4",
+                                                            t4)); // negative integer, -30000, 30
+    // seconds ago
 
     final Maps.Supplier<Object> data = name -> Maps.getIn(map, name);
 
@@ -130,13 +134,14 @@ public final class TestBooleanEvaluator extends TestCase
   public void testEvaluateFlatOperatorInAndNot_in()
   {
     final FMap<String, Object> data = FMap.<String, Object>b()
-        .p("port", 80)
-        .p("ip", "192.168.10.33")
-        .p("host", "production")
-        .p("database", null);
+                                          .p("port", 80)
+                                          .p("ip", "192.168.10.33")
+                                          .p("host", "production")
+                                          .p("database", null);
 
     final String One = "port = 88";
-    final String Exp = "((port in [80,8080]) and ((ip = \"192.168.1.19\") or (host = 'production')))";
+    final String Exp =
+      "((port in [80,8080]) and ((ip = \"192.168.1.19\") or (host = 'production')))";
 
     Assert.assertFalse(BooleanEvaluator.evaluate(BooleanExpression.parse(One), data));
     Assert.assertTrue(BooleanEvaluator.evaluate(BooleanExpression.parse(Exp), data));
@@ -145,10 +150,12 @@ public final class TestBooleanEvaluator extends TestCase
     Tree node = BooleanExpression.parse("port in [80,8080,9093,8901,23]");
     Assert.assertTrue(BooleanEvaluator.evaluate(node, data));
 
-    node = BooleanExpression.parse("ip not_in ['192.168.1.19','192.168.1.20','192.168.10.30','192.168.1.11']");
+    node = BooleanExpression.parse(
+      "ip not_in ['192.168.1.19','192.168.1.20','192.168.10.30','192.168.1.11']");
     Assert.assertTrue(BooleanEvaluator.evaluate(node, data));
 
-    node = BooleanExpression.parse("host in [\"production\",\"dev\",\"test\"] and database is null");
+    node =
+      BooleanExpression.parse("host in [\"production\",\"dev\",\"test\"] and database is null");
     Assert.assertTrue(BooleanEvaluator.evaluate(node, data));
 
     // "null in []" will return false
@@ -161,10 +168,10 @@ public final class TestBooleanEvaluator extends TestCase
     // Note: Like is using the collation element compare algorithm on primary difference
     // this means case will be insensitive
     final FMap<String, Object> data = FMap.<String, Object>b()
-        .p("city", "Buenos Aires")
-        .p("name", "Jane Do")
-        .p("id", 27)
-        .p("address", "72 Gustavo Moncada 8585 Piso 20-A");
+                                          .p("city", "Buenos Aires")
+                                          .p("name", "Jane Do")
+                                          .p("id", 27)
+                                          .p("address", "72 Gustavo Moncada 8585 Piso 20-A");
 
     Tree node = BooleanExpression.parse("city like 'B'");
     Assert.assertTrue(BooleanEvaluator.evaluate(node, data));
@@ -191,12 +198,12 @@ public final class TestBooleanEvaluator extends TestCase
   public void testEvaluateFlatOperatorMatchAndNotMatch()
   {
     final FMap<String, Object> data = FMap.<String, Object>b()
-        .p("product", "Internet Security")
-        .p("company", "Symantec")
-        .p("employeeId", 7086)
-        .p("email", "jane_do@example.com")
-        .p("version", "17.9.0.10")
-        .p("address", "22 Corporate Drive, The City, CA 92022");
+                                          .p("product", "Internet Security")
+                                          .p("company", "Symantec")
+                                          .p("employeeId", 7086)
+                                          .p("email", "jane_do@example.com")
+                                          .p("version", "17.9.0.10")
+                                          .p("address", "22 Corporate Drive, The City, CA 92022");
 
     Tree node = BooleanExpression.parse("product match 'Internet*'");
     Assert.assertTrue(BooleanEvaluator.evaluate(node, data));
@@ -205,10 +212,14 @@ public final class TestBooleanEvaluator extends TestCase
     Assert.assertTrue(BooleanEvaluator.evaluate(node, data));
 
     // make sure the escape sequences are escaped in the string
-    node = BooleanExpression.parse("email match '^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$'");
+    node = BooleanExpression.parse(
+      "email match '^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*" +
+      "(\\\\.[A-Za-z]{2,})$'");
     Assert.assertTrue(BooleanEvaluator.evaluate(node, data));
 
-    node = BooleanExpression.parse("email not_match '^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$'");
+    node = BooleanExpression.parse(
+      "email not_match '^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\" +
+      ".[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$'");
     Assert.assertFalse(BooleanEvaluator.evaluate(node, data));
 
     node = BooleanExpression.parse("address not_match 'city,'");
@@ -221,17 +232,19 @@ public final class TestBooleanEvaluator extends TestCase
   public void testEvaluateFlatOperatorsAndOr()
   {
     final FMap<String, Object> data = FMap.<String, Object>b()
-        .p("id", 42)
-        .p("name", "Karly Britta")
-        .p("contact", "Ruby Carly")
-        .p("address", "22 Street, The Big City")
-        .p("code", "4100")
-        .p("country", "BG");
+                                          .p("id", 42)
+                                          .p("name", "Karly Britta")
+                                          .p("contact", "Ruby Carly")
+                                          .p("address", "22 Street, The Big City")
+                                          .p("code", "4100")
+                                          .p("country", "BG");
 
-    Tree node = BooleanExpression.parse("id = 32701 or (contact like 'ruby' and country like 'bg')");
+    Tree node =
+      BooleanExpression.parse("id = 32701 or (contact like 'ruby' and country like 'bg')");
     Assert.assertTrue(BooleanEvaluator.evaluate(node, data));
 
-    node = BooleanExpression.parse("id in [32700,32702,32789] or (code like '41' and country like 'bg')");
+    node = BooleanExpression.parse(
+      "id in [32700,32702,32789] or (code like '41' and country like 'bg')");
     Assert.assertTrue(BooleanEvaluator.evaluate(node, data));
 
     node = BooleanExpression.parse("address like 'Canada' Or (contact LIKE ' carly' AND id != 22)");
@@ -245,53 +258,56 @@ public final class TestBooleanEvaluator extends TestCase
   {
     final Date date = new SimpleDateFormat("MM/dd/yy HH:mm:ss z").parse("08/17/16 01:32:27 PST");
     final FMap<String, Object> map = FMap.<String, Object>b()
-        .p("top", FMap.b()
-            .p("Company", "SkyLimited")
-            .p("EmployeeId", 32)
-            .p("EmployeeName", "Yuri Yu"))
-        .p("middle", FMap.b()
-            .p("OrderId", 32701)
-            .p("CustomerId", 10108)
-            .p("ShipId", 11))
-        .p("bottom", FMap.b()
-            .p("Date", date));
+                                         .p("top", FMap.b()
+                                                       .p("Company", "SkyLimited")
+                                                       .p("EmployeeId", 32)
+                                                       .p("EmployeeName", "Yuri Yu"))
+                                         .p("middle", FMap.b()
+                                                          .p("OrderId", 32701)
+                                                          .p("CustomerId", 10108)
+                                                          .p("ShipId", 11))
+                                         .p("bottom", FMap.b()
+                                                          .p("Date", date));
 
     final Maps.Supplier<Object> data = name -> Maps.getIn(map, name);
 
-    Tree node = BooleanExpression.parse("top.Company = 'whatLimited' or ( middle.CustomerId = 10108 and middle.ShipId != 11)");
+    Tree node = BooleanExpression.parse(
+      "top.Company = 'whatLimited' or ( middle.CustomerId = 10108 and middle.ShipId != 11)");
     Assert.assertFalse(BooleanEvaluator.evaluate(node, data));
 
-    node = BooleanExpression.parse("top.EmployeeName not_like 'Lucy' Or (middle.ShipId = 12 and middle.OrderId != 32700)");
+    node = BooleanExpression.parse(
+      "top.EmployeeName not_like 'Lucy' Or (middle.ShipId = 12 and middle.OrderId != 32700)");
     Assert.assertTrue(BooleanEvaluator.evaluate(node, data));
 
     // Note: non-existent key error is suppressed
-    node = BooleanExpression.parse("bottom.Date is_not null anD (id = 32700 OR top.EmployeeId = 32)");
+    node =
+      BooleanExpression.parse("bottom.Date is_not null anD (id = 32700 OR top.EmployeeId = 32)");
     Assert.assertTrue(BooleanEvaluator.evaluate(node, data));
   }
 
   public void testEvaluateArray()
   {
     final FMap<String, Object> data = FMap.<String, Object>b()
-        .p("name", "Joe")
-        .p("array", Arrays.asList(1, 2, 3, 22))
-        .p("list", Arrays.asList(
-            FMap.b()
-                .p("Company", "SkyLimited")
-                .p("EmployeeId", 20)
-                .p("EmployeeName", "Yuri Yu"),
-            FMap.b()
-                .p("Company", "Acme")
-                .p("EmployeeId", 22)
-                .p("EmployeeName", "Yuri"),
-            FMap.b()
-                .p("Company", "SkyLimited")
-                .p("EmployeeId", 42)
-                .p("EmployeeName", "Yu Vu"),
-            FMap.b()
-                .p("Company", "Acme")
-                .p("EmployeeId", 11)
-                .p("EmployeeName", "Li Li")
-        ));
+                                          .p("name", "Joe")
+                                          .p("array", Arrays.asList(1, 2, 3, 22))
+                                          .p("list", Arrays.asList(
+                                            FMap.b()
+                                                .p("Company", "SkyLimited")
+                                                .p("EmployeeId", 20)
+                                                .p("EmployeeName", "Yuri Yu"),
+                                            FMap.b()
+                                                .p("Company", "Acme")
+                                                .p("EmployeeId", 22)
+                                                .p("EmployeeName", "Yuri"),
+                                            FMap.b()
+                                                .p("Company", "SkyLimited")
+                                                .p("EmployeeId", 42)
+                                                .p("EmployeeName", "Yu Vu"),
+                                            FMap.b()
+                                                .p("Company", "Acme")
+                                                .p("EmployeeId", 11)
+                                                .p("EmployeeName", "Li Li")
+                                          ));
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
       BooleanExpression.parse("array contains 22"), data));
@@ -306,10 +322,15 @@ public final class TestBooleanEvaluator extends TestCase
       BooleanExpression.parse("(list contains Company = 'Acme') and name = 'Joe'"), data));
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
-      BooleanExpression.parse("list contains Company = 'SkyLimited' and EmployeeId = 20 and EmployeeName is_not null"), data));
+      BooleanExpression.parse(
+        "list contains Company = 'SkyLimited' and EmployeeId = 20 and EmployeeName is_not null"),
+      data));
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
-      BooleanExpression.parse("((list contains EmployeeId = 20) or (list contains EmployeeId = 20)) and (list contains Company is_not null)"), data));
+      BooleanExpression.parse(
+        "((list contains EmployeeId = 20) or (list contains EmployeeId = 20)) and (list contains " +
+        "Company is_not null)"),
+      data));
 
     Assert.assertFalse(BooleanEvaluator.evaluate(
       BooleanExpression.parse("list contains Company = 'SkyLimited' and EmployeeId = 11"), data));
@@ -318,13 +339,14 @@ public final class TestBooleanEvaluator extends TestCase
   public void testEvaluateMap()
   {
     final FMap<String, Object> data = FMap.<String, Object>b()
-        .p("name", "Joe")
-        .p("data",
-           FMap.b()
-               .p("Company", "Acme")
-               .p("EmployeeId", 22)
-               .p("EmployeeName", "Joe Dow")
-        );
+                                          .p("name", "Joe")
+                                          .p(
+                                            "data",
+                                            FMap.b()
+                                                .p("Company", "Acme")
+                                                .p("EmployeeId", 22)
+                                                .p("EmployeeName", "Joe Dow")
+                                          );
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
       BooleanExpression.parse("data contains Company = 'Acme'"), data));
@@ -333,10 +355,14 @@ public final class TestBooleanEvaluator extends TestCase
       BooleanExpression.parse("(data contains Company = 'Acme') and name = 'Joe'"), data));
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
-      BooleanExpression.parse("data contains Company like 'ac' and (EmployeeId = 20 or EmployeeId = 22)"), data));
+      BooleanExpression.parse(
+        "data contains Company like 'ac' and (EmployeeId = 20 or EmployeeId = 22)"), data));
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
-      BooleanExpression.parse("((data contains EmployeeId = 22) or (data contains EmployeeId = 11)) and (data contains Company is_not null)"), data));
+      BooleanExpression.parse(
+        "((data contains EmployeeId = 22) or (data contains EmployeeId = 11)) and (data contains " +
+        "Company is_not null)"),
+      data));
 
     Assert.assertFalse(BooleanEvaluator.evaluate(
       BooleanExpression.parse("data contains Company = 'SkyLimited' and EmployeeId = 22"), data));
@@ -346,37 +372,46 @@ public final class TestBooleanEvaluator extends TestCase
   public void testEvaluateMapEx()
   {
     final FMap<String, Object> data = FMap.<String, Object>b()
-        .p("first name", "Joe")
-        .p("data",
-           FMap.b()
-               .p("Company", "Acme")
-               .p("Employee Id", 22)
-               .p("Employee Name", "Joe Dow")
-        );
+                                          .p("first name", "Joe")
+                                          .p(
+                                            "data",
+                                            FMap.b()
+                                                .p("Company", "Acme")
+                                                .p("Employee Id", 22)
+                                                .p("Employee Name", "Joe Dow")
+                                          );
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
       BooleanExpression.parse("data contains Company = 'Acme'"), data));
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
-      BooleanExpression.parse("(data contains Company = 'Acme') and 'first name' like 'Joe'"), data));
+      BooleanExpression.parse("(data contains Company = 'Acme') and 'first name' like 'Joe'"),
+      data));
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
-      BooleanExpression.parse("data contains Company like 'ac' and ('Employee Id' = 20 or 'Employee Id' = 22)"), data));
+      BooleanExpression.parse(
+        "data contains Company like 'ac' and ('Employee Id' = 20 or 'Employee Id' = 22)"), data));
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
-      BooleanExpression.parse("((data contains 'Employee Id' = 22) or (data contains 'Employee Id' = 11)) and (data contains Company is_not null)"), data));
+      BooleanExpression.parse(
+        "((data contains 'Employee Id' = 22) or (data contains 'Employee Id' = 11)) and (data " +
+        "contains Company is_not null)"),
+      data));
 
     Assert.assertFalse(BooleanEvaluator.evaluate(
-      BooleanExpression.parse("data contains Company = 'SkyLimited' and 'Employee Id' = 22"), data));
+      BooleanExpression.parse("data contains Company = 'SkyLimited' and 'Employee Id' = 22"),
+      data));
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
       BooleanExpression.parse("(data contains Company like 'Ac') and 'first name' = 'Joe'"), data));
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
-      BooleanExpression.parse("(data contains Company starts_with 'A') and 'first name' = 'Joe'"), data));
+      BooleanExpression.parse("(data contains Company starts_with 'A') and 'first name' = 'Joe'"),
+      data));
 
     Assert.assertTrue(BooleanEvaluator.evaluate(
-      BooleanExpression.parse("(data contains Company ends_with 'me') and 'first name' starts_with 'Joe'"), data));
+      BooleanExpression.parse(
+        "(data contains Company ends_with 'me') and 'first name' starts_with 'Joe'"), data));
 
     Assert.assertFalse(BooleanEvaluator.evaluate(
       BooleanExpression.parse("(data contains Company ends_with 'cm')"), data));

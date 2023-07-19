@@ -22,5 +22,5 @@ public class XmlWinSysmonEventLogParser extends XmlWinEventLogParser
   public static final String SourceType = "xmlwineventlog";
 
   @Override
-  public String toString() { return SourceType; }
+  public String toString() {return SourceType;}
 }

@@ -23,7 +23,7 @@ import io.ocsf.translator.svc.Event;
 import io.ocsf.translator.svc.config.ConfigParsers;
 import io.ocsf.translator.svc.config.ConfigTranslators;
 import io.ocsf.translator.svc.EventDemuxer;
-import io.ocsf.translator.Translators;
+import io.ocsf.translator.svc.Translators;
 
 import java.io.IOException;
 

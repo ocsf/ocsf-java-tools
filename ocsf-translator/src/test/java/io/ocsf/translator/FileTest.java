@@ -27,9 +27,9 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Map;
 
-public final class TransformerFileTest
+public final class FileTest
 {
-  private TransformerFileTest() {}
+  private FileTest() {}
 
   public static void main(final String... args) throws IOException
   {

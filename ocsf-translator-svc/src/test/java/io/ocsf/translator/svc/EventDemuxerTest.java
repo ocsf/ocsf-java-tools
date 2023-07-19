@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package io.ocsf.translator.svc.svc;
+package io.ocsf.translator.svc;
 
 import io.ocsf.utils.Parser;
 import io.ocsf.schema.Dictionary;
-import io.ocsf.translator.svc.Event;
-import io.ocsf.translator.svc.Splunk;
-import io.ocsf.translator.svc.Tests;
-import io.ocsf.translator.svc.EventDemuxer;
 import io.ocsf.translator.svc.concurrent.BlockingQueue;
 import io.ocsf.translator.svc.concurrent.MutableProcessorList;
-import io.ocsf.translator.Translators;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.Maps;
 import org.junit.After;

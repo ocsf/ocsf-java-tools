@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.ocsf.translator.svc.svc;
+package io.ocsf.translator.svc;
 
 import io.ocsf.parsers.WinEventLogParser;
 import io.ocsf.parsers.XmlWinEventLogParser;

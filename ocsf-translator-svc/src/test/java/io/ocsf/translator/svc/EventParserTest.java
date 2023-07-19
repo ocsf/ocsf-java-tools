@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package io.ocsf.translator.svc.concurrent;
+package io.ocsf.translator.svc;
 
 import io.ocsf.translator.svc.Event;
+import io.ocsf.translator.svc.Splunk;
 import io.ocsf.translator.svc.Tests;
+import io.ocsf.translator.svc.EventParser;
 import io.ocsf.utils.FMap;
+import io.ocsf.utils.Maps;
+import io.ocsf.utils.Parser;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -28,50 +32,41 @@ import org.junit.Test;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class TranslatorTest extends Tests
+public class EventParserTest extends Tests
 {
+  // create a very simple "parser"
+  private final Parser parser = text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
+
   private static final AtomicBoolean done = new AtomicBoolean();
-
-  private static final class SimpleTransformer extends Transformer
-  {
-    public SimpleTransformer(final String name, final Source<Event> source, final Sink<Event> sink)
-    {
-      super(name, source, sink);
-    }
-
-    @Override
-    protected void terminated()
-    {
-      super.terminated();
-      done.set(true);
-    }
-
-    @Override
-    protected Event process(final Event event)
-    {
-      event.data().put(MESSAGE, TEST_MESSAGE);
-      return event;
-    }
-  }
-
-  private final SimpleTransformer transformer = new SimpleTransformer("test", in, out);
 
   @Before
   public void setUp() throws Exception
   {
-    new Thread(transformer).start();
+    new Thread(new EventParser(parser, in, out)
+    {
+      @Override
+      protected void terminated()
+      {
+        super.terminated();
+        done.set(true);
+      }
+    }).start();
 
     // send some data in the input queue
     for (int i = 0; i < MAX_QUEUE_SIZE; i++)
     {
-      in.put(new Event(FMap.<String, Object>b().p(EVENT_ID, i)));
+      in.put(new Event(
+          FMap.<String, Object>b()
+              .p(Splunk.RAW_EVENT, Integer.toString(i))
+              .p(Splunk.TENANT, "Tenant")
+              .p(Splunk.SOURCE_TYPE, TEST_MESSAGE)));
     }
   }
 
   @After
   public void tearDown() throws Exception
   {
-    // send 'eos' to terminate the transformer's thread
+    // send 'eos' event to terminate the parser's thread
     in.put(Event.eos());
   }
 
@@ -93,11 +88,12 @@ public class TranslatorTest extends Tests
     {
       final Map<String, Object> data = out.take().data();
 
-      Assert.assertEquals(2, data.size());
+      Assert.assertEquals(3, data.size());
       Assert.assertEquals(i, data.get(EVENT_ID));
-      Assert.assertEquals(TEST_MESSAGE, data.get(MESSAGE));
+      Assert.assertEquals(TEST_MESSAGE, Maps.getIn(data, Event.SOURCE_TYPE));
     }
 
     Assert.assertEquals(0, out.available());
   }
+
 }

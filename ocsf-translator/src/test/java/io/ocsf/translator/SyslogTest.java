@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import java.util.Map;
 
-public class CiscoSyslogTest
+public class SyslogTest
 {
   private static final String Data =
     "{" +

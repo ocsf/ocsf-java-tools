@@ -15,10 +15,11 @@
  *
  */
 
-package io.ocsf.translator;
+package io.ocsf.translator.svc;
 
 import io.ocsf.schema.Dictionary;
 import io.ocsf.schema.Utils;
+import io.ocsf.translator.Translator;
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.ParserException;
@@ -121,7 +122,7 @@ public final class Translators
 
   public void put(final String name, final Translator.I translator)
   {
-    if (translator.hasPredicate())
+    if (translator.isDefault())
     {
       if (translators.put(name, translator) != null)
         logger.warn("Translator {} has been overwritten", name);

@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-package io.ocsf.translator.svc.svc;
+package io.ocsf.translator.svc;
 
-import io.ocsf.translator.svc.Event;
-import io.ocsf.translator.svc.Splunk;
-import io.ocsf.translator.svc.Tests;
-import io.ocsf.translator.svc.EventParser;
 import io.ocsf.utils.FMap;
-import io.ocsf.utils.Maps;
-import io.ocsf.utils.Parser;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -32,17 +26,21 @@ import org.junit.Test;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class EventParserTest extends Tests
+public class EventNormalizerTest extends Tests
 {
-  // create a very simple "parser"
-  private final Parser parser = text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
+  private final Translators translators = new Translators("test");
 
   private static final AtomicBoolean done = new AtomicBoolean();
 
   @Before
   public void setUp() throws Exception
   {
-    new Thread(new EventParser(parser, in, out)
+    translators.put("Transformer", data ->
+        FMap.<String, Object>b()
+            .o(EVENT_ID, data.remove(EVENT_ID))
+            .o(MESSAGE, data.remove(MESSAGE)));
+
+    new Thread(new EventNormalizer(translators, in, out)
     {
       @Override
       protected void terminated()
@@ -57,16 +55,15 @@ public class EventParserTest extends Tests
     {
       in.put(new Event(
           FMap.<String, Object>b()
-              .p(Splunk.RAW_EVENT, Integer.toString(i))
-              .p(Splunk.TENANT, "Tenant")
-              .p(Splunk.SOURCE_TYPE, TEST_MESSAGE)));
+              .p(EVENT_ID, i)
+              .p(MESSAGE, TEST_MESSAGE)));
     }
   }
 
   @After
   public void tearDown() throws Exception
   {
-    // send 'eos' event to terminate the parser's thread
+    // send 'eos' event to terminate the transformer's thread
     in.put(Event.eos());
   }
 
@@ -90,7 +87,7 @@ public class EventParserTest extends Tests
 
       Assert.assertEquals(3, data.size());
       Assert.assertEquals(i, data.get(EVENT_ID));
-      Assert.assertEquals(TEST_MESSAGE, Maps.getIn(data, Event.SOURCE_TYPE));
+      Assert.assertEquals(TEST_MESSAGE, data.get(MESSAGE));
     }
 
     Assert.assertEquals(0, out.available());

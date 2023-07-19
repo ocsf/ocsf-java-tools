@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import java.util.Map;
 
-public class InfobloxDhcpSyslogTest
+public class SyslogDhcpTest
 {
   private static final String Data =
     "{" +
@@ -50,7 +50,7 @@ public class InfobloxDhcpSyslogTest
 
   private static final String Rule =
     "{" +
-    "  \"desc\": \"Translates Infoblox DHCP\"," +
+    "  \"desc\": \"Translates DHCP\"," +
     "  \"when\": \"message like 'DHCPACK'\"," +
     "  \"parser\": {" +
     "    \"name\": \"message\"," +
@@ -75,7 +75,7 @@ public class InfobloxDhcpSyslogTest
 
   private static final String RegexRule =
     "{" +
-    "  \"desc\": \"Translates Infoblox DHCP\"," +
+    "  \"desc\": \"Translates DHCP\"," +
     "  \"when\": \"message like 'DHCPACK'\"," +
     "  \"parser\": {" +
     "    \"name\": \"message\"," +
@@ -103,7 +103,7 @@ public class InfobloxDhcpSyslogTest
 
   private static final String MultiStageParsingRule =
     "{" +
-    "  \"desc\": \"Translates Infoblox DHCP\"," +
+    "  \"desc\": \"Translates DHCP\"," +
     "  \"when\": \"message like 'DHCPACK'\"," +
     "  \"parsers\": [{" +
     "    \"name\": \"message\"," +
@@ -135,7 +135,7 @@ public class InfobloxDhcpSyslogTest
 
   private static final String MultiStageParsingRegex =
     "{" +
-    "  \"desc\": \"Translates Infoblox DHCPACK" +
+    "  \"desc\": \"Translates DHCPACK" +
     " event.\"," +
     "  \"when\": \"message like 'DHCPACK'\"," +
     "  \"parsers\": [" +

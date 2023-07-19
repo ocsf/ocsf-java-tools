@@ -34,64 +34,65 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Transformer uses a set of rules to map a Map[String, Object] to another Map[String, Object].
+ * Translator uses a set of rules to map a Map[String, Object] to another Map[String, Object].
  */
 public final class Translator
 {
   private static final Logger logger = LoggerFactory.getLogger(Translator.class);
 
   private static final String RuleList = "rules";
-  private static final String RuleSet = "ruleset";
+  private static final String RuleSet  = "ruleset";
 
   private static final String Include = "include";
 
   private static final String DefaultValue = "default";
-  private static final String NameField = "name";
-  private static final String OtherField = "other";
-  private static final String Overwrite = "overwrite";
-  private static final String Is_Array = "is_array";
-  private static final String Value = "value";
-  private static final String ValueType = "type";
-  private static final String Values = "values";
-  private static final String Separator = "separator";
+  private static final String NameField    = "name";
+  private static final String OtherField   = "other";
+  private static final String Overwrite    = "overwrite";
+  private static final String Is_Array     = "is_array";
+  private static final String Value        = "value";
+  private static final String ValueType    = "type";
+  private static final String Values       = "values";
+  private static final String Separator    = "separator";
 
-  private static final String Predicate = "when";
-  private static final String Parser = "parser";
-  private static final String Parsers = "parsers";
+  private static final String Predicate    = "when";
+  private static final String Parser       = "parser";
+  private static final String Parsers      = "parsers";
   private static final String PatternField = "pattern";
-  private static final String RegexField = "regex";
-  private static final String OutputField = "output";
+  private static final String RegexField   = "regex";
+  private static final String OutputField  = "output";
 
   /**
-   * Translator Interface.
+   * Translator interface.
    */
   @FunctionalInterface
   public interface I
   {
     /**
-     * Applies the rules to the given data.
+     * Applies the translator's rules to the given data.
      *
      * @param data the event data
-     * @return the transformed data
+     * @return the transformed event data
      */
     Map<String, Object> apply(final Map<String, Object> data);
 
-    default Map<String, Object> apply(final Map<String, Object> data,
+    default Map<String, Object> apply(
+      final Map<String, Object> data,
       final Map<String, Object> translated)
     {
       return translated;
     }
 
-    default boolean hasPredicate() {return false;}
+    default boolean isDefault() {return false;}
   }
 
   /**
-   * Translator Interface.
+   * Translator conditional interface.
    */
   @FunctionalInterface
-  interface ConditionalTranslator extends I
+  interface Conditional extends I
   {
-    default boolean hasPredicate() {return true;}
+    default boolean isDefault() {return true;}
   }
 
   /**
@@ -151,7 +152,8 @@ public final class Translator
    * @throws ParserException invalid json
    * @throws IOException     unable to read the resource
    */
-  public static I create(final Path home, final Path path, final JsonReader reader) throws IOException
+  public static I create(final Path home, final Path path, final JsonReader reader)
+    throws IOException
   {
     return build(home, reader, Maps.typecast(reader.read(path)));
   }
@@ -161,12 +163,12 @@ public final class Translator
    *
    * NOTE: this function does not support included rules.
    */
-  static I fromString(final String json) throws IOException
+  public static I fromString(final String json) throws IOException
   {
     return build(null, null, Json5Parser.to(json));
   }
 
-  static I build(
+  public static I build(
     final Path home, final JsonReader reader, final Map<String, Object> map) throws IOException
   {
     final I translator = createTranslator(
@@ -179,10 +181,10 @@ public final class Translator
     }
 
     {
-      final Collection<I> translators = new ArrayList<>(ruleset.size());
+      final Collection<I> list = new ArrayList<>(ruleset.size());
       for (final Map<String, Object> rule : ruleset)
       {
-        translators.add(createSubTranslator(
+        list.add(createSubTranslator(
           (String) rule.get(Predicate), readParser(rule), readRules(home, reader, rule)));
       }
 
@@ -194,7 +196,7 @@ public final class Translator
           final Map<String, Object> updated    = translator.apply(data);
           final Map<String, Object> translated = updated != data ? updated : new HashMap<>();
 
-          for (final I t : translators)
+          for (final I t : list)
           {
             t.apply(data, translated);
           }
@@ -203,9 +205,9 @@ public final class Translator
         }
 
         @Override
-        public boolean hasPredicate()
+        public boolean isDefault()
         {
-          return translator.hasPredicate();
+          return translator.isDefault();
         }
       };
     }
@@ -323,7 +325,7 @@ public final class Translator
     // if no conditions, then translate everything
     if (Strings.isEmpty(cond)) return data -> apply(compiled, translator.parse(data));
 
-    return new ConditionalTranslator()
+    return new Conditional()
     {
       final Predicate<Map<String, Object>> p = compile(cond);
 
@@ -331,7 +333,7 @@ public final class Translator
       public Map<String, Object> apply(final Map<String, Object> data)
       {
         return p.test(data) ? Translator.apply(compiled, translator.parse(data)) :
-          translator.parse(data);
+               translator.parse(data);
       }
     };
   }
@@ -356,7 +358,8 @@ public final class Translator
         }
 
         @Override
-        public Map<String, Object> apply(final Map<String, Object> data, final Map<String,
+        public Map<String, Object> apply(
+          final Map<String, Object> data, final Map<String,
           Object> translated)
         {
           return Translator.apply(compiled, translator.parse(data), translated);
@@ -364,7 +367,7 @@ public final class Translator
       };
     }
 
-    return new ConditionalTranslator()
+    return new Conditional()
     {
       final Predicate<Map<String, Object>> p = compile(cond);
 
@@ -372,15 +375,16 @@ public final class Translator
       public Map<String, Object> apply(final Map<String, Object> data)
       {
         return p.test(data) ? Translator.apply(compiled, translator.parse(data)) :
-          translator.parse(data);
+               translator.parse(data);
       }
 
       @Override
-      public Map<String, Object> apply(final Map<String, Object> data,
+      public Map<String, Object> apply(
+        final Map<String, Object> data,
         final Map<String, Object> translated)
       {
         return p.test(data) ? Translator.apply(compiled, translator.parse(data), translated) :
-          translator.parse(data);
+               translator.parse(data);
       }
     };
   }
@@ -395,7 +399,8 @@ public final class Translator
 
   private static Collection<Map<String, Object>> readRules(
     final Path home, final JsonReader reader,
-    final Collection<Map<String, Object>> list, final Collection<Map<String, Object>> rules) throws IOException
+    final Collection<Map<String, Object>> list, final Collection<Map<String, Object>> rules)
+    throws IOException
   {
     for (final Map<String, Object> rule : list)
     {
@@ -424,7 +429,8 @@ public final class Translator
     return rules;
   }
 
-  static Map<String, Object> apply(final List<Tuple<String, Rule>> rules, final Map<String,
+  static Map<String, Object> apply(
+    final List<Tuple<String, Rule>> rules, final Map<String,
     Object> data)
   {
     return apply(rules, data, new HashMap<>());
@@ -477,7 +483,8 @@ public final class Translator
     throw new IllegalArgumentException("Illegal rule");
   }
 
-  private static Tuple<String, Rule> newRule(final String name, final Map<String, Object> map) throws Exception
+  private static Tuple<String, Rule> newRule(final String name, final Map<String, Object> map)
+    throws Exception
   {
     for (final Map.Entry<String, Object> entry : map.entrySet())
     {
@@ -509,7 +516,8 @@ public final class Translator
     throw new InvalidExpressionException("Missing transformation statement");
   }
 
-  private static Tuple<String, Rule> embedded(final String name, final Collection<Map<String,
+  private static Tuple<String, Rule> embedded(
+    final String name, final Collection<Map<String,
     Object>> ruleData)
   {
     final List<Tuple<String, Rule>> rules = compile(ruleData);
@@ -525,7 +533,7 @@ public final class Translator
         else if (value instanceof List<?>)
         {
           Maps.<List<Map<String, Object>>>typecast(value)
-            .forEach(map -> translated.putAll(apply(rules, map)));
+              .forEach(map -> translated.putAll(apply(rules, map)));
         }
       }
     });
@@ -541,7 +549,7 @@ public final class Translator
     {
       final Map<String, Object> map = Maps.typecast(ruleData);
       overwrite = Maps.get(map, Overwrite, Boolean.FALSE);
-      value = map.get(Value);
+      value     = map.get(Value);
 
       final String when = (String) map.get(Predicate);
       predicate = Strings.isEmpty(when) ? null : compile(when);
@@ -549,7 +557,7 @@ public final class Translator
     else
     {
       overwrite = false;
-      value = ruleData;
+      value     = ruleData;
       predicate = null;
     }
 
@@ -569,7 +577,7 @@ public final class Translator
     {
       final Map<String, Object> map = Maps.typecast(ruleData);
       overwrite = Maps.get(map, Overwrite, Boolean.FALSE);
-      dest = (String) map.get(NameField);
+      dest      = (String) map.get(NameField);
 
       final String when = (String) map.get(Predicate);
       predicate = Strings.isEmpty(when) ? null : compile(when);
@@ -577,7 +585,7 @@ public final class Translator
     else
     {
       overwrite = false;
-      dest = (String) ruleData;
+      dest      = (String) ruleData;
       predicate = null;
     }
 
@@ -634,25 +642,25 @@ public final class Translator
     {
       final Map<String, Object> map = Maps.typecast(ruleData);
 
-      key = Maps.get(map, NameField, name).intern();
-      type = Maps.get(map, ValueType);
+      key       = Maps.get(map, NameField, name).intern();
+      type      = Maps.get(map, ValueType);
       separator = (String) map.get(Separator);
 
-      defValue = map.get(DefaultValue);
+      defValue  = map.get(DefaultValue);
       overwrite = Maps.get(map, Overwrite, Boolean.FALSE);
-      is_array = Maps.get(map, Is_Array, Boolean.FALSE);
+      is_array  = Maps.get(map, Is_Array, Boolean.FALSE);
 
       final String when = (String) map.get(Predicate);
       predicate = Strings.isEmpty(when) ? null : compile(when);
     }
     else if (ruleData instanceof String)
     {
-      key = ((String) ruleData).intern();
-      type = null;
+      key       = ((String) ruleData).intern();
+      type      = null;
       separator = null;
-      defValue = null;
+      defValue  = null;
       overwrite = false;
-      is_array = false;
+      is_array  = false;
       predicate = null;
     }
     else

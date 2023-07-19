@@ -21,7 +21,6 @@ import io.ocsf.utils.Parser;
 import io.ocsf.translator.svc.concurrent.ProcessorList;
 import io.ocsf.translator.svc.config.ConfigParsers;
 import io.ocsf.translator.svc.config.ConfigTranslators;
-import io.ocsf.translator.Translators;
 import io.ocsf.utils.Maps;
 
 import java.io.IOException;

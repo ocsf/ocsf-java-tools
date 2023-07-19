@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package io.ocsf.translator.svc.config;
+package io.ocsf.translator.svc;
 
 import io.ocsf.translator.svc.concurrent.ProcessorList;
-import io.ocsf.translator.Translators;
+import io.ocsf.translator.svc.config.ConfigTranslators;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -4,7 +4,7 @@ plugins {
     id 'application'
 }
 
-group = project['artifactGroup'] + '.translator-cli'
+group = project['artifactGroup'] + '.cli'
 version = project['artifactVersion']
 
 dependencies {

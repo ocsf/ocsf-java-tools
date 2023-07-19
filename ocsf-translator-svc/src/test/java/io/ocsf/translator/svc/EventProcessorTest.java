@@ -14,53 +14,48 @@
  * limitations under the License.
  */
 
-package io.ocsf.translator.svc.svc;
+package io.ocsf.translator.svc;
 
-import io.ocsf.translator.svc.Event;
-import io.ocsf.translator.svc.Tests;
-import io.ocsf.translator.Translators;
-import io.ocsf.translator.svc.EventNormalizer;
+import io.ocsf.utils.Parser;
+import io.ocsf.schema.Dictionary;
 import io.ocsf.utils.FMap;
+import io.ocsf.utils.Maps;
+import io.ocsf.utils.Strings;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-public class EventNormalizerTest extends Tests
+public class EventProcessorTest extends Tests
 {
-  private final Translators translators = new Translators("test");
+  // create a very simple "parser"
+  private final Parser parser = text -> FMap.<String, Object>b().p(EVENT_ID, Integer.parseInt(text));
 
-  private static final AtomicBoolean done = new AtomicBoolean();
+  private final Translators translators = new Translators(Strings.EMPTY);
 
   @Before
   public void setUp() throws Exception
   {
+    final EventProcessor processor = new EventProcessor(parser, translators, in, out);
+
     translators.put("Transformer", data ->
         FMap.<String, Object>b()
-            .o(EVENT_ID, data.remove(EVENT_ID))
-            .o(MESSAGE, data.remove(MESSAGE)));
+            .p(EVENT_ID, data.remove(EVENT_ID))
+            .p(EVENT_ORIGIN, data.remove(EVENT_ORIGIN))
+            .p(Dictionary.RAW_EVENT, data.remove(Dictionary.RAW_EVENT)));
 
-    new Thread(new EventNormalizer(translators, in, out)
-    {
-      @Override
-      protected void terminated()
-      {
-        super.terminated();
-        done.set(true);
-      }
-    }).start();
+    processor.start();
 
     // send some data in the input queue
     for (int i = 0; i < MAX_QUEUE_SIZE; i++)
     {
       in.put(new Event(
           FMap.<String, Object>b()
-              .p(EVENT_ID, i)
-              .p(MESSAGE, TEST_MESSAGE)));
+              .p(Splunk.RAW_EVENT, Integer.toString(i))
+              .p(Splunk.TENANT, "Tenant")
+              .p(Splunk.SOURCE_TYPE, TEST_MESSAGE)));
     }
   }
 
@@ -71,17 +66,6 @@ public class EventNormalizerTest extends Tests
     in.put(Event.eos());
   }
 
-  @SuppressWarnings("BusyWait")
-  @AfterClass
-  public static void afterClass() throws InterruptedException
-  {
-    for (int i = 0; !done.get() && i < MAX_QUEUE_SIZE; i++)
-    {
-      Thread.sleep(200);
-    }
-    Assert.assertTrue(done.get());
-  }
-
   @Test
   public void validate() throws InterruptedException
   {
@@ -89,9 +73,9 @@ public class EventNormalizerTest extends Tests
     {
       final Map<String, Object> data = out.take().data();
 
-      Assert.assertEquals(3, data.size());
+      Assert.assertEquals(5, data.size());
       Assert.assertEquals(i, data.get(EVENT_ID));
-      Assert.assertEquals(TEST_MESSAGE, data.get(MESSAGE));
+      Assert.assertEquals(TEST_MESSAGE, Maps.getIn(data, Dictionary.UNMAPPED, Event.SOURCE_TYPE));
     }
 
     Assert.assertEquals(0, out.available());

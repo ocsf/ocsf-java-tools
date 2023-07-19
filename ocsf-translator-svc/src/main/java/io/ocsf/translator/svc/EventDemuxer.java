@@ -23,7 +23,6 @@ import io.ocsf.translator.svc.concurrent.ProcessorList;
 import io.ocsf.translator.svc.concurrent.Sink;
 import io.ocsf.translator.svc.concurrent.Source;
 import io.ocsf.translator.svc.concurrent.Transformer;
-import io.ocsf.translator.Translators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

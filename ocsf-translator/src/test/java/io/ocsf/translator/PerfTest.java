@@ -26,9 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public final class TransformerPerfTest
+public final class PerfTest
 {
-  private TransformerPerfTest() {}
+  private PerfTest() {}
 
   public static void main(final String... args) throws IOException
   {

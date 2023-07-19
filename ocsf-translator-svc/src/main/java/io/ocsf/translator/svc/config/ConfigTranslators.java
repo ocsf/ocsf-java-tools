@@ -19,7 +19,7 @@ package io.ocsf.translator.svc.config;
 
 import io.ocsf.translator.svc.concurrent.MutableProcessorList;
 import io.ocsf.translator.svc.concurrent.ProcessorList;
-import io.ocsf.translator.Translators;
+import io.ocsf.translator.svc.Translators;
 import io.ocsf.utils.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

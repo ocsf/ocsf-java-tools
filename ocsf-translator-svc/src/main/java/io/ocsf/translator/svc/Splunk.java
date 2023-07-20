@@ -18,14 +18,15 @@
 package io.ocsf.translator.svc;
 
 /**
- * The Splunk class defines Splunk attributes available in the raw events.
+ * The Splunk-specific attribute names.
  */
 public final class Splunk
 {
-  public static final String SOURCE_TYPE     = "sourceType";
-  public static final String RAW_EVENT       = "rawEvent";
-  public static final String TENANT          = "tenant";
-  /**
+  public static final String SOURCE_TYPE = "sourceType";
+  public static final String RAW_EVENT   = "rawEvent";
+  public static final String TENANT      = "tenant";
+
+  /*
    * The out-of-band attributes, not available in the raw event data.
    */
   public static final String CUSTOMER_ID     = "customer_uid";

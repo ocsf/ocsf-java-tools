@@ -16,7 +16,6 @@
 
 package io.ocsf.translator.svc;
 
-import io.ocsf.translator.svc.config.TranslatorsLoader;
 import io.ocsf.utils.FuzzyHashMap;
 import org.junit.Assert;
 import org.junit.Test;

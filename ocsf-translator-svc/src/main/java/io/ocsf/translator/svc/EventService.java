@@ -18,7 +18,6 @@
 package io.ocsf.translator.svc;
 
 import io.ocsf.parsers.Parsers;
-import io.ocsf.translator.svc.config.TranslatorsLoader;
 import io.ocsf.utils.FuzzyHashMap;
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.parsers.Parser;

@@ -15,9 +15,8 @@
  *
  */
 
-package io.ocsf.translator.svc.config;
+package io.ocsf.translator.svc;
 
-import io.ocsf.translator.svc.TranslatorsManager;
 import io.ocsf.utils.FuzzyHashMap;
 import io.ocsf.utils.Maps;
 import org.slf4j.Logger;
@@ -37,7 +36,7 @@ public final class TranslatorsLoader
 {
   private static final Logger logger = LoggerFactory.getLogger(TranslatorsLoader.class);
 
-  private static final String SOURCE_TYPE_FILE = ".metadata";
+  private static final String RULE_TYPE_FILE = ".metadata";
 
   private TranslatorsLoader() {}
 
@@ -152,7 +151,7 @@ public final class TranslatorsLoader
 
   private static String readSourceType(final Path path, final String type) throws IOException
   {
-    final Path file = path.resolve(SOURCE_TYPE_FILE);
+    final Path file = path.resolve(RULE_TYPE_FILE);
     if (Files.isRegularFile(file))
     {
       final Map<String, String> data = io.ocsf.utils.Files.readJson(file);

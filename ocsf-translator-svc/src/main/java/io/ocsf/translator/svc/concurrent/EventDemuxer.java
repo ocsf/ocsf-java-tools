@@ -15,8 +15,12 @@
  *
  */
 
-package io.ocsf.translator.svc;
+package io.ocsf.translator.svc.concurrent;
 
+import io.ocsf.translator.svc.EventParser;
+import io.ocsf.translator.svc.EventProcessor;
+import io.ocsf.translator.svc.Splunk;
+import io.ocsf.translator.svc.TranslatorsManager;
 import io.ocsf.utils.FuzzyHashMap;
 import io.ocsf.utils.event.Event;
 import io.ocsf.utils.event.EventQueue;
@@ -31,8 +35,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The EventDemuxer is a helper class to de-multiplex the incoming raw event stream into multiple
- * streams using on the event source type (sourceType).
+ * The EventDemuxer serves as a valuable helper class designed to de-multiplex the incoming raw
+ * event stream into multiple streams, each corresponding to the specific event source type. Its
+ * primary function is to efficiently manage and segregate the various types of events in the raw
+ * stream, optimizing data flow and processing.
+ * <p>
+ * By leveraging the EventDemuxer, developers can streamline event handling, enabling a more
+ * organized and focused approach to event processing. This ultimately leads to improved code
+ * readability and maintainability, as well as enhanced performance.
+ * <p>
+ * In summary, the EventDemuxer significantly enhances the event processing pipeline by
+ * intelligently distributing events based on their source type, thereby offering a more elegant and
+ * efficient solution for managing event streams.
  */
 public class EventDemuxer extends Transformer
 {
@@ -50,18 +64,18 @@ public class EventDemuxer extends Transformer
    *
    * @param parsers     the parsers registered with the source type
    * @param normalizers the normalizers registered with the source type
-   * @param source      the input raw events
-   * @param sink        the parsed and translated events
-   * @param unparsed    the events that were not the parsed and translated
+   * @param source      the source of the input events
+   * @param sink        the sink for the parsed and translated events
+   * @param raw         the sink for events that were not translated
    */
   public EventDemuxer(
     final FuzzyHashMap<Parser> parsers,
     final FuzzyHashMap<TranslatorsManager> normalizers,
     final Source<Event> source,
     final Sink<Event> sink,
-    final Sink<Event> unparsed)
+    final Sink<Event> raw)
   {
-    super(EventDemuxer.class.getName(), source, unparsed);
+    super(EventDemuxer.class.getName(), source, raw);
 
     this.parsers     = parsers;
     this.normalizers = normalizers;

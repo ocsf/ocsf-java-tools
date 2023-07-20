@@ -33,8 +33,6 @@ public abstract class Transformer implements Runnable
     this.name   = name;
     this.source = source;
     this.sink   = sink;
-
-    logger.info("{}: new instance", this);
   }
 
   /**
@@ -57,6 +55,7 @@ public abstract class Transformer implements Runnable
   @Override
   public void run()
   {
+    logger.info("{}: main thread started", this);
     try
     {
       for (Event event = source.take(); event.isNotEos(); event = source.take())

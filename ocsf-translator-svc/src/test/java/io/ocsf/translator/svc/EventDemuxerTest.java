@@ -17,6 +17,7 @@
 package io.ocsf.translator.svc;
 
 import io.ocsf.schema.Dictionary;
+import io.ocsf.translator.svc.concurrent.EventDemuxer;
 import io.ocsf.utils.FMap;
 import io.ocsf.utils.FuzzyHashMap;
 import io.ocsf.utils.Maps;

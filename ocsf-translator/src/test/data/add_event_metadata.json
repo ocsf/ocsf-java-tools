@@ -1,0 +1,17 @@
+{
+  "caption": "Add OCSF Metadata",
+  "description": "This example shows how to add OCSF metadata to the event. It adds an empty profile list and the schema version.",
+  "references": [
+    "https://schema.ocsf.io/1.0.0-rc.3/objects/metadata"
+  ],
+  "rules": [
+    {
+      "_": {
+        "metadata": {
+          "profiles": [],
+          "version": "1.0.0-rc.3"
+        }
+      }
+    }
+  ]
+}

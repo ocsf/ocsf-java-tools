@@ -16,12 +16,7 @@
 
 package io.ocsf.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Utility class with Map function helpers.
@@ -299,6 +294,142 @@ public final class Maps
       return remove(map, path.split(NameSplitRegex));
 
     return value;
+  }
+
+  /**
+   * Represents a function that accepts three arguments and produces a result.
+   *
+   * @see #deep_merge(Map, Map, Resolver)
+   */
+  @FunctionalInterface
+  public interface Resolver
+  {
+    /**
+     * This function will be called to resolve the conflicts when merging two maps.
+     *
+     * @param key    the duplicate key
+     * @param value1 the type of the first value (the value of key in map1)
+     * @param value2 the type of the second value (the value of key in map2)
+     */
+    Object apply(final String key, final Object value1, final Object value2);
+
+    default boolean overwrite() {return false;}
+  }
+
+  /**
+   * Recursively merges two maps into one.
+   * <p>
+   * All keys in map2 will be added to map1.
+   *
+   * @param map1      the map where the map2 will be added
+   * @param map2      the map to be added to map1
+   * @param overwrite the overwrite flag controls how the duplicate keys are handled. If overwrite
+   *                  is <code>true</code>, then map2 values overwrite the map1 values.
+   * @return the merged map
+   */
+  public static Map<String, Object> merge(
+    final Map<String, Object> map1, final Map<String, Object> map2, final boolean overwrite)
+  {
+    return merge(map1, map2, resolver(overwrite));
+  }
+
+  /**
+   * Recursively merges two maps into one, resolving conflicts through the given resolver function.
+   * <p>
+   * All keys in map2 will be added to map1. The given resolver function will be invoked when there
+   * are duplicate keys; its arguments are key (the duplicate key), value1 (the value of key in
+   * map1), and value2 (the value of key in map2). The value returned by resolver is used as the
+   * value under key in the resulting map.
+   *
+   * @param map1     the map where the map2 will be added
+   * @param map2     the map to be added to map1
+   * @param resolver the conflicts resolver function
+   * @return the merged map
+   */
+  public static Map<String, Object> merge(
+    final Map<String, Object> map1, final Map<String, Object> map2, final Resolver resolver)
+  {
+    Objects.requireNonNull(resolver);
+
+    if (map1 == null) return map2;
+    if (map2 == null) return map1;
+
+    return deep_merge(map1, map2, resolver);
+  }
+
+  private static Map<String, Object> deep_merge(
+    final Map<String, Object> map1, final Map<String, Object> map2, final Resolver resolver)
+  {
+    for (final Map.Entry<String, Object> entry : map2.entrySet())
+    {
+      final String key    = entry.getKey();
+      final Object value2 = entry.getValue();
+
+      if (value2 != null)
+        map1.merge(key, value2, (v1, v2) -> resolver.apply(key, v1, v2));
+      else if (resolver.overwrite())
+        map1.remove(key);
+    }
+
+    return map1;
+  }
+
+  /*
+   * The default resolver does not overwrite the existing values.
+   */
+  private static final class DefaultResolver implements Resolver
+  {
+    @Override
+    public Object apply(final String key, final Object value1, final Object value2)
+    {
+      if (value1 instanceof Map<?, ?> && value2 instanceof Map<?, ?>)
+      {
+        final Map<String, Object> map1 = typecast(value1);
+
+        if (map1.isEmpty())
+          return value2;
+
+        final Map<String, Object> map2 = typecast(value2);
+        if (map2.isEmpty())
+          return value1;
+
+        return deep_merge(map1, map2, this);
+      }
+
+      return value1 != null ? value1 : value2;
+    }
+
+  }
+
+  private static final class OverwrtingResolver implements Resolver
+  {
+    @Override
+    public Object apply(final String key, final Object value1, final Object value2)
+    {
+      if (value1 instanceof Map<?, ?> && value2 instanceof Map<?, ?>)
+      {
+        final Map<String, Object> map1 = typecast(value1);
+
+        if (map1.isEmpty())
+          return value2;
+
+        final Map<String, Object> map2 = typecast(value2);
+        if (map2.isEmpty())
+          return value1;
+
+        return deep_merge(map1, map2, this);
+      }
+
+      return value2;
+    }
+
+    @Override
+    public boolean overwrite() {return true;}
+  }
+
+  private static Resolver resolver(final boolean overwrite)
+  {
+    return overwrite ? new OverwrtingResolver() : new DefaultResolver();
   }
 
   private static Object getNested(Map<String, Object> map, final String[] path)

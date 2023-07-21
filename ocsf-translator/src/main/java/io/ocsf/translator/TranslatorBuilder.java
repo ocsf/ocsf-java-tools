@@ -50,6 +50,7 @@ public final class TranslatorBuilder
 
   private static final String Include = "include";
 
+  private static final String MagicValue   = "_";
   private static final String DefaultValue = "default";
   private static final String NameField    = "name";
   private static final String OtherField   = "other";
@@ -66,30 +67,6 @@ public final class TranslatorBuilder
   private static final String PatternField = "pattern";
   private static final String RegexField   = "regex";
   private static final String OutputField  = "output";
-
-  /**
-   * Translator interface.
-   */
-  @FunctionalInterface
-  public interface Translator
-  {
-    /**
-     * Applies the translator's rules to the given data.
-     *
-     * @param data the event data
-     * @return the transformed event data
-     */
-    Map<String, Object> apply(final Map<String, Object> data);
-
-    default Map<String, Object> apply(
-      final Map<String, Object> data,
-      final Map<String, Object> translated)
-    {
-      return translated;
-    }
-
-    default boolean isDefault() {return false;}
-  }
 
   /**
    * Translator conditional interface.
@@ -476,7 +453,7 @@ public final class TranslatorBuilder
   {
     for (final Map.Entry<String, Object> r : rule.entrySet())
     {
-      final String name = r.getKey();
+      final String name = r.getKey().intern();
       final Object obj  = r.getValue();
 
       if (obj instanceof Map<?, ?>)
@@ -493,30 +470,42 @@ public final class TranslatorBuilder
   private static Tuple<String, Rule> newRule(final String name, final Map<String, Object> map)
     throws Exception
   {
-    for (final Map.Entry<String, Object> entry : map.entrySet())
+    if (MagicValue.equals(name))
     {
-      switch (entry.getKey())
+      final Object value = map.get("@value");
+
+      if (value instanceof Map<?, ?>)
+        return merge(name, Maps.typecast(value));
+
+      return merge(name, map);
+    }
+    else
+    {
+      for (final Map.Entry<String, Object> entry : map.entrySet())
       {
-        case "@move":
-          return move(name, entry.getValue());
+        switch (entry.getKey())
+        {
+          case "@move":
+            return move(name, entry.getValue());
 
-        case "@copy":
-          return copy(name, entry.getValue());
+          case "@copy":
+            return copy(name, entry.getValue());
 
-        case "@remove":
-          return remove(name, entry.getValue());
+          case "@remove":
+            return remove(name, entry.getValue());
 
-        case "@value":
-          return value(name, entry.getValue());
+          case "@value":
+            return value(name, entry.getValue());
 
-        case "@clone":
-          return clone(name, entry.getValue());
+          case "@clone":
+            return clone(name, entry.getValue());
 
-        case "@enum":
-          return lookup(name, Maps::removeIn, entry.getValue());
+          case "@enum":
+            return lookup(name, Maps::removeIn, entry.getValue());
 
-        case "@lookup":
-          return lookup(name, Maps::getIn, entry.getValue());
+          case "@lookup":
+            return lookup(name, Maps::getIn, entry.getValue());
+        }
       }
     }
 
@@ -544,6 +533,11 @@ public final class TranslatorBuilder
         }
       }
     });
+  }
+
+  private static Tuple<String, Rule> merge(final String name, final Map<String, Object> value)
+  {
+    return new Tuple<>(name, (_data, translated) -> Maps.merge(translated, value, false));
   }
 
   private static Tuple<String, Rule> value(final String name, final Object ruleData)

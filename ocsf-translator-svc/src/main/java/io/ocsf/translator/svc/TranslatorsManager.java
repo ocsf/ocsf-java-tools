@@ -19,6 +19,7 @@ package io.ocsf.translator.svc;
 
 import io.ocsf.schema.Dictionary;
 import io.ocsf.schema.Utils;
+import io.ocsf.translator.Translator;
 import io.ocsf.translator.TranslatorBuilder;
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Maps;
@@ -46,11 +47,11 @@ public final class TranslatorsManager
 
   private final Path home;
 
-  private final Map<String, TranslatorBuilder.Translator> translators = new LinkedHashMap<>();
+  private final Map<String, Translator> translators = new LinkedHashMap<>();
 
   // This translator is used by the 'translate(data)' function when none of the named translators
   // translates the given data. It is set to the translator that does not have a 'when' clause.
-  private TranslatorBuilder.Translator translator;
+  private Translator translator;
 
   /**
    * Creates a new collections of translators.
@@ -123,7 +124,7 @@ public final class TranslatorsManager
     put(name, TranslatorBuilder.build(home, reader, rule));
   }
 
-  public void put(final String name, final TranslatorBuilder.Translator translator)
+  public void put(final String name, final Translator translator)
   {
     if (translator.isDefault())
     {
@@ -168,7 +169,7 @@ public final class TranslatorsManager
    */
   public Map<String, Object> translate(final String name, final Map<String, Object> data)
   {
-    final TranslatorBuilder.Translator t = translators.get(name);
+    final Translator t = translators.get(name);
 
     return t != null ? translate(t, data) : null;
   }
@@ -187,7 +188,7 @@ public final class TranslatorsManager
   {
     if (data != null)
     {
-      for (final TranslatorBuilder.Translator t : translators.values())
+      for (final Translator t : translators.values())
       {
         final Map<String, Object> translated = translate(t, data);
         if (translated != null)
@@ -213,7 +214,7 @@ public final class TranslatorsManager
   }
 
   private static Map<String, Object> translate(
-    final TranslatorBuilder.Translator translator, final Map<String, Object> data)
+    final Translator translator, final Map<String, Object> data)
   {
     final Map<String, Object> translated = translator.apply(data);
     if (data == translated)

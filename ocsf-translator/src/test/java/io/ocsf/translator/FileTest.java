@@ -38,7 +38,7 @@ public final class FileTest
       final String home = args[0];
       final String ruleFile = args[1];
 
-      final TranslatorBuilder.Translator
+      final Translator
         translator = TranslatorBuilder.fromFile(Paths.get(home), Paths.get(ruleFile));
 
       System.out.println("Using rule file: " + ruleFile);
@@ -57,7 +57,7 @@ public final class FileTest
   }
 
   private static void visitAllDirsAndFiles(
-    final TranslatorBuilder.Translator translator, final File file) throws IOException
+    final Translator translator, final File file) throws IOException
   {
     System.out.println("Processing " + file);
 
@@ -79,7 +79,7 @@ public final class FileTest
   }
 
   private static void transform(
-    final TranslatorBuilder.Translator translator, final String filename) throws IOException
+    final Translator translator, final String filename) throws IOException
   {
     try
     {

@@ -21,6 +21,7 @@ import io.ocsf.schema.Dictionary;
 import io.ocsf.schema.Schema;
 import io.ocsf.schema.Utils;
 import io.ocsf.schema.cli.CommandLineParser.Argument;
+import io.ocsf.translator.Translator;
 import io.ocsf.translator.TranslatorBuilder;
 import io.ocsf.utils.Files;
 import io.ocsf.utils.Json;
@@ -336,7 +337,7 @@ public final class Main
     return Optional.empty();
   }
 
-  private static Optional<TranslatorBuilder.Translator> translator()
+  private static Optional<Translator> translator()
   {
     final Argument ruleDir  = clp.getArg('R');
     final Argument ruleFile = clp.getArg('r');
@@ -394,7 +395,7 @@ public final class Main
   }
 
   private static void translate(
-    final TranslatorBuilder.Translator translator, final List<String> files,
+    final Translator translator, final List<String> files,
     final Consumer<Item> consumer)
   {
     for (final String arg : files)
@@ -465,7 +466,7 @@ public final class Main
   }
 
   private static boolean translate(
-    final TranslatorBuilder.Translator translator, final Item source, final Consumer<Item> consumer)
+    final Translator translator, final Item source, final Consumer<Item> consumer)
   {
     if (source.data == null)
     {
@@ -490,7 +491,7 @@ public final class Main
     return false;
   }
 
-  private static TranslatorBuilder.Translator translator(final String home, final String rule)
+  private static Translator translator(final String home, final String rule)
   {
     try
     {
@@ -502,7 +503,7 @@ public final class Main
         System.out.println("// rule  file: " + ruleFile);
       }
 
-      final TranslatorBuilder.Translator translator = TranslatorBuilder.fromFile(
+      final Translator translator = TranslatorBuilder.fromFile(
         Paths.get(home),
         Paths.get(ruleFile));
 

@@ -1,0 +1,36 @@
+[
+  {
+    "_": {
+      "metadata": {
+        "profiles": [
+          "splunk/ba"
+        ]
+      }
+    }
+  },
+  {
+    "_": {
+      "desc": "Set the event schema version",
+      "@value": {
+        "metadata": {
+          "version": "1.0.0-rc.2"
+        }
+      }
+    }
+  },
+  {
+    "customer_uid": {
+      "@move": "metadata.customer_uid"
+    }
+  },
+  {
+    "source_type": {
+      "@move": "metadata.source_type"
+    }
+  },
+  {
+    "raw_data": {
+      "@move": "raw_data"
+    }
+  }
+]

@@ -58,7 +58,7 @@ public final class PerfTest
         }
       }
 
-      final TranslatorBuilder.Translator
+      final Translator
         translator = TranslatorBuilder.fromFile(Paths.get(home), Paths.get(rule));
 
       final long start = System.currentTimeMillis();

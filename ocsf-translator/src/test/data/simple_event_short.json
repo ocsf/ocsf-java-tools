@@ -1,0 +1,32 @@
+{
+  "caption": "Create OCSF Event",
+  "description": "This example shows how to create a simple OCSF event using the short rule format.",
+  "references": [
+    "https://schema.ocsf.io/1.0.0-rc.3/base_event"
+  ],
+  "rules": [
+    {
+      "_": {
+        "category_uid": 0,
+        "class_uid": 0,
+        "activity_id": 0,
+        "message": "A simple OCSF event created by the OCSF Translator Tool",
+        "metadata": {
+          "product": {
+            "lang": "en",
+            "name": "OCSF Translator Tool",
+            "uid": "521d0c88-2721-11ee-952e-0242ac110003",
+            "vendor_name": "ocsf.io",
+            "version": "1.0.0-dev"
+          },
+          "profiles": [],
+          "version": "1.0.0-rc.3"
+        },
+        "severity_id": 1,
+        "status_id": 1,
+        "time": 1689873456010477,
+        "timezone_offset": 0
+      }
+    }
+  ]
+}

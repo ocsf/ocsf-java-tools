@@ -27,6 +27,8 @@ import io.ocsf.utils.Files;
 import io.ocsf.utils.Json;
 import io.ocsf.utils.parsers.Parser;
 import io.ocsf.utils.parsers.ParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,9 +50,11 @@ import java.util.function.Consumer;
  */
 public final class Main
 {
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
   private Main() {}
 
-  public static final String Name = "ocsf-translator-cli";
+  public static final String Name = "ocsf-cli";
 
   private static final CommandLineParser clp;
 
@@ -223,6 +227,9 @@ public final class Main
 
   public static void main(final String... args)
   {
+    if (logger.isInfoEnabled())
+      logger.info("Started {} with {}", Name, args);
+
     clp.parseCommandLine(args);
 
     verbose        = clp.getArg('V').isSet();
@@ -658,8 +665,8 @@ public final class Main
 
     // 3. the hard part.  Scan for rule name - assuming it's a file basename identifier.
     final List<String> matches = new ArrayList<>();
-    final String matchRe = String.format("^(.*-%s|%s|%s-.*).json$", ruleName, ruleName,
-                                         ruleName);
+    final String matchRe =
+      String.format("^(.*-%s|%s|%s-.*).json$", ruleName, ruleName, ruleName);
 
     visitAllDirsAndFiles(baseDir, file ->
     {

@@ -8,8 +8,8 @@ group = project['artifactGroup'] + '.cli'
 version = project['artifactVersion']
 
 dependencies {
-    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.4.8'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.8'
+    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.4.8'
 
     implementation project(':ocsf-utils')
     implementation project(':ocsf-schema')
@@ -22,6 +22,11 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(11)
     }
+}
+
+// Add logback.xml dir to the classpath: lib/etc
+startScripts {
+    classpath += files('etc')
 }
 
 application {

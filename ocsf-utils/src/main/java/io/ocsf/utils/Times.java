@@ -121,9 +121,20 @@ public final class Times
   private static long parseLocalTime(final String value)
   {
     final int len = value.length();
+    if (len <= local_date_len)
+    {
+      final int pos = value.indexOf('.');
+      if (pos > 0)
+      {
+        final String time = value.substring(0, pos);
+        final String fraq = value.substring(pos + 1);
 
-    if (len < local_date_len)
-      return Long.parseLong(value);
+        return Long.parseLong(time) * 1000L + Integer.parseInt(fraq);
+      }
+
+      if (len < local_date_len)
+        return Long.parseLong(value);
+    }
 
     if (len == local_date_len)
       return Instant.from(local_df.parse(value, LocalDateTime::from).atZone(ZoneId.systemDefault()))

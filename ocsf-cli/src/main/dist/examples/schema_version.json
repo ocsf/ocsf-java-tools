@@ -1,0 +1,10 @@
+  {
+    "_": {
+      "description": "Defines the schema version used in the translations.",
+      "@value": {
+        "metadata": {
+          "version": "1.0.0-rc.3"
+        }
+      }
+    }
+  }

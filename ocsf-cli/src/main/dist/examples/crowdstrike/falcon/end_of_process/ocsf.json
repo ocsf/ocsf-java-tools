@@ -1,0 +1,61 @@
+{
+  "category_uid": 1,
+  "class_uid": 1007,
+  "activity_id": 2,
+  "message": "CrowdStrike EndOfProcessMacV15 event",
+  "status_id": 1,
+  "severity_id": 1,
+  "time": 1689872345358,
+  "metadata": {
+    "uid": "c0556921-4d81-4a4f-9ed9-40d40e700f7c",
+    "product": {
+      "name": "CrowdStrike Falcon®",
+      "vendor_name": "CrowdStrike",
+      "lang": "en"
+    },
+    "log_name": "EndOfProcess",
+    "event_code": "EndOfProcessMacV15",
+    "profiles": ["host"],
+    "original_time": "1689872345358",
+    "version": "1.0.0-rc.3"
+  },
+  "process": {
+    "uid": "498111111111111111",
+    "pid": 91111
+  },
+  "device": {
+    "uid": "a790f20809df48069111111111111111",
+    "os": {
+      "type_id": 300,
+      "name": "Mac"
+    },
+    "type_id": 0,
+    "ip": "11.11.111.30",
+    "uid_alt": "9efe65d0808e43968111111111111111",
+    "desc": "prod"
+  },
+  "unmapped": {
+    "FileDeletedCount": "0",
+    "DirectoryCreatedCount": "0",
+    "ContextThreadId": "0",
+    "NetworkConnectCount": "0",
+    "NetworkListenCount": "0",
+    "NetworkBindCount": "0",
+    "NetworkRecvAcceptCount": "0",
+    "NewExecutableWrittenCount": "0",
+    "EffectiveTransmissionClass": "3",
+    "NetworkCloseCount": "0",
+    "SuspectStackCount": "0",
+    "ContextTimeStamp": "1689872344.275",
+    "ConfigStateHash": "3106111111",
+    "ContextProcessId": "498673111111111111",
+    "AsepWrittenCount": "0",
+    "SuspiciousDnsRequestCount": "0",
+    "ConfigBuild": "1001.4.0011001.1111",
+    "NetworkCapableAsepWriteCount": "0",
+    "ExecutableDeletedCount": "0",
+    "DnsRequestCount": "0",
+    "fdr_logtype": "data",
+    "Entitlements": "15"
+  }
+}

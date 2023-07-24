@@ -1,0 +1,79 @@
+{
+  "actor": {
+    "process": {
+      "pid": 135475,
+      "tid": 145056872
+    }
+  },
+  "category_uid": 1,
+  "metadata": {
+    "uid": "03b6fc8e-b429-4d3a-89ec-2d5edf42aa96",
+    "product": {
+      "name": "CrowdStrike Falcon®",
+      "vendor_name": "CrowdStrike",
+      "lang": "en"
+    },
+    "log_name": "ProcessRollup2",
+    "event_code": "ProcessRollup2V19",
+    "profiles": ["host"],
+    "original_time": "1689872933259",
+    "version": "1.0.0-rc.3"
+  },
+  "process": {
+    "uid": "1355666",
+    "created_time": 1689872933110,
+    "file": {
+      "path": "\\Device\\HarddiskVolume3\\Windows\\System32\\cmd.exe",
+      "parent_folder": "\\Device\\HarddiskVolume3\\Windows\\System32",
+      "type_id": 1,
+      "name": "cmd.exe"
+    },
+    "cmd_line": "C:\\Windows\\system32\\cmd.exe",
+    "pid": 50111
+  },
+  "status_id": 1,
+  "activity_id": 1,
+  "class_uid": 1007,
+  "severity_id": 1,
+  "time": 1689872933259,
+  "message": "CrowdStrike ProcessRollup2 event",
+  "device": {
+    "uid": "5ce6c074c9e6111111111111",
+    "os": {
+      "type_id": 100,
+      "name": "Win"
+    },
+    "type_id": 0,
+    "ip": "216.11.11.111",
+    "uid_alt": "9efe65d0808e439685fe1111111111",
+    "desc": "prod"
+  },
+  "unmapped": {
+    "ProcessCreateFlags": "134211111",
+    "IntegrityLevel": "8192",
+    "ParentProcessId": "13547511111111",
+    "SHA1HashData": "0000000000000000000000000000000000000000",
+    "UserSid": "S-1-5-21-1111111111111111",
+    "TokenType": "1",
+    "AuthenticodeHashData": "b3cba8c579c1c86dd45ec7a74111111111111111",
+    "ProcessEndTime": "",
+    "ParentBaseFileName": "MSBuild.exe",
+    "ImageSubsystem": "3",
+    "EffectiveTransmissionClass": "3",
+    "SessionId": "3",
+    "Tags": "25, 9055111, 120946271111111, 212205711111111, 26388271111111",
+    "RawProcessId": "50111",
+    "ConfigStateHash": "3811111111",
+    "MD5HashData": "8a2122e8162dbef04111111111111111",
+    "SHA256HashData": "b99d61d874728edc0918ca0eb10eab93d381e7367e37740111111111111111",
+    "ProcessSxsFlags": "64",
+    "AuthenticationId": "1111111111",
+    "ConfigBuild": "1007.3.1111111.11",
+    "WindowFlags": "256",
+    "ParentAuthenticationId": "1661111111",
+    "fdr_logtype": "data",
+    "Entitlements": "15",
+    "ProcessParameterFlags": "21111",
+    "SignInfoFlags": "8681111"
+  }
+}

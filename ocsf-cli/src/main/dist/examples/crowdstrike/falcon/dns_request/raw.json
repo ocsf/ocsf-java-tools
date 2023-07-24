@@ -1,0 +1,22 @@
+{
+  "ConfigBuild": "1007.4.0017003.11",
+  "ConfigStateHash": "3106515990",
+  "ContextProcessId": "499289067991475385",
+  "ContextThreadId": "0",
+  "ContextTimeStamp": "1689867325.543",
+  "DomainName": "integrations.fitanalytics.com",
+  "EffectiveTransmissionClass": "2",
+  "Entitlements": "15",
+  "EventOrigin": "1",
+  "RequestType": "1",
+  "aid": "4d60ba1ce9b94f80816176c354b721d8",
+  "aip": "11.111.111.111",
+  "cid": "9efe65d0808e43968XXXXXXXXXXXXXXX",
+  "env": "prod",
+  "event_platform": "Mac",
+  "event_simpleName": "DnsRequest",
+  "fdr_logtype": "data",
+  "id": "XXXXXXXX-5ea3-4eba-88c0-XXXXXXXXXXXX",
+  "name": "DnsRequestMacV2",
+  "timestamp": "1689867325810"
+}

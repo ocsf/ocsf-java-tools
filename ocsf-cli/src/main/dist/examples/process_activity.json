@@ -1,0 +1,12 @@
+{
+  "_": {
+    // System Activity
+    "category_uid": 1,
+    // Process Activity
+    "class_uid": 1007,
+    // no profiles used
+    "metadata": {
+      "profiles": []
+    }
+  }
+}

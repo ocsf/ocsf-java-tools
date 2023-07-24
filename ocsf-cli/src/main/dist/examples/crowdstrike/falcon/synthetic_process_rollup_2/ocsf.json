@@ -1,0 +1,71 @@
+{
+  "actor": {
+    "process": {
+      "pid": 49948053,
+      "tid": 0
+    },
+    "user": {
+      "uid": "0"
+    }
+  },
+  "category_uid": 1,
+  "metadata": {
+    "uid": "5dad4335-ba94-4dbe-b050-143d77705ed2",
+    "product": {
+      "name": "CrowdStrike Falcon®",
+      "vendor_name": "CrowdStrike",
+      "lang": "en"
+    },
+    "log_name": "SyntheticProcessRollup2",
+    "event_code": "SyntheticProcessRollup2MacV4",
+    "profiles": ["host"],
+    "original_time": "1689873040117",
+    "version": "1.0.0-rc.3"
+  },
+  "process": {
+    "uid": "49954433",
+    "file": {
+      "path": "/usr/libexec/xpcproxy",
+      "parent_folder": "/usr/libexec",
+      "type_id": 1,
+      "name": "xpcproxy"
+    },
+    "cmd_line": "xpcproxy com.apple.mdworker.shared.1",
+    "pid": 11111
+  },
+  "status_id": 1,
+  "activity_id": 1,
+  "class_uid": 1007,
+  "severity_id": 1,
+  "time": 1689873040117,
+  "message": "CrowdStrike SyntheticProcessRollup2 event",
+  "device": {
+    "uid": "356092b0f2da4479a",
+    "os": {
+      "type_id": 300,
+      "name": "Mac"
+    },
+    "type_id": 0,
+    "ip": "99.11.111.111",
+    "uid_alt": "9efe65d0808e43968",
+    "desc": "prod"
+  },
+  "unmapped": {
+    "ParentProcessId": "499480539",
+    "SessionProcessId": "499480539",
+    "SyntheticPR2Flags": "8",
+    "SVUID": "0",
+    "EffectiveTransmissionClass": "2",
+    "ProcessGroupId": "499480539",
+    "RawProcessId": "11111",
+    "ContextTimeStamp": "1689873040.066",
+    "ConfigStateHash": "3106511111",
+    "GID": "0",
+    "SVGID": "0",
+    "ConfigBuild": "1007.4.111111.11",
+    "RGID": "0",
+    "fdr_logtype": "data",
+    "Entitlements": "15",
+    "RUID": "0"
+  }
+}

@@ -1,0 +1,91 @@
+[
+  {
+    "_": {
+      "description": "CrowdStrike Falcon event translations.",
+      "@value": {
+        "metadata": {
+          "product": {
+            "lang": "en",
+            "name": "CrowdStrike Falcon®",
+            "vendor_name": "CrowdStrike"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": {
+      "@move": "metadata.uid"
+    }
+  },
+  {
+    "name": {
+      "@move": "metadata.event_code"
+    }
+  },
+  {
+    "event_simpleName": {
+      "@move": "metadata.log_name"
+    }
+  },
+  {
+    "timestamp": {
+      "desc": "The time of the event, normalized to OCSF.",
+      "@copy": {
+        "name": "time",
+        "type": "timestamp"
+      }
+    }
+  },
+  {
+    "timestamp": {
+      "@move": "metadata.original_time"
+    }
+  },
+  {
+    "_": {
+      "device":{
+        "type_id": 0
+      }
+    }
+  },
+  {
+    "aip": {
+      "@move": "device.ip"
+    }
+  },
+  {
+    "aid": {
+      "@move": "device.uid"
+    }
+  },
+  {
+    "cid": {
+      "@move": "device.uid_alt"
+    }
+  },
+  {
+    "event_platform": {
+      "desc": "Determine the device OS name.",
+      "@lookup": {
+        "name": "device.os.type_id",
+        "default": 99,	// Other
+        "other": "device.os.type",
+        "values": {
+          "Win": 100,
+          "Mac": 300
+        }
+      }
+    }
+  },
+  {
+    "event_platform": {
+      "@move": "device.os.name"
+    }
+  },
+  {
+    "env": {
+      "@move": "device.desc"
+    }
+  }
+]

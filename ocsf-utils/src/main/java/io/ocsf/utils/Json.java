@@ -57,8 +57,8 @@ public final class Json
     DECIMAL_FORMAT.setMaximumFractionDigits(340);
   }
 
-  private static final String NULL_STRING = null;
-  private static final char[] COMMA       = ", " .toCharArray();
+  private static final String NULL  = null;
+  private static final char[] COMMA = ", " .toCharArray();
   private static final char[] EMPTY_ARRAY = "[]" .toCharArray();
 
   private static final String EMPTY_OBJECT_STR = "{}";
@@ -84,7 +84,10 @@ public final class Json
 
   public static String toString(final Map<String, Object> map)
   {
-    return mapToString(map, new StringBuilder(capacity(map.size()))).toString();
+    if (map != null)
+      return mapToString(map, new StringBuilder(capacity(map.size()))).toString();
+
+    return Strings.EMPTY;
   }
 
   /**
@@ -147,7 +150,7 @@ public final class Json
 
     if (value == null)
     {
-      return buf.append(NULL_STRING);
+      return buf.append(NULL);
     }
 
     if (value.getClass().isArray())
@@ -254,7 +257,7 @@ public final class Json
 
     if (value == null)
     {
-      return buf.append(NULL_STRING);
+      return buf.append(NULL);
     }
 
     if (value.getClass().isArray())
@@ -415,7 +418,7 @@ public final class Json
       final Object element = a[i];
       if (element == null)
       {
-        buf.append(NULL_STRING);
+        buf.append(NULL);
       }
       else
       {
@@ -559,7 +562,7 @@ public final class Json
   {
     if (s == null)
     {
-      return sb.append(NULL_STRING);
+      return sb.append(NULL);
     }
     if (s.isEmpty())
     {

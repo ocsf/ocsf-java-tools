@@ -6,3 +6,5 @@ build
 
 # Ignore IntelliJ build output directory
 .idea
+
+.run

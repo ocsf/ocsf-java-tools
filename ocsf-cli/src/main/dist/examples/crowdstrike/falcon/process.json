@@ -1,0 +1,44 @@
+[
+  {
+    "SourceProcessId": {
+      "@move": {
+        "name": "actor.process.pid",
+        "type":  "integer"
+      }
+    }
+  },
+  {
+    "SourceThreadId": {
+      "@move": {
+        "name": "actor.process.tid",
+        "type":  "integer"
+      }
+    }
+  },
+  {
+    "RawProcessId": {
+      "@copy": {
+        "name": "process.pid",
+        "type": "integer"
+      }
+    }
+  },
+  {
+    "TargetProcessId": {
+      "@move": "process.uid"
+    }
+  },
+  {
+    "ImageFileName": {
+      "@move": {
+        "name": "process.file",
+        "type": "path"
+      }
+    }
+  },
+  {
+    "CommandLine": {
+      "@move": "process.cmd_line"
+    }
+  }
+]

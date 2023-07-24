@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -48,9 +49,9 @@ public final class TranslatorBuilder
   private static final String RuleList = "rules";
   private static final String RuleSet  = "ruleset";
 
-  private static final String Include = "include";
+  private static final String Include    = "@include";
+  private static final String MagicValue = "_";
 
-  private static final String MagicValue   = "_";
   private static final String DefaultValue = "default";
   private static final String NameField    = "name";
   private static final String OtherField   = "other";
@@ -382,35 +383,64 @@ public final class TranslatorBuilder
   }
 
   private static Collection<Map<String, Object>> readRules(
-    final Path home, final JsonReader reader,
-    final Collection<Map<String, Object>> list, final Collection<Map<String, Object>> rules)
+    final Path home,
+    final JsonReader reader,
+    final Collection<Map<String, Object>> list,
+    final Collection<Map<String, Object>> rules)
     throws IOException
   {
     for (final Map<String, Object> rule : list)
     {
-      final String filename = Maps.get(rule, Include);
+      final Object include = Maps.get(rule, Include);
 
-      if (filename != null)
+      if (include == null)
       {
-        final Object included = reader.read(home.resolve(filename));
-        if (included instanceof Map<?, ?>)
-        {
-          // includes a single rule
-          rules.add(Maps.typecast(included));
-        }
-        else if (included instanceof Collection<?>)
-        {
-          // includes a list of rules
-          readRules(home, reader, Maps.typecast(included), rules);
-        }
+        rules.add(rule);
+      }
+      else if (include instanceof String)
+      {
+        includeRule(home, (String) include, reader, rules);
+      }
+      else if (include instanceof List<?>)
+      {
+        final Collection<String> files = Maps.typecast(include);
+
+        for (final String filename : files)
+          includeRule(home, filename, reader, rules);
       }
       else
       {
-        rules.add(rule);
+        // TODO: invalid JSON object
+        throw new InvalidObjectException(String.valueOf(include));
       }
     }
 
     return rules;
+  }
+
+  private static void includeRule(
+    final Path home,
+    final String filename,
+    final JsonReader reader,
+    final Collection<Map<String, Object>> rules)
+    throws IOException
+  {
+    final Object included = reader.read(home.resolve(filename));
+    if (included instanceof Map<?, ?>)
+    {
+      // includes a single rule
+      rules.add(Maps.typecast(included));
+    }
+    else if (included instanceof Collection<?>)
+    {
+      // includes a list of rules
+      readRules(home, reader, Maps.typecast(included), rules);
+    }
+    else
+    {
+      // TODO: invalid JSON object
+      throw new InvalidObjectException(String.valueOf(included));
+    }
   }
 
   static Map<String, Object> apply(
@@ -428,7 +458,6 @@ public final class TranslatorBuilder
     Maps.cleanup(data);
     return translated;
   }
-
 
   static List<Tuple<String, Rule>> compile(final Collection<Map<String, Object>> src)
   {
@@ -470,6 +499,7 @@ public final class TranslatorBuilder
   private static Tuple<String, Rule> newRule(final String name, final Map<String, Object> map)
     throws Exception
   {
+    // first, handle the values
     if (MagicValue.equals(name))
     {
       final Object value = map.get("@value");
@@ -479,33 +509,34 @@ public final class TranslatorBuilder
 
       return merge(name, map);
     }
-    else
+
+    for (final Map.Entry<String, Object> entry : map.entrySet())
     {
-      for (final Map.Entry<String, Object> entry : map.entrySet())
+      switch (entry.getKey())
       {
-        switch (entry.getKey())
-        {
-          case "@move":
-            return move(name, entry.getValue());
+        case "@move":
+          return move(name, entry.getValue());
 
-          case "@copy":
-            return copy(name, entry.getValue());
+        case "@copy":
+          return copy(name, entry.getValue());
 
-          case "@remove":
-            return remove(name, entry.getValue());
+        case "@remove":
+          return remove(name, entry.getValue());
 
-          case "@value":
-            return value(name, entry.getValue());
+        case "@value":
+          return value(name, entry.getValue());
 
-          case "@clone":
-            return clone(name, entry.getValue());
+        case "@clone":
+          return clone(name, entry.getValue());
 
-          case "@enum":
-            return lookup(name, Maps::removeIn, entry.getValue());
+        case "@enum":
+          return lookup(name, Maps::removeIn, entry.getValue());
 
-          case "@lookup":
-            return lookup(name, Maps::getIn, entry.getValue());
-        }
+        case "@lookup":
+          return lookup(name, Maps::getIn, entry.getValue());
+
+        default:
+          break;  // ignore the other fields
       }
     }
 

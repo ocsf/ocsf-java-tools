@@ -1,0 +1,56 @@
+{
+  "category_uid": 4,
+  "class_uid": 4003,
+  "message": "CrowdStrike DnsRequestMacV2 event",
+  "activity_id": 1,
+  "severity_id": 1,
+  "status_id": 1,
+  "time": "1689867325810",
+  "actor": {
+    "process": {
+      "uid": "499289067991475385"
+    }
+  },
+  "metadata": {
+    "uid": "bc5c0533-1806-49d2-8aa2-8b72f09d19de",
+    "product": {
+      "name": "CrowdStrike Falcon®",
+      "vendor_name": "CrowdStrike",
+      "lang": "en"
+    },
+    "log_name": "DnsRequest",
+    "event_code": "DnsRequestMacV2",
+    "profiles": ["host"],
+    "original_time": "1689867325810",
+    "version": "1.0.0-rc.3"
+  },
+  "src_endpoint": {
+    "uid": "4d60ba1ce9b94f80816176c354b721d8",
+    "ip": "11.111.111.111"
+  },
+  "query": {
+    "hostname": "integrations.fitanalytics.com",
+    "type": "A",
+    "class": "1"
+  },
+  "device": {
+    "uid": "4d60ba1ce9b94f80816176c354b721d8",
+    "os": {
+      "type_id": 300,
+      "name": "Mac"
+    },
+    "type_id": 0,
+    "ip": "11.111.111.111",
+    "uid_alt": "9efe65d0808e43968XXXXXXXXXXXXXXX",
+    "desc": "prod"
+  },
+  "unmapped": {
+    "ContextTimeStamp": "1689867325.543",
+    "ConfigStateHash": "3106515990",
+    "ContextThreadId": "0",
+    "ConfigBuild": "1007.4.0017003.11",
+    "fdr_logtype": "data",
+    "Entitlements": "15",
+    "EffectiveTransmissionClass": "2"
+  }
+}

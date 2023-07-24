@@ -5,18 +5,13 @@
 
   "rules": [
     {
-      "include": "common.json"
+      "@include": [
+        "common.json",
+        "activity.json",
+        "microsoft/windows/windows.json",
+        "microsoft/windows/XmlWinEventLog/Security/rule-462x.json"
+      ]
     },
-    {
-      "include": "activity.json"
-    },
-    {
-      "include": "microsoft/windows/windows.json"
-    },
-    {
-      "include": "microsoft/windows/XmlWinEventLog/Security/rule-462x.json"
-    },
-
     {
       "message": {
         "@value": "An account failed to log on."

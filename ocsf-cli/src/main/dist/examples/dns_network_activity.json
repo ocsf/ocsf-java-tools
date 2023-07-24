@@ -1,0 +1,8 @@
+{
+  "_": {
+    // Network Activity
+    "category_uid": 4,
+    // DNS Activity
+    "class_uid": 4003
+  }
+}

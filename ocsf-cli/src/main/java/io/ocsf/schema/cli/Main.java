@@ -68,6 +68,8 @@ public final class Main
 
   private static boolean verbose = false;
 
+  private static final int OK = 0;
+
   private static final Parsers parsers = new Parsers();
 
   private static final class Item
@@ -230,6 +232,12 @@ public final class Main
     if (logger.isInfoEnabled())
       logger.info("Started {} with {}", Name, args);
 
+    if (args.length == 0)
+    {
+      clp.help();
+      System.exit(OK);
+    }
+
     clp.parseCommandLine(args);
 
     verbose        = clp.getArg('V').isSet();
@@ -237,16 +245,15 @@ public final class Main
 
     printHelp();
 
-    initSchema();
-
     final List<String> files = clp.extraArgs();
-
     if (files.isEmpty())
     {
       System.err.println("No files on the command line. Are you missing something?");
       clp.help();
       System.exit(1);
     }
+
+    initSchema();
 
     parser()
       .ifPresentOrElse(
@@ -282,13 +289,13 @@ public final class Main
       if (verbose)
         printParsers();
 
-      System.exit(0);
+      System.exit(OK);
     }
 
     if (clp.getArg('P').isSet())
     {
       printParsers();
-      System.exit(0);
+      System.exit(OK);
     }
   }
 

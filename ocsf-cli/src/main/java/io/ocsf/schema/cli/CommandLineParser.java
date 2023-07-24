@@ -236,7 +236,12 @@ public class CommandLineParser
     helpOption = helpOpt;
   }
 
-  public String getHelpMessage()
+  public void help()
+  {
+    System.err.println(buildHelp());
+  }
+
+  private String buildHelp()
   {
     final StringBuilder help = new StringBuilder();
 
@@ -277,11 +282,6 @@ public class CommandLineParser
     return help.toString();
   }
 
-  public void help()
-  {
-    System.err.println(getHelpMessage());
-    System.exit(1);
-  }
 
   /**
    * parse the command line with argv. Args not processed by the command line flags are copied to

@@ -35,6 +35,8 @@ public final class Files
 {
   private Files() {}
 
+  public static final String JSON_FILE_EXT = ".json";
+
   public static String readFile(final String filename) throws IOException
   {
     return readFile(Paths.get(filename));
@@ -163,5 +165,4 @@ public final class Files
 
     throw new FileNotFoundException(filename);
   }
-
 }

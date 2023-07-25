@@ -33,7 +33,6 @@ public class ReadFileTest extends TestCase
   public void testReadJsonFile() throws IOException
   {
     final List<Map<String, Object>> data = Files.readJson("src/test/resources/rules/common.json");
-
     Assert.assertFalse(data.isEmpty());
   }
 

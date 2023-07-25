@@ -46,7 +46,7 @@ public final class TranslatorBuilder
 {
   private static final Logger logger = LoggerFactory.getLogger(TranslatorBuilder.class);
 
-  private static final String RuleList = "rules";
+  public static final String RuleList = "rules";
   private static final String RuleSet  = "ruleset";
 
   private static final String Include    = "@include";
@@ -108,6 +108,9 @@ public final class TranslatorBuilder
    */
   public static Translator fromFile(final Path home, final Path path) throws IOException
   {
+    if (java.nio.file.Files.isRegularFile(path))
+      return create(home, home.resolve(path.toRealPath()), Files::readJson);
+
     return create(home, home.resolve(path), Files::readJson);
   }
 

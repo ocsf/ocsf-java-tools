@@ -509,17 +509,17 @@ public final class Main
   {
     try
     {
-      final String ruleFile = resolveRuleFile(home, rule);
+      final String file = resolveFile(home, rule);
 
       if (verbose)
       {
         System.out.println("// rules home: " + home);
-        System.out.println("// rule  file: " + ruleFile);
+        System.out.println("// rule  file: " + file);
       }
 
       final Translator translator = TranslatorBuilder.fromFile(
         Paths.get(home),
-        Paths.get(ruleFile));
+        Paths.get(file));
 
       if (schemaFile != null)
       {
@@ -610,7 +610,6 @@ public final class Main
     return null;
   }
 
-
   private static void visitAllDirsAndFiles(final File file, final Consumer<File> action)
   {
 
@@ -631,75 +630,70 @@ public final class Main
   }
 
   /**
-   * Attempts to resolve ruleName on rulePath using three techniques:
-   * <pre>
-   *  1. ruleName is relative to rulePath: rulePath / ruleName, If exists, stop
-   *  2. Remove as prefix "rulePath" from ruleName, go to step 1
-   *  3. Scan for rule file using glob pattern (expressed as a find cmd):
-   *      find $rulePath -name "${ruleName}.json" -o "${ruleName}-*.json" -o "*-${ruleName}.json"
-   * </pre>
+   * Attempts to resolve the given name as a filename on the specified path.
    *
-   * @param rulePath - base directory of rules
-   * @param ruleName - full path to rule, relative path of rule, or base name of rule
+   * @param path - the path to the rules' directory
+   * @param name - the full path to rule, relative path of rule, or base name of rule
    * @return - the relative path of rule
    */
-  private static String resolveRuleFile(final String rulePath, final String ruleName)
+  static String resolveFile(final String path, final String name)
     throws NotDirectoryException, FileNotFoundException
   {
-    final File baseDir = new File(rulePath);
+    final File baseDir = new File(path);
     if (!baseDir.isDirectory())
     {
-      throw new NotDirectoryException(String.format("rule-dir '%s' is not a directory", rulePath));
+      throw new NotDirectoryException(String.format("rule-dir '%s' is not a directory", path));
     }
 
-    // 1. look for
-    File ruleFile = new File(baseDir, ruleName);
-    if (ruleFile.isFile())
+    // look for a file with an exact name
+    File file = new File(name);
+    if (file.isFile())
     {
-      return ruleName; // ruleName was already relative to baseDir.
+      return name;
     }
 
-    // 2. See if ruleFile can be removed from ruleName.  In bash: ${ruleName#$ruleFile}
-    if (ruleName.startsWith(rulePath))
+    // look for a file relative to the specified path
+    file = new File(baseDir, name);
+    if (file.isFile())
     {
-      final String relativeRuleName = ruleName.substring(rulePath.length());
-      ruleFile = new File(baseDir, relativeRuleName);
-      if (ruleFile.isFile())
-      {
-        return relativeRuleName;
-      }
+      return file.getPath();
     }
 
-    // 3. the hard part.  Scan for rule name - assuming it's a file basename identifier.
+    // scan for a file path that matches the given name
     final List<String> matches = new ArrayList<>();
-    final String matchRe =
-      String.format("^(.*-%s|%s|%s-.*).json$", ruleName, ruleName, ruleName);
-
-    visitAllDirsAndFiles(baseDir, file ->
+    visitAllDirsAndFiles(baseDir, f ->
     {
-      final String baseName = file.getName();
-      if (baseName.matches(matchRe))
+      final String p = f.getPath();
+      if (p.contains(name) && p.endsWith(Files.JSON_FILE_EXT))
       {
-        matches.add(file.getPath());
+        try
+        {
+          final Map<String, Object> data = Files.readJson(p);
+
+          if (data.containsKey(TranslatorBuilder.RuleList))
+            matches.add(p);
+        }
+        catch (final Exception e)
+        {
+          // ignore the file
+        }
       }
     });
 
     if (matches.size() == 0)
     {
-      // came up short - didn't find anything.
-      throw new FileNotFoundException(String.format("Cannot find a rule with rule-dir %s and " +
-                                                    "ruleName %s", rulePath, ruleName));
+      // didn't find anything
+      throw new FileNotFoundException(
+        String.format("Cannot find a rule with rule-dir %s and ruleName %s", path, name));
     }
 
     if (matches.size() > 1)
     {
-      System.err.printf("Found %d possible rules for '%s':%n", matches.size(), ruleName);
-      matches.forEach(file -> System.err.printf("\t%s%n", file));
+      System.err.printf("Found %d possible rules for '%s':%n", matches.size(), name);
+      matches.forEach(f -> System.err.printf("\t%s%n", f));
     }
 
-    // found it - return the path relative to basedir.
-    final String name = matches.get(0).substring(baseDir.getPath().length());
-    return name.charAt(0) == '/' ? name.substring(1) : name;
+    // found it - return the file path
+    return matches.get(0);
   }
-
 }

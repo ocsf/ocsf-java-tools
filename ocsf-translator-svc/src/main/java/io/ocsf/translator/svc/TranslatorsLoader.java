@@ -146,7 +146,7 @@ public final class TranslatorsLoader
   private static boolean isJsonFile(final Path path)
   {
     final String name = getPathName(path);
-    return name.endsWith(".json");
+    return name.endsWith(io.ocsf.utils.Files.JSON_FILE_EXT);
   }
 
   private static String readSourceType(final Path path, final String type) throws IOException

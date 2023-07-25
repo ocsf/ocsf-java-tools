@@ -1,0 +1,40 @@
+{
+  "caption": "CrowdStrike EndOfProcess",
+  "description": "OCSF mapping for the CrowdStrike EndOfProcess events.",
+  "references": [
+    "https://schema.ocsf.io/1.0.0-rc.3/classes/process_activity"
+  ],
+  "when": "event_simpleName == 'EndOfProcess'",
+  "rules": [
+    {
+      "@include": [
+        "schema_version.json",
+        "process_activity.json",
+        "crowdstrike/falcon/product.json"]
+    },
+    {
+      "_": {
+        "description": "Using the long format allows to add additional fields to the rules, such as description.",
+        "@value": {
+          "message": "CrowdStrike EndOfProcessMacV15 event",
+          "activity_id": 2,			// Terminate process
+          "severity_id": 1,			// Informational
+          "status_id": 1 				// Success
+        }
+      }
+    },
+    {
+      "RawProcessId": {
+        "@move": {
+          "name": "process.pid",
+          "type": "integer"
+        }
+      }
+    },
+    {
+      "TargetProcessId": {
+        "@move": "process.uid"
+      }
+    }
+  ]
+}

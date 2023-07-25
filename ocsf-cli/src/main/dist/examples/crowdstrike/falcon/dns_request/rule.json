@@ -1,0 +1,135 @@
+{
+  "caption": "CrowdStrike DnsRequest",
+  "description": "OCSF mapping for the CrowdStrike DnsRequest events.",
+  "references": [
+    "https://schema.ocsf.io/1.0.0-rc.3/classes/dns_activity"
+  ],
+  "when": "event_simpleName == 'DnsRequest'",
+  "rules": [
+    {
+      "@include": [
+        "schema_version.json",
+        "dns_network_activity.json"
+      ]
+    },
+    {
+      "_": {
+        "description": "Using the long format allows to add additional fields to the rules, such as description.",
+        "@value": {
+          "message": "CrowdStrike DnsRequestMacV2 event",
+          "activity_id": 1,			// Query
+          "severity_id": 1,			// Informational
+          "status_id": 1,				// Success
+          "metadata": {
+            "profiles": ["host"]
+          }
+        }
+      }
+    },
+    {
+      "aip": {
+        "@copy": "src_endpoint.ip"
+      }
+    },
+    {
+      "aid": {
+        "@copy": "src_endpoint.uid"
+      }
+    },
+    {
+      "RespondingDnsServer": {
+        "@move": "dst_endpoint.ip"
+      }
+    },
+    {
+      "ContextProcessId": {
+        "@move": {
+          "name": "actor.process.pid",
+          "type":  "integer"
+        }
+      }
+    },
+    {
+      "EventOrigin": {
+        "@move": "query.class"
+      }
+    },
+    {
+      "DomainName": {
+        "@move": "query.hostname"
+      }
+    },
+    {
+      "RequestType": {
+        "desc": "Determine the type of resource records being queried.",
+        "@enum": {
+          "name": "query.type",
+          "other": "query.type",
+          "values": {
+            "1": "A",
+            "2": "NS",
+            "3": "MD",
+            "4": "MF",
+            "5": "CNAME",
+            "6": "SOA",
+            "7": "MB",
+            "8": "MG",
+            "9": "MR",
+            "10": "NULL",
+            "11": "WKS",
+            "12": "PTR",
+            "13": "HINFO",
+            "14": "MINFO",
+            "15": "MX",
+            "16": "TXT",
+            "17": "RP",
+            "18": "AFSDB",
+            "19": "X25",
+            "20": "ISDN",
+            "21": "RT",
+            "22": "NSAP",
+            "23": "NSAP_PTR",
+            "24": "SIG",
+            "25": "KEY",
+            "26": "PX",
+            "27": "GPOS",
+            "28": "AAAA",
+            "29": "LOC",
+            "30": "NXT",
+            "31": "EID",
+            "32": "NIMLOC",
+            "33": "SRV",
+            "34": "ATMA",
+            "35": "NAPTR",
+            "36": "KX",
+            "37": "CERT",
+            "38": "A6",
+            "39": "DNAME",
+            "40": "SINK",
+            "41": "OPT",
+            "43": "DS",
+            "46": "RRSIG",
+            "47": "NSEC",
+            "48": "DNSKEY",
+            "49": "DHCID",
+            "100": "UINFO",
+            "101": "UID",
+            "102": "GID",
+            "103": "UNSPEC",
+            "248": "ADDRS",
+            "249": "TKEY",
+            "250": "TSIG",
+            "251": "IXFR",
+            "252": "AXFR",
+            "253": "MAILB",
+            "254": "MAILA",
+            "255": "ALL",
+            "65281": "WINS",
+            "65282": "WINSR"
+          }
+        }
+      }
+    },
+    { "@include": "crowdstrike/falcon/product.json" }
+  ]
+}

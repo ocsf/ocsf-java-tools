@@ -1,0 +1,38 @@
+{
+  "caption": "CrowdStrike ProcessRollup2",
+  "description": "OCSF mapping for the CrowdStrike ProcessRollup2 events.",
+  "references": [
+    "https://schema.ocsf.io/1.0.0-rc.3/classes/process_activity"
+  ],
+  "when": "event_simpleName == 'ProcessRollup2'",
+  "rules": [
+    {
+      "@include": [
+        "schema_version.json",
+        "process_activity.json",
+        "crowdstrike/falcon/product.json",
+        "crowdstrike/falcon/process.json"
+      ]
+    },
+    {
+      "_": {
+        "description": "Using the long format allows to add additional fields to the rules, such as description.",
+        "@value": {
+          "message": "CrowdStrike ProcessRollup2 event",
+          "activity_id": 1,			// Launch process
+          "severity_id": 1,			// Informational
+          "status_id": 1				// Success
+        }
+      }
+    },
+    {
+      "ProcessStartTime": {
+        "desc": "TNormalized to OCSF timestamp.",
+        "@move": {
+          "name": "process.created_time",
+          "type": "timestamp"
+        }
+      }
+    }
+  ]
+}

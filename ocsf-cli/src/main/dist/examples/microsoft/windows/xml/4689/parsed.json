@@ -1,0 +1,31 @@
+{
+  "Channel": "Security",
+  "Computer": "DC01.contoso.local",
+  "EventData": {
+    "ProcessId": "0xfb0",
+    "ProcessName": "C:\\Windows\\System32\\notepad.exe",
+    "Status": "0x0",
+    "SubjectDomainName": "CONTOSO",
+    "SubjectLogonId": "0x31365",
+    "SubjectUserName": "dadmin",
+    "SubjectUserSid": "S-1-5-21-3457937927-2839227994-823803824-1104"
+  },
+  "EventID": "4689",
+  "EventRecordID": "187030",
+  "Execution": {
+    "ProcessID": "4",
+    "ThreadID": "144"
+  },
+  "Keywords": "0x8020000000000000",
+  "Level": "0",
+  "Opcode": "0",
+  "Provider": {
+    "Guid": "{54849625-5478-4994-A5BA-3E3B0328C30D}",
+    "Name": "Microsoft-Windows-Security-Auditing"
+  },
+  "Task": "13313",
+  "TimeCreated": {
+    "SystemTime": "2015-08-27T17:13:01.826339500Z"
+  },
+  "Version": "0"
+}

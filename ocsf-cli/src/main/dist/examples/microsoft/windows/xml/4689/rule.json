@@ -1,0 +1,88 @@
+{
+  "desc": "Translates Windows xml event 4689 (A process has exited)",
+  "title": "A process has exited",
+  "references": [
+    "https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4689",
+    "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventID=4689"
+  ],
+  "min_os_version": "Windows Server 2008, Windows Vista",
+  "event_versions": [
+    {"0": "Windows Server 2008, Windows Vista"}
+  ],
+  "when": "EventID == '4689' and Channel == 'Security'",
+
+  "rules": [
+    {
+      "@include": [
+        "schema_version.json",
+        "process_activity.json",
+        "microsoft/windows/product.json",
+        "microsoft/windows/xml/common.json"
+      ]
+    },
+    {
+      "_": {
+        "activity_id": 2, // Terminate (2)
+        "message": "A process has exited.",
+        "actor": {
+          "user": {
+            "type_id" : 1, // User Account
+            "account": {
+              "type_id" : 2 // Windows Account
+            }
+          }
+        }
+      }
+    },
+    {
+      "EventData.Status": {
+        "desc": "The exit code of exited/terminated process. This exit code is unique for every application, check application documentation for more details. The exit code value for a process reflects the specific convention implemented by the application developer for that process.",
+        "@move": {
+          "name": "exit_code",
+          "type": "integer"
+        }
+      }
+    },
+    {
+      "EventData.ProcessId": {
+        "@move": {
+          "name": "process.pid",
+          "type": "integer"
+        }
+      }
+    },
+    {
+      "EventData.ProcessName": {
+        "@move": {
+          "name": "process.file",
+          "type": "path"
+        }
+      }
+    },
+    {
+      "process": {
+        "@clone": "actor.process"
+      }
+    },
+    {
+      "EventData.SubjectUserName": {
+        "@move": "actor.user.name"
+      }
+    },
+    {
+      "EventData.SubjectDomainName": {
+        "@move": "actor.user.domain"
+      }
+    },
+    {
+      "EventData.SubjectUserSid": {
+        "@move": "actor.user.uid"
+      }
+    },
+    {
+      "EventData.SubjectLogonId": {
+        "@move": "actor.session.uid"
+      }
+    }
+  ]
+}

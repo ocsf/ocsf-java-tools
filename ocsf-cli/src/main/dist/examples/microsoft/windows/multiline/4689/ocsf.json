@@ -1,0 +1,70 @@
+{
+  "activity_id": 2,
+  "actor": {
+    "process": {
+      "file": {
+        "name": "splunk-optimize.exe",
+        "parent_folder": "C:\\Program Files\\Splunk\\bin",
+        "path": "C:\\Program Files\\Splunk\\bin\\splunk-optimize.exe",
+        "type_id": 1
+      },
+      "pid": 6488
+    },
+    "session": {
+      "uid": "0x3E7"
+    },
+    "user": {
+      "account": {
+        "type_id": 2
+      },
+      "domain": "WORKGROUP",
+      "name": "QASUS-2K12-019$",
+      "type_id": 1,
+      "uid": "S-1-5-18"
+    }
+  },
+  "category_uid": 1,
+  "class_uid": 1007,
+  "device": {
+    "hostname": "qasus-2k12-019.sv.splunk.com",
+    "os": {
+      "name": "MS Windows",
+      "type_id": 100
+    },
+    "type_id": 0
+  },
+  "exit_code": 0,
+  "message": "A process has exited.",
+  "metadata": {
+    "event_code": "4689",
+    "log_name": "Security",
+    "log_provider": "Microsoft Windows security auditing.",
+    "original_time": "11/23/2021 09:25:39 AM",
+    "product": {
+      "lang": "en",
+      "name": "Microsoft Windows",
+      "vendor_name": "Microsoft Corp."
+    },
+    "profiles": [],
+    "uid": "b915ade3-1bd8-4400-ba51-b777a75d9c83",
+    "version": "1.0.0-rc.3"
+  },
+  "process": {
+    "file": {
+      "name": "splunk-optimize.exe",
+      "parent_folder": "C:\\Program Files\\Splunk\\bin",
+      "path": "C:\\Program Files\\Splunk\\bin\\splunk-optimize.exe",
+      "type_id": 1
+    },
+    "pid": 6488
+  },
+  "severity_id": 1,
+  "status_id": 1,
+  "time": 1637688339000,
+  "unmapped": {
+    "EventType": "0",
+    "OpCode": "Info",
+    "RecordNumber": "1077698477",
+    "TaskCategory": "Process Termination"
+  }
+}

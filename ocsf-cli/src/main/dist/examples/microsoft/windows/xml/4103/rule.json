@@ -1,0 +1,97 @@
+{
+  "desc": "Translates Windows xml event 4103 (Powershell Module Logging)",
+  "title": "Powershell Module Logging",
+  "references": [
+    "https://www.iblue.team/incident-response-1/logging-powershell-activities",
+    "https://www.socinvestigation.com/threat-hunting-using-powershell-and-fileless-malware-attacks/",
+    "https://www.blackhillsinfosec.com/powershell-logging-blue-team/",
+    "https://www.crowdstrike.com/blog/investigating-powershell-command-and-script-logging/"
+  ],
+  "min_os_version": "Unknown",
+  "event_versions": [
+    {"0": "Unknown"}
+  ],
+  "when": "EventID == '4103' and Channel == 'Microsoft-Windows-PowerShell/Operational'",
+
+  "rules": [
+    {
+      "@include": [
+        "schema_version.json",
+        "process_activity.json",
+        "microsoft/windows/product.json",
+        "microsoft/windows/xml/common.json"
+      ]
+    },
+    {
+      "_": {
+        "activity_id": 1, // Launch (1)
+        "message": "Powershell Module Logging",
+        "actor": {
+          "process": {
+            // The process that performed the operation or action on the target object. In this event, Microsoft
+            // regards actor.process as the 'Host Application'. Event 4103 does not log a pid for the actor process,
+            // so this value defaults to -1 (unknown)
+            "pid": -1
+          },
+          "user": {
+            "type_id" : 1, // User Account
+            "account": {
+              "type_id" : 2 // Windows Account
+            }
+          }
+        }
+      }
+    },
+    {
+      "EventData.ContextInfo.Host Application": {
+        "desc": "The process that performed the operation or action on the target object. In this event, Microsoft regards actor.process as the 'Host Application'. E.g.: powershell",
+        "@move": {
+          "name": "actor.process.cmd_line"
+        }
+      }
+    },
+    {
+      "EventData.Payload": {
+        "desc": "The command-line level activity associated with this event.",
+        "@move": "process.cmd_line"
+      }
+    },
+    {
+      "EventData.ContextInfo.Script Name": {
+        "desc": "The process that was launched.",
+        "@move": {
+          "name": "process.file",
+          "type": "path"
+        }
+      }
+    },
+    {
+      "Execution.ProcessID": {
+        "desc": "The Process ID of the process that was performed. Event 4103 does not always log a pid for the process, in this case, the value will default to -1 (unknown).",
+        "@move": {
+          "name": "process.pid",
+          "type": "integer",
+          "default": -1
+        }
+      }
+    },
+    {
+      "EventData.ContextInfo.Command Name": {
+        "desc": "The powershell module(s) associated with the event. Typically a cmdlet.",
+        "@move": {"name": "process.loaded_modules","is_array": true}
+      }
+    },
+    {
+      "EventData.ContextInfo.User": {
+        "desc": "The user associated with the launched process",
+        "@move": "actor.user.name"
+      }
+    },
+    {
+      "Security.UserID": {
+        "desc": "The uid of the user that launched the process. In Windows, this corresponds to the User SID",
+        "@move": "actor.user.uid"
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+11/23/2021 09:25:39 AM
+LogName=Security
+EventCode=4689
+EventType=0
+ComputerName=qasus-2k12-019.sv.splunk.com
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=1077698477
+Keywords=Audit Success
+TaskCategory=Process Termination
+OpCode=Info
+Message=A process has exited.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		QASUS-2K12-019$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Process Information:
+	Process ID:	0x1958
+	Process Name:	C:\Program Files\Splunk\bin\splunk-optimize.exe
+	Exit Status:	0x0

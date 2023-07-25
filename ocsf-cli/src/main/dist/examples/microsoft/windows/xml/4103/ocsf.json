@@ -1,0 +1,93 @@
+{
+  "activity_id": 1,
+  "actor": {
+    "process": {
+      "cmd_line": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -EncodedCommand JgBjAGgAYwBwAC4AYwBvAG0AIAA2ADUAMAAwADEAIAA+ACAAJABuAHUAbABsAAoAJABlAHgAZQBjAF8AdwByAGEAcABwAGUAcgBfAHMAdAByACAAPQAgACQAaQBuAHAAdQB0ACAAfAAgAE8AdQB0AC0AUwB0AHIAaQBuAGcACgAkAHMAcABsAGkAdABfAHAAYQByAHQAcwAgAD0AIAAkAGUAeABlAGMAXwB3AHIAYQBwAHAAZQByAF8AcwB0AHIALgBTAHAAbABpAHQAKABAACgAIgBgADAAYAAwAGAAMABgADAAIgApACwAIAAyACwAIABbAFMAdAByAGkAbgBnAFMAcABsAGkAdABPAHAAdABpAG8AbgBzAF0AOgA6AFIAZQBtAG8AdgBlAEUAbQBwAHQAeQBFAG4AdAByAGkAZQBzACkACgBJAGYAIAAoAC0AbgBvAHQAIAAkAHMAcABsAGkAdABfAHAAYQByAHQAcwAuAEwAZQBuAGcAdABoACAALQBlAHEAIAAyACkAIAB7ACAAdABoAHIAbwB3ACAAIgBpAG4AdgBhAGwAaQBkACAAcABhAHkAbABvAGEAZAAiACAAfQAKAFMAZQB0AC0AVgBhAHIAaQBhAGIAbABlACAALQBOAGEAbQBlACAAagBzAG8AbgBfAHIAYQB3ACAALQBWAGEAbAB1AGUAIAAkAHMAcABsAGkAdABfAHAAYQByAHQAcwBbADEAXQAKACQAZQB4AGUAYwBfAHcAcgBhAHAAcABlAHIAIAA9ACAAWwBTAGMAcgBpAHAAdABCAGwAbwBjAGsAXQA6ADoAQwByAGUAYQB0AGUAKAAkAHMAcABsAGkAdABfAHAAYQByAHQAcwBbADAAXQApAAoAJgAkAGUAeABlAGMAXwB3AHIAYQBwAHAAZQByAA==",
+      "pid": -1
+    },
+    "user": {
+      "account": {
+        "type_id": 2
+      },
+      "name": "ATTACKRANGE\\Administrator",
+      "type_id": 1,
+      "uid": "S-1-5-21-1568124518-47167176-2301812064-500"
+    }
+  },
+  "category_uid": 1,
+  "class_uid": 1007,
+  "device": {
+    "hostname": "win-dc-683.attackrange.local",
+    "os": {
+      "name": "MS Windows",
+      "type_id": 100
+    },
+    "type_id": 0
+  },
+  "message": "Powershell Module Logging",
+  "metadata": {
+    "event_code": "4103",
+    "log_name": "Microsoft-Windows-PowerShell/Operational",
+    "log_provider": "Microsoft-Windows-PowerShell",
+    "log_version": "1",
+    "original_time": "2021-03-26T10:40:25.381297100Z",
+    "product": {
+      "feature": {
+        "uid": "{A0C1853B-5C40-4B15-8766-3CF1C58F985A}"
+      },
+      "lang": "en",
+      "name": "Microsoft Windows",
+      "vendor_name": "Microsoft Corp."
+    },
+    "profiles": [],
+    "uid": "29140175-7a51-4ad9-ba7f-176affaba39b",
+    "version": "1.0.0-rc.3"
+  },
+  "process": {
+    "cmd_line": "CommandInvocation(Add-Type): \"Add-Type\"\nParameterBinding(Add-Type): name=\"TypeDefinition\"; value=\"using System;\nusing System.ComponentModel;\nusing System.Runtime.InteropServices;\n\nnamespace Ansible.Command {\n    public class SymLinkHelper {\n        [DllImport(\"kernel32.dll\", CharSet=CharSet.Unicode, SetLastError=true)]\n        public static extern bool DeleteFileW(string lpFileName);\n\n        [DllImport(\"kernel32.dll\", CharSet=CharSet.Unicode, SetLastError=true)]\n        public static extern bool RemoveDirectoryW(string lpPathName);\n\n        public static void DeleteDirectory(string path) {\n            if (!RemoveDirectoryW(path))\n                throw new Exception(String.Format(\"RemoveDirectoryW({0}) failed: {1}\", path, new Win32Exception(Marshal.GetLastWin32Error()).Message));\n        }\n\n        public static void DeleteFile(string path) {\n            if (!DeleteFileW(path))\n                throw new Exception(String.Format(\"DeleteFileW({0}) failed: {1}\", path, new Win32Exception(Marshal.GetLastWin32Error()).Message));\n        }\n    }\n}\"",
+    "file": {
+      "name": "PSReadLine.psm1",
+      "parent_folder": "C:\\Program Files\\WindowsPowerShell\\Modules\\PSReadline\\1.2",
+      "path": "C:\\Program Files\\WindowsPowerShell\\Modules\\PSReadline\\1.2\\PSReadLine.psm1",
+      "type_id": 1
+    },
+    "loaded_modules": [
+      "Add-Type"
+    ],
+    "pid": 3272
+  },
+  "severity_id": 1,
+  "status": "0x0",
+  "status_id": 99,
+  "time": 1616755225381,
+  "unmapped": {
+    "Correlation": {
+      "ActivityID": "{B3FA0929-222B-0002-D80C-FAB32B22D701}"
+    },
+    "EventData": {
+      "ContextInfo": {
+        "Command Path": "",
+        "Command Type": "Cmdlet",
+        "Connected User": "",
+        "Engine Version": "5.1.14393.3866",
+        "Host ID": "8b3eca31-5ae7-4673-9c7e-fd045c7d2edf",
+        "Host Name": "Default Host",
+        "Host Version": "5.1.14393.3866",
+        "Pipeline ID": "6",
+        "Runspace ID": "3fe0b8d7-99ec-4a5b-b884-519c54b81b30",
+        "Sequence Number": "34",
+        "Severity": "Informational",
+        "Shell ID": "Microsoft.PowerShell"
+      }
+    },
+    "EventRecordID": "62141",
+    "Execution": {
+      "ThreadID": "4492"
+    },
+    "Opcode": "20",
+    "RenderingInfo": {
+      "Culture": "en-US"
+    },
+    "Task": "106"
+  }
+}

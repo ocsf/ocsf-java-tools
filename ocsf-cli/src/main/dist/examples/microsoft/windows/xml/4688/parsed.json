@@ -1,0 +1,39 @@
+{
+  "Channel": "Security",
+  "Computer": "WIN-GG82ULGC9GO.contoso.local",
+  "EventData": {
+    "CommandLine": "C:\\Windows\\System32\\rundll32.exe c:\\sys\\junk.txt",
+    "MandatoryLabel": "S-1-16-8192",
+    "NewProcessId": "0x2bc",
+    "NewProcessName": "C:\\Windows\\System32\\rundll32.exe",
+    "ParentProcessName": "C:\\Windows\\explorer.exe",
+    "ProcessId": "0xe74",
+    "SubjectDomainName": "CONTOSO",
+    "SubjectLogonId": "0x3e7",
+    "SubjectUserName": "WIN-GG82ULGC9GO$",
+    "SubjectUserSid": "S-1-5-18",
+    "TargetDomainName": "CONTOSO",
+    "TargetLogonId": "0x4a5af0",
+    "TargetUserName": "dadmin",
+    "TargetUserSid": "S-1-5-21-1377283216-344919071-3415362939-1104",
+    "TokenElevationType": "%%1938"
+  },
+  "EventID": "4688",
+  "EventRecordID": "2814",
+  "Execution": {
+    "ProcessID": "4",
+    "ThreadID": "400"
+  },
+  "Keywords": "0x8020000000000000",
+  "Level": "0",
+  "Opcode": "0",
+  "Provider": {
+    "Guid": "{54849625-5478-4994-A5BA-3E3B0328C30D}",
+    "Name": "Microsoft-Windows-Security-Auditing"
+  },
+  "Task": "13312",
+  "TimeCreated": {
+    "SystemTime": "2015-11-12T02:24:52.377352500Z"
+  },
+  "Version": "2"
+}

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Events>
+   <Event xmlns="http://schemas.microsoft.com/win/2004/08/events/event">
+      <System>
+         <Provider Name="Microsoft-Windows-PowerShell" Guid="{A0C1853B-5C40-4B15-8766-3CF1C58F985A}" />
+         <EventID>4103</EventID>
+         <Version>1</Version>
+         <Level>4</Level>
+         <Task>106</Task>
+         <Opcode>20</Opcode>
+         <Keywords>0x0</Keywords>
+         <TimeCreated SystemTime="2021-03-26T10:40:25.381297100Z" />
+         <EventRecordID>62141</EventRecordID>
+         <Correlation ActivityID="{B3FA0929-222B-0002-D80C-FAB32B22D701}" />
+         <Execution ProcessID="3272" ThreadID="4492" />
+         <Channel>Microsoft-Windows-PowerShell/Operational</Channel>
+         <Computer>win-dc-683.attackrange.local</Computer>
+         <Security UserID="S-1-5-21-1568124518-47167176-2301812064-500" />
+      </System>
+      <EventData>
+         <Data Name="ContextInfo">Severity = Informational
+        Host Name = Default Host
+        Host Version = 5.1.14393.3866
+        Host ID = 8b3eca31-5ae7-4673-9c7e-fd045c7d2edf
+        Host Application = C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -EncodedCommand JgBjAGgAYwBwAC4AYwBvAG0AIAA2ADUAMAAwADEAIAA+ACAAJABuAHUAbABsAAoAJABlAHgAZQBjAF8AdwByAGEAcABwAGUAcgBfAHMAdAByACAAPQAgACQAaQBuAHAAdQB0ACAAfAAgAE8AdQB0AC0AUwB0AHIAaQBuAGcACgAkAHMAcABsAGkAdABfAHAAYQByAHQAcwAgAD0AIAAkAGUAeABlAGMAXwB3AHIAYQBwAHAAZQByAF8AcwB0AHIALgBTAHAAbABpAHQAKABAACgAIgBgADAAYAAwAGAAMABgADAAIgApACwAIAAyACwAIABbAFMAdAByAGkAbgBnAFMAcABsAGkAdABPAHAAdABpAG8AbgBzAF0AOgA6AFIAZQBtAG8AdgBlAEUAbQBwAHQAeQBFAG4AdAByAGkAZQBzACkACgBJAGYAIAAoAC0AbgBvAHQAIAAkAHMAcABsAGkAdABfAHAAYQByAHQAcwAuAEwAZQBuAGcAdABoACAALQBlAHEAIAAyACkAIAB7ACAAdABoAHIAbwB3ACAAIgBpAG4AdgBhAGwAaQBkACAAcABhAHkAbABvAGEAZAAiACAAfQAKAFMAZQB0AC0AVgBhAHIAaQBhAGIAbABlACAALQBOAGEAbQBlACAAagBzAG8AbgBfAHIAYQB3ACAALQBWAGEAbAB1AGUAIAAkAHMAcABsAGkAdABfAHAAYQByAHQAcwBbADEAXQAKACQAZQB4AGUAYwBfAHcAcgBhAHAAcABlAHIAIAA9ACAAWwBTAGMAcgBpAHAAdABCAGwAbwBjAGsAXQA6ADoAQwByAGUAYQB0AGUAKAAkAHMAcABsAGkAdABfAHAAYQByAHQAcwBbADAAXQApAAoAJgAkAGUAeABlAGMAXwB3AHIAYQBwAHAAZQByAA==
+        Engine Version = 5.1.14393.3866
+        Runspace ID = 3fe0b8d7-99ec-4a5b-b884-519c54b81b30
+        Pipeline ID = 6
+        Command Name = Add-Type
+        Command Type = Cmdlet
+        Script Name = C:\Program Files\WindowsPowerShell\Modules\PSReadline\1.2\PSReadLine.psm1
+        Command Path =
+        Sequence Number = 34
+        User = ATTACKRANGE\Administrator
+        Connected User =
+        Shell ID = Microsoft.PowerShell</Data>
+         <Data Name="UserData" />
+         <Data Name="Payload">CommandInvocation(Add-Type): "Add-Type"
+ParameterBinding(Add-Type): name="TypeDefinition"; value="using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
+
+namespace Ansible.Command {
+    public class SymLinkHelper {
+        [DllImport("kernel32.dll", CharSet=CharSet.Unicode, SetLastError=true)]
+        public static extern bool DeleteFileW(string lpFileName);
+
+        [DllImport("kernel32.dll", CharSet=CharSet.Unicode, SetLastError=true)]
+        public static extern bool RemoveDirectoryW(string lpPathName);
+
+        public static void DeleteDirectory(string path) {
+            if (!RemoveDirectoryW(path))
+                throw new Exception(String.Format("RemoveDirectoryW({0}) failed: {1}", path, new Win32Exception(Marshal.GetLastWin32Error()).Message));
+        }
+
+        public static void DeleteFile(string path) {
+            if (!DeleteFileW(path))
+                throw new Exception(String.Format("DeleteFileW({0}) failed: {1}", path, new Win32Exception(Marshal.GetLastWin32Error()).Message));
+        }
+    }
+}"</Data>
+      </EventData>
+      <RenderingInfo Culture="en-US">
+         <Message>CommandInvocation(Add-Type): "Add-Type"
+ParameterBinding(Add-Type): name="TypeDefinition"; value="using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
+
+namespace Ansible.Command {
+    public class SymLinkHelper {
+        [DllImport("kernel32.dll", CharSet=CharSet.Unicode, SetLastError=true)]
+        public static extern bool DeleteFileW(string lpFileName);
+
+        [DllImport("kernel32.dll", CharSet=CharSet.Unicode, SetLastError=true)]
+        public static extern bool RemoveDirectoryW(string lpPathName);
+
+        public static void DeleteDirectory(string path) {
+            if (!RemoveDirectoryW(path))
+                throw new Exception(String.Format("RemoveDirectoryW({0}) failed: {1}", path, new Win32Exception(Marshal.GetLastWin32Error()).Message));
+        }
+
+        public static void DeleteFile(string path) {
+            if (!DeleteFileW(path))
+                throw new Exception(String.Format("DeleteFileW({0}) failed: {1}", path, new Win32Exception(Marshal.GetLastWin32Error()).Message));
+        }
+    }
+}"
+
+
+Context:
+        Severity = Informational
+        Host Name = Default Host
+        Host Version = 5.1.14393.3866
+        Host ID = 8b3eca31-5ae7-4673-9c7e-fd045c7d2edf
+        Host Application = C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -EncodedCommand JgBjAGgAYwBwAC4AYwBvAG0AIAA2ADUAMAAwADEAIAA+ACAAJABuAHUAbABsAAoAJABlAHgAZQBjAF8AdwByAGEAcABwAGUAcgBfAHMAdAByACAAPQAgACQAaQBuAHAAdQB0ACAAfAAgAE8AdQB0AC0AUwB0AHIAaQBuAGcACgAkAHMAcABsAGkAdABfAHAAYQByAHQAcwAgAD0AIAAkAGUAeABlAGMAXwB3AHIAYQBwAHAAZQByAF8AcwB0AHIALgBTAHAAbABpAHQAKABAACgAIgBgADAAYAAwAGAAMABgADAAIgApACwAIAAyACwAIABbAFMAdAByAGkAbgBnAFMAcABsAGkAdABPAHAAdABpAG8AbgBzAF0AOgA6AFIAZQBtAG8AdgBlAEUAbQBwAHQAeQBFAG4AdAByAGkAZQBzACkACgBJAGYAIAAoAC0AbgBvAHQAIAAkAHMAcABsAGkAdABfAHAAYQByAHQAcwAuAEwAZQBuAGcAdABoACAALQBlAHEAIAAyACkAIAB7ACAAdABoAHIAbwB3ACAAIgBpAG4AdgBhAGwAaQBkACAAcABhAHkAbABvAGEAZAAiACAAfQAKAFMAZQB0AC0AVgBhAHIAaQBhAGIAbABlACAALQBOAGEAbQBlACAAagBzAG8AbgBfAHIAYQB3ACAALQBWAGEAbAB1AGUAIAAkAHMAcABsAGkAdABfAHAAYQByAHQAcwBbADEAXQAKACQAZQB4AGUAYwBfAHcAcgBhAHAAcABlAHIAIAA9ACAAWwBTAGMAcgBpAHAAdABCAGwAbwBjAGsAXQA6ADoAQwByAGUAYQB0AGUAKAAkAHMAcABsAGkAdABfAHAAYQByAHQAcwBbADAAXQApAAoAJgAkAGUAeABlAGMAXwB3AHIAYQBwAHAAZQByAA==
+        Engine Version = 5.1.14393.3866
+        Runspace ID = 3fe0b8d7-99ec-4a5b-b884-519c54b81b30
+        Pipeline ID = 6
+        Command Name = Add-Type
+        Command Type = Cmdlet
+        Script Name =
+        Command Path =
+        Sequence Number = 34
+        User = ATTACKRANGE\Administrator
+        Connected User =
+        Shell ID = Microsoft.PowerShell
+
+
+User Data:</Message>
+         <Level>Information</Level>
+         <Task>Executing Pipeline</Task>
+         <Opcode>To be used when operation is just executing a method</Opcode>
+         <Channel>Microsoft-Windows-PowerShell/Operational</Channel>
+         <Provider />
+         <Keywords />
+      </RenderingInfo>
+   </Event>
+</Events>

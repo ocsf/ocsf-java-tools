@@ -1,0 +1,87 @@
+[
+  {
+    "EventCode": {
+      "@move": {
+        "name": "metadata.event_code"
+      }
+    }
+  },
+  {
+    "SourceName": {
+      "@move": {
+        "name": "metadata.log_provider"
+      }
+    }
+  },
+  {
+    "ComputerName": {
+      "desc": "The device where the event occurred.",
+      "@move": {
+        "name": "device.hostname"
+      }
+    }
+  },
+  {
+    "Message": {
+      "desc": "The description of the event.",
+      "@move": {
+        "name": "message"
+      }
+    }
+  },
+  {
+    "LogName": {
+      "desc": "The subsystem or application that is providing the event data.",
+      "@move": "metadata.log_name"
+    }
+  },
+  {
+    "Type": {
+      "desc": "The normalized severity of the event",
+      "@enum": {
+        "name": "severity_id",
+        "default": 99,
+        "other": "severity",
+        "overwrite": false,
+        "values": {
+          "Information": 1,
+          "Warning": 3,
+          "Error": 4,
+          "Critical": 5,
+          "Verbose": 99
+        }
+      }
+    }
+  },
+  {
+    "Keywords": {
+      "desc": "The cross-platform normalized status of the activity or alert reported by the event.",
+      "@enum": {
+        "name": "status_id",
+        "default": 99,
+        "other": "status",
+        "overwrite": false,
+        "values": {
+          "Audit Success": 1,
+          "Audit Failure": 2
+        }
+      }
+    }
+  },
+  {
+    "ref_time": {
+      "desc": "The time of the event",
+      "@copy": {
+        "name": "metadata.original_time"
+      }
+    }
+  },
+  {
+    "ref_time": {
+      "@move": {
+        "name": "time",
+        "type": "timestamp"
+      }
+    }
+  }
+]

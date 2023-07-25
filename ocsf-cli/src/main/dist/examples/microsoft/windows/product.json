@@ -1,0 +1,18 @@
+{
+  "_": {
+    "metadata": {
+      "product": {
+        "lang": "en",
+        "name": "Microsoft Windows",
+        "vendor_name": "Microsoft Corp."
+      }
+    },
+    "device":{
+      "type_id": 0,
+      "os": {
+        "type_id": 100,
+        "name": "MS Windows"
+      }
+    }
+  }
+}

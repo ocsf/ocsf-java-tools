@@ -1,0 +1,89 @@
+{
+  "activity_id": 1,
+  "actor": {
+    "process": {
+      "file": {
+        "name": "explorer.exe",
+        "parent_folder": "C:\\Windows",
+        "path": "C:\\Windows\\explorer.exe",
+        "type_id": 1
+      },
+      "pid": 3700
+    },
+    "session": {
+      "uid": "0x3e7"
+    },
+    "user": {
+      "account": {
+        "type_id": 2
+      },
+      "domain": "CONTOSO",
+      "name": "WIN-GG82ULGC9GO$",
+      "type_id": 1,
+      "uid": "S-1-5-18"
+    }
+  },
+  "category_uid": 1,
+  "class_uid": 1007,
+  "device": {
+    "hostname": "WIN-GG82ULGC9GO.contoso.local",
+    "os": {
+      "name": "MS Windows",
+      "type_id": 100
+    },
+    "type_id": 0
+  },
+  "message": "A new process has been created.",
+  "metadata": {
+    "event_code": "4688",
+    "log_name": "Security",
+    "log_provider": "Microsoft-Windows-Security-Auditing",
+    "log_version": "2",
+    "original_time": "2015-11-12T02:24:52.377352500Z",
+    "product": {
+      "feature": {
+        "uid": "{54849625-5478-4994-A5BA-3E3B0328C30D}"
+      },
+      "lang": "en",
+      "name": "Microsoft Windows",
+      "vendor_name": "Microsoft Corp."
+    },
+    "profiles": [],
+    "uid": "01d9caa5-6bb4-4d76-9e3d-7210a29e6859",
+    "version": "1.0.0-rc.3"
+  },
+  "process": {
+    "cmd_line": "C:\\Windows\\System32\\rundll32.exe c:\\sys\\junk.txt",
+    "file": {
+      "name": "rundll32.exe",
+      "parent_folder": "C:\\Windows\\System32",
+      "path": "C:\\Windows\\System32\\rundll32.exe",
+      "type_id": 1
+    },
+    "pid": 700,
+    "session": {
+      "uid": "0x4a5af0"
+    },
+    "user": {
+      "domain": "CONTOSO",
+      "name": "dadmin",
+      "uid": "S-1-5-21-1377283216-344919071-3415362939-1104"
+    }
+  },
+  "severity_id": 1,
+  "status_id": 1,
+  "time": 1447295092377,
+  "unmapped": {
+    "EventData": {
+      "MandatoryLabel": "S-1-16-8192",
+      "TokenElevationType": "%%1938"
+    },
+    "EventRecordID": "2814",
+    "Execution": {
+      "ProcessID": "4",
+      "ThreadID": "400"
+    },
+    "Opcode": "0",
+    "Task": "13312"
+  }
+}

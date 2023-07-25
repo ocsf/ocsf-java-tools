@@ -1,0 +1,77 @@
+{
+  "activity_id": 2,
+  "actor": {
+    "process": {
+      "file": {
+        "name": "notepad.exe",
+        "parent_folder": "C:\\Windows\\System32",
+        "path": "C:\\Windows\\System32\\notepad.exe",
+        "type_id": 1
+      },
+      "pid": 4016
+    },
+    "session": {
+      "uid": "0x31365"
+    },
+    "user": {
+      "account": {
+        "type_id": 2
+      },
+      "domain": "CONTOSO",
+      "name": "dadmin",
+      "type_id": 1,
+      "uid": "S-1-5-21-3457937927-2839227994-823803824-1104"
+    }
+  },
+  "category_uid": 1,
+  "class_uid": 1007,
+  "device": {
+    "hostname": "DC01.contoso.local",
+    "os": {
+      "name": "MS Windows",
+      "type_id": 100
+    },
+    "type_id": 0
+  },
+  "exit_code": 0,
+  "message": "A process has exited.",
+  "metadata": {
+    "event_code": "4689",
+    "log_name": "Security",
+    "log_provider": "Microsoft-Windows-Security-Auditing",
+    "log_version": "0",
+    "original_time": "2015-08-27T17:13:01.826339500Z",
+    "product": {
+      "feature": {
+        "uid": "{54849625-5478-4994-A5BA-3E3B0328C30D}"
+      },
+      "lang": "en",
+      "name": "Microsoft Windows",
+      "vendor_name": "Microsoft Corp."
+    },
+    "profiles": [],
+    "uid": "d3191492-7a45-4358-9b44-d6b3a56a3ad9",
+    "version": "1.0.0-rc.3"
+  },
+  "process": {
+    "file": {
+      "name": "notepad.exe",
+      "parent_folder": "C:\\Windows\\System32",
+      "path": "C:\\Windows\\System32\\notepad.exe",
+      "type_id": 1
+    },
+    "pid": 4016
+  },
+  "severity_id": 1,
+  "status_id": 1,
+  "time": 1440695581826,
+  "unmapped": {
+    "EventRecordID": "187030",
+    "Execution": {
+      "ProcessID": "4",
+      "ThreadID": "144"
+    },
+    "Opcode": "0",
+    "Task": "13313"
+  }
+}

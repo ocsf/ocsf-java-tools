@@ -627,6 +627,10 @@ public final class Main
           visitAllDirsAndFiles(new File(file, child), action);
       }
     }
+    else
+    {
+      System.err.printf("Invalid path: %s%n", file.getPath());
+    }
   }
 
   /**

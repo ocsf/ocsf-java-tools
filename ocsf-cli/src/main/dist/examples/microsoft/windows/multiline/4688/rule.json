@@ -1,0 +1,193 @@
+{
+  "desc": "Translates Windows multiline event 4688 (A new process has been created)",
+  "title": "A new process has been created",
+  "references": [
+    "https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4688",
+    "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventID=4688"
+  ],
+  "min_os_version": "Windows Server 2008, Windows Vista",
+  "event_versions": [
+    {"0": "Windows Server 2008, Windows Vista"},
+    {"1": "Windows Server 2012 R2, Windows 8.1"},
+    {"2": "Windows 10"}
+  ],
+  "when": "EventCode == '4688' and LogName == 'Security'",
+
+  "rules": [
+    {
+      "@include": [
+        "schema_version.json",
+        "process_activity.json",
+        "microsoft/windows/product.json",
+        "microsoft/windows/multiline/common.json"
+      ]
+    },
+    {
+      "_": {
+        "activity_id": 1, // Launch (1)
+        "message": "Powershell Module Logging",
+        "actor": {
+          "user": {
+            "type_id" : 1, // User Account
+            "account": {
+              "type_id" : 2 // Windows Account
+            }
+          }
+        }
+      }
+    },
+    {
+      "Process Information.Creator Process Name": {
+        "desc": "The executable which created the new process",
+        "ba_fields" : ["parent_process_name"],
+        "@move": {
+          "name": "actor.process.file",
+          "type": "path:1"
+        }
+      }
+    },
+    {
+      "Process Information.Creator Process ID": {
+        "desc": "Process ID of the process which ran the new process",
+        "ba_fields" : ["parent_process_id"],
+        "@move": {
+          "name": "actor.process.pid",
+          "type": "integer"
+        }
+      }
+    },
+    {
+      "Process Information.Process Command Line": {
+        "desc": "The name of executable and arguments which were passed to it.",
+        "ba_fields" : ["process"],
+        "@move": {
+          "name": "process.cmd_line"
+        }
+      }
+    },
+    {
+      "Process Information.New Process Name": {
+        "desc": "The executable for the new process",
+        "ba_fields" : ["process_name", "process_path"],
+        "@move": {
+          "name": "process.file",
+          "type": "path"
+        }
+      }
+    },
+    {
+      "Process Information.New Process ID": {
+        "desc": "Process ID of the new process",
+        "ba_fields" : ["process_id"],
+        "@move": {
+          "name": "process.pid",
+          "type": "integer"
+        }
+      }
+    },
+    {
+      "Target Subject.Account Domain":{
+        "desc": "The domain or computer name of the user which the new process shall run as",
+        "ba_fields" : ["account_domain"],
+        "@move": {
+          "name": "process.user.domain"
+        }
+      }
+    },
+    {
+      "Target Subject.Account Name":{
+        "desc": "The name of the user which the new process shall run as",
+        "ba_fields" : ["dest_user", "endpoint_user"],
+        "@move": {
+          "name": "process.user.name"
+        }
+      }
+    },
+    {
+      "Target Subject.Logon ID":{
+        "desc": "A semi-unique (unique between reboots) number that identifies the target account's logon session.  Logon ID allows you to correlate backwards to the logon event (4624) as well as with other events logged during the same logon session.",
+        "@move": {
+          "name": "process.session.uid"
+        }
+      }
+    },
+    {
+      "Target Subject.Security ID": {
+        "desc": "SID of target account for the 'create process' operation. Event Viewer automatically tries to resolve SIDs and show the account name. If the SID cannot be resolved, you will see the source data in the event.",
+        "@move": {
+          "name": "process.user.uid"
+        }
+      }
+    },
+    {
+      "Subject.Account Domain": {
+        "desc": "The user account domain. In the case of local accounts, the value is the computer name",
+        "@move": {
+          "name": "actor.user.domain"
+        }
+      }
+    },
+    {
+      "Creator Subject.Account Domain": {
+        "desc": "The user account domain. In the case of local accounts, the value is the computer name",
+        "@move": {
+          "name": "actor.user.domain",
+          "overwrite": false
+        }
+      }
+    },
+    {
+      "Subject.Account Name": {
+        "desc": "The name of the account that requested the 'create process' operation.",
+        "ba_fields" : ["dest_user", "endpoint_user"],
+        "@move": {
+          "name": "actor.user.name"
+        }
+      }
+    },
+    {
+      "Creator Subject.Account Name": {
+        "desc": "The name of the account that requested the 'create process' operation.",
+        "ba_fields" : ["dest_user", "endpoint_user"],
+        "@move": {
+          "name": "actor.user.name",
+          "overwrite": false
+        }
+      }
+    },
+    {
+      "Subject.Logon ID": {
+        "desc": "A semi-unique (unique between reboots) number that identifies the logon session.  Logon ID allows you to correlate backwards to the logon event (4624) as well as with other events logged during the same logon session.",
+        "@move": {
+          "name": "actor.session.uid"
+        }
+      }
+    },
+    {
+      "Creator Subject.Logon ID": {
+        "desc": "A semi-unique (unique between reboots) number that identifies the logon session.  Logon ID allows you to correlate backwards to the logon event (4624) as well as with other events logged during the same logon session.",
+        "@move": {
+          "name": "actor.session.uid",
+          "overwrite": false
+        }
+      }
+    },
+    {
+      "Subject.Security ID": {
+        "desc": "SID of account that requested the 'create process' operation. Event Viewer automatically tries to resolve SIDs and show the account name. If the SID cannot be resolved, you will see the source data in the event.",
+        "@move": {
+          "name": "actor.user.uid"
+        }
+      }
+    },
+    {
+      "Creator Subject.Security ID": {
+        "desc": "SID of account that requested the 'create process' operation. Event Viewer automatically tries to resolve SIDs and show the account name. If the SID cannot be resolved, you will see the source data in the event.",
+        "@move": {
+          "name": "actor.user.uid",
+          "overwrite": false
+        }
+      }
+    }
+  ]
+}

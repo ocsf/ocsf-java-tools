@@ -1,0 +1,87 @@
+{
+  "desc": "Translates Windows multiline event 4103 (Powershell Module Logging)",
+  "title": "Powershell Module Logging",
+  "references": [
+    "https://www.iblue.team/incident-response-1/logging-powershell-activities",
+    "https://www.socinvestigation.com/threat-hunting-using-powershell-and-fileless-malware-attacks/",
+    "https://www.blackhillsinfosec.com/powershell-logging-blue-team/",
+    "https://www.crowdstrike.com/blog/investigating-powershell-command-and-script-logging/"
+  ],
+  "min_os_version": "Unknown",
+  "event_versions": [
+    {"0": "Unknown"}
+  ],
+  "when": "EventCode == '4103' and LogName == 'Microsoft-Windows-PowerShell/Operational'",
+
+  "rules": [
+    {
+      "@include": [
+        "schema_version.json",
+        "process_activity.json",
+        "microsoft/windows/product.json",
+        "microsoft/windows/multiline/common.json"
+      ]
+    },
+    {
+      "_": {
+        "activity_id": 1, // Launch (1)
+        "message": "Powershell Module Logging",
+        "actor": {
+          "process": {
+            // The process that performed the operation or action on the target object. In this event, Microsoft
+            // regards actor.process as the 'Host Application'. Event 4103 does not log a pid for the actor process,
+            // so this value defaults to -1 (unknown)
+            "pid": -1
+          },
+          "user": {
+            "type_id" : 1, // User Account
+            "account": {
+              "type_id" : 2 // Windows Account
+            }
+          }
+        },
+        "process": {
+          // The Process ID of the process that was performed. Event 4103 does not always log a pid for the process.
+          // In this case, the value defaults to -1 (unknown)
+          "pid": -1
+        }
+      }
+    },
+    {
+      "Context.Command Name": {
+        "desc": "The powershell module(s) associated with the event. Typically a cmdlet.",
+        "@move": {"name": "process.loaded_modules","is_array": true}
+      }
+    },
+    {
+      "Context.Host Application": {
+        "desc": "The process that performed the operation or action on the target object. In this event, Microsoft regards actor.process as the 'Host Application'. E.g.: powershell",
+        "ba_fields": ["parent_process_name"],
+        "@move": {
+          "name": "actor.process.cmd_line"
+        }
+      }
+    },
+    {
+      "Context.Script Name": {
+        "desc": "The process that was launched.",
+        "@move": {
+          "name": "process.file",
+          "type": "path"
+        }
+      }
+    },
+    {
+      "Context.User": {
+        "desc": "The user associated with the launched process",
+        "@move": "actor.user.name"
+      }
+    },
+    {
+      "Sid": {
+        "desc": "The uid of the user that launched the process. In Windows, this corresponds to the User SID",
+        "@move": "actor.user.uid"
+      }
+    }
+  ]
+}

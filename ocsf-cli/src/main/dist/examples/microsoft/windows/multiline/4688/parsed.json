@@ -1,0 +1,33 @@
+{
+  "ref_time": "11/18/2021 02:20:27 PM",
+  "EventCode": "4688",
+  "EventType": "0",
+  "Keywords": "Audit Success",
+  "LogName": "Security",
+  "Message": "A new process has been created.",
+  "OpCode": "Info",
+  "ComputerName": "MBX111-VIP-CA-1.pexch111.serverpod.net",
+  "TaskCategory": "Process Creation",
+  "Type": "Information",
+  "Creator Subject": {
+    "Account Domain": "PEXCH111",
+    "Account Name": "MBX111-VIP-CA-1$",
+    "Logon ID": "0x3E7",
+    "Security ID": "NT AUTHORITY\\SYSTEM"
+  },
+  "Process Information": {
+    "Creator Process ID": "0x828",
+    "New Process ID": "0xdfc",
+    "New Process Name": "C:\\Windows\\System32\\relog.exe",
+    "Process Command Line": "\"relog.exe\" \"C:\\Program Files\\Microsoft\\Exchange Server\\V15\\Logging\\Diagnostics\\PerformanceLogsToBeProcessed\\ExchangeDiagnosticsPerformanceLog_11181415.blg\" -f csv -o \"C:\\Program Files\\Microsoft\\Exchange Server\\V15\\Logging\\Diagnostics\\PerformanceLogsToBeProcessed\\ExchangeDiagnosticsPerformanceLog_11181415.csvtmp\" -y",
+    "Token Elevation Type": "TokenElevationTypeDefault (1)"
+  },
+  "RecordNumber": "2115811397",
+  "SourceName": "Microsoft Windows security auditing.",
+  "Target Subject": {
+    "Account Domain": "-",
+    "Account Name": "-",
+    "Logon ID": "0x0",
+    "Security ID": "NULL SID"
+  }
+}

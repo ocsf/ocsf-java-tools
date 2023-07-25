@@ -1,0 +1,75 @@
+{
+  "activity_id": 1,
+  "actor": {
+    "process": {
+      "pid": 2088
+    },
+    "session": {
+      "uid": "0x3E7"
+    },
+    "user": {
+      "account": {
+        "type_id": 2
+      },
+      "domain": "PEXCH111",
+      "name": "MBX111-VIP-CA-1$",
+      "type_id": 1,
+      "uid": "NT AUTHORITY\\SYSTEM"
+    }
+  },
+  "category_uid": 1,
+  "class_uid": 1007,
+  "device": {
+    "hostname": "MBX111-VIP-CA-1.pexch111.serverpod.net",
+    "os": {
+      "name": "MS Windows",
+      "type_id": 100
+    },
+    "type_id": 0
+  },
+  "message": "A new process has been created.",
+  "metadata": {
+    "event_code": "4688",
+    "log_name": "Security",
+    "log_provider": "Microsoft Windows security auditing.",
+    "original_time": "11/18/2021 02:20:27 PM",
+    "product": {
+      "lang": "en",
+      "name": "Microsoft Windows",
+      "vendor_name": "Microsoft Corp."
+    },
+    "profiles": [],
+    "uid": "ba32bbd4-4b3d-47a0-bb5f-1a80f56db5d3",
+    "version": "1.0.0-rc.3"
+  },
+  "process": {
+    "cmd_line": "\"relog.exe\" \"C:\\Program Files\\Microsoft\\Exchange Server\\V15\\Logging\\Diagnostics\\PerformanceLogsToBeProcessed\\ExchangeDiagnosticsPerformanceLog_11181415.blg\" -f csv -o \"C:\\Program Files\\Microsoft\\Exchange Server\\V15\\Logging\\Diagnostics\\PerformanceLogsToBeProcessed\\ExchangeDiagnosticsPerformanceLog_11181415.csvtmp\" -y",
+    "file": {
+      "name": "relog.exe",
+      "parent_folder": "C:\\Windows\\System32",
+      "path": "C:\\Windows\\System32\\relog.exe",
+      "type_id": 1
+    },
+    "pid": 3580,
+    "session": {
+      "uid": "0x0"
+    },
+    "user": {
+      "domain": "-",
+      "name": "-",
+      "uid": "NULL SID"
+    }
+  },
+  "severity_id": 1,
+  "status_id": 1,
+  "time": 1637274027000,
+  "unmapped": {
+    "EventType": "0",
+    "OpCode": "Info",
+    "Process Information": {
+      "Token Elevation Type": "TokenElevationTypeDefault (1)"
+    },
+    "RecordNumber": "2115811397",
+    "TaskCategory": "Process Creation"
+  }
+}

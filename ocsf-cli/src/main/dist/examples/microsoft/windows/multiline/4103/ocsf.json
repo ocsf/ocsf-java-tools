@@ -1,0 +1,81 @@
+{
+  "activity_id": 1,
+  "actor": {
+    "process": {
+      "cmd_line": "powershell",
+      "pid": 0
+    },
+    "user": {
+      "account": {
+        "type_id": 2
+      },
+      "name": "ATTACKRANGE\\administrator",
+      "type_id": 1,
+      "uid": "S-1-5-21-2825133891-65375684-292279277-500"
+    }
+  },
+  "category_uid": 1,
+  "class_uid": 1007,
+  "device": {
+    "hostname": "win-dc-1603297.attackrange.local",
+    "os": {
+      "name": "MS Windows",
+      "type_id": 100
+    },
+    "type_id": 0
+  },
+  "message": "CommandInvocation(Set-StrictMode): \"Set-StrictMode\"\nParameterBinding(Set-StrictMode): name=\"Off\"; value=\"True\"",
+  "metadata": {
+    "event_code": "4103",
+    "log_name": "Microsoft-Windows-PowerShell/Operational",
+    "log_provider": "Microsoft-Windows-PowerShell",
+    "original_time": "10/07/2020 10:29:00 PM",
+    "product": {
+      "lang": "en",
+      "name": "Microsoft Windows",
+      "vendor_name": "Microsoft Corp."
+    },
+    "profiles": [],
+    "uid": "5bf1488b-d3af-47d0-aa60-e92d1aafa760",
+    "version": "1.0.0-rc.3"
+  },
+  "process": {
+    "file": {
+      "name": "PSReadLine.psm1",
+      "parent_folder": "C:\\Program Files\\WindowsPowerShell\\Modules\\PSReadline\\1.2",
+      "path": "C:\\Program Files\\WindowsPowerShell\\Modules\\PSReadline\\1.2\\PSReadLine.psm1",
+      "type_id": 1
+    },
+    "loaded_modules": [
+      "Set-StrictMode"
+    ],
+    "pid": 0
+  },
+  "severity_id": 1,
+  "status": "None",
+  "status_id": 99,
+  "time": 1602134940000,
+  "unmapped": {
+    "Context": {
+      "Command Path": "",
+      "Command Type": "Cmdlet",
+      "Connected User": "",
+      "Engine Version": "5.1.14393.3866",
+      "Host ID": "548cbebc-322f-4cf8-b2b6-8265f4391cd9",
+      "Host Name": "ConsoleHost",
+      "Host Version": "5.1.14393.3866",
+      "Pipeline ID": "21",
+      "Runspace ID": "377d8ad3-3bae-46b1-aa6d-0a8ffd3c8288",
+      "Sequence Number": "186",
+      "Severity": "Informational",
+      "Shell ID": "Microsoft.PowerShell"
+    },
+    "EventType": "4",
+    "OpCode": "To be used when operation is just executing a method",
+    "RecordNumber": "225352",
+    "SidType": "0",
+    "TaskCategory": "Executing Pipeline",
+    "User": "NOT_TRANSLATED",
+    "User Data": ""
+  }
+}

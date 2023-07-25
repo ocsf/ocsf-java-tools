@@ -1,0 +1,34 @@
+10/07/2020 10:29:00 PM
+LogName=Microsoft-Windows-PowerShell/Operational
+SourceName=Microsoft-Windows-PowerShell
+EventCode=4103
+EventType=4
+Type=Information
+ComputerName=win-dc-1603297.attackrange.local
+User=NOT_TRANSLATED
+Sid=S-1-5-21-2825133891-65375684-292279277-500
+SidType=0
+TaskCategory=Executing Pipeline
+OpCode=To be used when operation is just executing a method
+RecordNumber=225352
+Keywords=None
+Message=CommandInvocation(Set-StrictMode): "Set-StrictMode"
+ParameterBinding(Set-StrictMode): name="Off"; value="True"
+Context:
+        Severity = Informational
+        Host Name = ConsoleHost
+        Host Version = 5.1.14393.3866
+        Host ID = 548cbebc-322f-4cf8-b2b6-8265f4391cd9
+        Host Application = powershell
+        Engine Version = 5.1.14393.3866
+        Runspace ID = 377d8ad3-3bae-46b1-aa6d-0a8ffd3c8288
+        Pipeline ID = 21
+        Command Name = Set-StrictMode
+        Command Type = Cmdlet
+        Script Name = C:\Program Files\WindowsPowerShell\Modules\PSReadline\1.2\PSReadLine.psm1
+        Command Path =
+        Sequence Number = 186
+        User = ATTACKRANGE\administrator
+        Connected User =
+        Shell ID = Microsoft.PowerShell
+User Data:

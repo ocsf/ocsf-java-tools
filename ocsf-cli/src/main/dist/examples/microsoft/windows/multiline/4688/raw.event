@@ -1,0 +1,39 @@
+11/18/2021 02:20:27 PM
+LogName=Security
+EventCode=4688
+EventType=0
+ComputerName=MBX111-VIP-CA-1.pexch111.serverpod.net
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=2115811397
+Keywords=Audit Success
+TaskCategory=Process Creation
+OpCode=Info
+Message=A new process has been created.
+
+Creator Subject:
+	Security ID:		NT AUTHORITY\SYSTEM
+	Account Name:		MBX111-VIP-CA-1$
+	Account Domain:		PEXCH111
+	Logon ID:		0x3E7
+
+Target Subject:
+	Security ID:		NULL SID
+	Account Name:		-
+	Account Domain:		-
+	Logon ID:		0x0
+
+Process Information:
+	New Process ID:		0xdfc
+	New Process Name:	C:\Windows\System32\relog.exe
+	Token Elevation Type:	TokenElevationTypeDefault (1)
+	Creator Process ID:	0x828
+	Process Command Line:	"relog.exe" "C:\Program Files\Microsoft\Exchange Server\V15\Logging\Diagnostics\PerformanceLogsToBeProcessed\ExchangeDiagnosticsPerformanceLog_11181415.blg" -f csv -o "C:\Program Files\Microsoft\Exchange Server\V15\Logging\Diagnostics\PerformanceLogsToBeProcessed\ExchangeDiagnosticsPerformanceLog_11181415.csvtmp" -y
+
+Token Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.
+
+Type 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.
+
+Type 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.
+
+Type 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.

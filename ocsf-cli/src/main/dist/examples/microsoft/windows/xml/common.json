@@ -1,0 +1,95 @@
+[
+  {
+    "EventID": {
+      "@move": {
+        "name": "metadata.event_code"
+      }
+    }
+  },
+  {
+    "Provider.Name": {
+      "@move": {
+        "name": "metadata.log_provider"
+      }
+    }
+  },
+  {
+    "Computer": {
+      "desc": "The device where the event occurred.",
+      "@move": {
+        "name": "device.hostname"
+      }
+    }
+  },
+  {
+    "Channel": {
+      "desc": "The subsystem or application that is providing the event data.",
+      "@move": "metadata.log_name"
+    }
+  },
+  {
+    "Provider.Guid": {
+      "desc": "A unique identifier for the product feature",
+      "@move": {
+        "name": "metadata.product.feature.uid"
+      }
+    }
+  },
+  {
+    "Version": {
+      "desc": "The Windows event version.",
+      "@move": {
+        "name": "metadata.log_version"
+      }
+    }
+  },
+  {
+    "Level": {
+      "desc": "The normalized severity of the event. Windows Log Level numeric values are inversely mapped to SES. Informational events can be Windows Log Level 4 OR 0.",
+      "@enum": {
+        "name": "severity_id",
+        "default": 99,
+        "other": "severity",
+        "values": {
+          "5": 99,
+          "4": 1,
+          "3": 3,
+          "2": 4,
+          "1": 5,
+          "0": 1
+        }
+      }
+    }
+  },
+  {
+    "Keywords": {
+      "desc": "The cross-platform normalized status of the activity or alert reported by the event.",
+      "@enum": {
+        "name": "status_id",
+        "default": 99,
+        "other": "status",
+        "values": {
+          "0x8020000000000000": 1,
+          "0x8010000000000000": 2
+        }
+      }
+    }
+  },
+  {
+    "TimeCreated.SystemTime": {
+      "desc": "The time of the event, as reported in the original log.",
+      "@copy": {
+        "name": "metadata.original_time"
+      }
+    }
+  },
+  {
+    "TimeCreated.SystemTime": {
+      "desc": "The time of the event, normalized to OCSF.",
+      "@move": {
+        "name": "time",
+        "type": "timestamp"
+      }
+    }
+  }
+]

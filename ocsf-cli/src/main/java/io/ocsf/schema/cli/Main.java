@@ -41,6 +41,7 @@ import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -77,7 +78,7 @@ public final class Main
   {
     final File                source;
     final Map<String, Object> data;
-    final String              task;  // used for creating file name.
+    final String              task;  // used for creating file name
 
     private boolean printed;
 
@@ -287,8 +288,13 @@ public final class Main
 
   private static void printParsers()
   {
-    System.out.println("Available Parsers:");
-    parsers.values().forEach(parser -> System.out.printf("\t%s%n", parser));
+    System.out.println("Parser list:");
+    parsers
+      .values()
+      .stream()
+      .sorted(Comparator.comparing(Object::toString))
+      .forEach(parser -> System.out.printf("\t%s%n", parser));
+
     System.out.println();
   }
 

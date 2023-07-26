@@ -15,9 +15,8 @@
  *
  */
 
-package io.ocsf.parser.parsers;
+package io.ocsf.parsers;
 
-import io.ocsf.parsers.WinMultiLineParser;
 import io.ocsf.utils.Json;
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.parsers.Json5Parser;
@@ -78,7 +77,8 @@ public final class WindowsEolTest
 
     final String raw = (String) Maps.getIn(data, "result._raw");
 
-    final WinMultiLineParser parser = new WinMultiLineParser(raw);
+    final WindowsMultilineParser.MultiLineParser
+      parser = new WindowsMultilineParser.MultiLineParser(raw);
 
     final Map<String, Object> parsed = parser.parse();
 

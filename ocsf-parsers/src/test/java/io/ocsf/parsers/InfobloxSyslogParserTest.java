@@ -15,9 +15,8 @@
  *
  */
 
-package io.ocsf.parser.parsers;
+package io.ocsf.parsers;
 
-import io.ocsf.parsers.InfobloxDHCPParser;
 import io.ocsf.utils.Json;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,15 +26,15 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 
-public class InfobloxDhcpSyslogTest
+public class InfobloxSyslogParserTest
 {
 
   @Test
-  public void parse() throws Exception
+  public void parse()
   {
-    final InfobloxDHCPParser parser = new InfobloxDHCPParser();
+    final InfobloxSyslogParser parser = new InfobloxSyslogParser();
 
-    Arrays.stream(InfobloxDhcpSyslogData.Data).map((Function<String, Map<String, Object>>) s -> {
+    Arrays.stream(InfobloxSyslogData.Data).map((Function<String, Map<String, Object>>) s -> {
       try
       {
         return parser.parse(s);
@@ -47,7 +46,7 @@ public class InfobloxDhcpSyslogTest
       }
     }).forEach(map -> {
       Assert.assertNotNull(map);
-      Assert.assertEquals(Json.format(map), 6, map.size());
+      Assert.assertEquals(Json.format(map), 7, map.size());
     });
   }
 }

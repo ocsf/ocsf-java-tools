@@ -31,14 +31,12 @@ public final class Parsers
   {
     parsers.put(new CarbonBlackParser());
     parsers.put(new ProofpointEmailParser());
-    parsers.put(new Office365Parser());
-    parsers.put(new XmlWinEventLogParser());
-    parsers.put(new XmlWinEventSecurityLogParser());
-    parsers.put(new XmlWinSysmonEventLogParser());
-    parsers.put(new WinEventLogParser());
-    parsers.put(new WinEventSecurityLogParser());
+    parsers.put(new Windows365Parser());
+    parsers.put(new WindowsXmlParser());
+    parsers.put(new WindowsSysmonParser());
+    parsers.put(new WindowsMultilineParser());
     parsers.put(new CiscoSyslogParser());
-    parsers.put(new InfobloxDHCPParser());
+    parsers.put(new InfobloxSyslogParser());
     parsers.put(new BoxParser());
   }
 

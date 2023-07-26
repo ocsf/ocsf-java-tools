@@ -15,12 +15,11 @@
  *
  */
 
-package io.ocsf.parser.parsers;
+package io.ocsf.parsers;
 
-import io.ocsf.parsers.XmlWinEventLogParser;
 import io.ocsf.utils.Json;
 
-public final class XmlWinEventParserTest
+public final class WindowsXmlParserTest
 {
   private static final String xml2 =
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -100,11 +99,11 @@ public final class XmlWinEventParserTest
     "  </EventData>\n" +
     "</Event>";
 
-  private XmlWinEventParserTest() {}
+  private WindowsXmlParserTest() {}
 
   public static void main(final String... args) throws Exception
   {
-    final XmlWinEventLogParser parser = new XmlWinEventLogParser();
+    final WindowsXmlParser parser = new WindowsXmlParser();
 
     System.out.println(Json.format(parser.parse(xml1)));
     System.out.println(Json.format(parser.parse(xml2)));

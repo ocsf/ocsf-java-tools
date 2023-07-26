@@ -15,7 +15,7 @@
  *
  */
 
-package io.ocsf.parser.parsers;
+package io.ocsf.parsers;
 
 public final class CiscoSyslogData
 {

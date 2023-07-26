@@ -17,11 +17,14 @@
 
 package io.ocsf.parsers;
 
-public final class WinEventSecurityLogParser extends WinEventLogParser
+/**
+ * Microsoft System Monitor (Sysmon) event parser (XML).
+ * See <a href="https://learn.microsoft.com/en-us/sysinternals/">Sysinternals</a>
+ */
+public class WindowsSysmonParser extends WindowsXmlParser
 {
-  public static final String SourceType = "WinEventLog:Security";
+  public static final String SourceType = "microsoft:windows:sysmon";
 
   @Override
   public String toString() {return SourceType;}
-
 }

@@ -15,9 +15,9 @@
  *
  */
 
-package io.ocsf.parser.parsers;
+package io.ocsf.parsers;
 
-public final class InfobloxDhcpSyslogData
+public final class InfobloxSyslogData
 {
   public static final String[] Data = {
     "<30>May 19 10:36:09 10.160.20.42 dhcpd[10006]: DHCPRELEASE of 10.26.74.112 from " +
@@ -54,5 +54,5 @@ public final class InfobloxDhcpSyslogData
     "01:b8:80:4f:04:6a:28"
   };
 
-  private InfobloxDhcpSyslogData() {}
+  private InfobloxSyslogData() {}
 }

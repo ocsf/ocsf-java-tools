@@ -23,11 +23,11 @@ import io.ocsf.utils.parsers.Parser;
 import java.util.Map;
 
 /**
- * Proofpoint Email Protection JSON event parser.
+ * Proofpoint Email Protection event parser.
  */
 public class ProofpointEmailParser implements Parser
 {
-  public static final String SourceType = "pps_maillog";
+  public static final String SourceType = "proofpoint:email";
 
   @Override
   public Map<String, Object> parse(final String text) throws Exception

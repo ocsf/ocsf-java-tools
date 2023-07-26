@@ -15,89 +15,89 @@
  *
  */
 
-package io.ocsf.parser.parsers;
+package io.ocsf.parsers;
 
-import io.ocsf.parsers.WinEventLogParser;
 import io.ocsf.utils.Maps;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Map;
 
-public class WinEventLogParserTest
+public class WindowsMultilineParserTest
 {
   @Test
   public void parseEventTest() throws Exception
   {
-    final String Event = "01/15/2015 03:20:28 AM\n" +
-                         "LogName=Security\n" +
-                         "SourceName=Microsoft Windows security auditing.\n" +
-                         "EventCode=4624\n" +
-                         "EventType=0\n" +
-                         "Type=Information\n" +
-                         "ComputerName=szusoidc1.soi.dir.acme080.com\n" +
-                         "TaskCategory=Logon\n" +
-                         "OpCode=Info\n" +
-                         "RecordNumber=989284571\n" +
-                         "CaseID=AD_4624_1_1\n" +
-                         "Keywords=Audit Success\n" +
-                         "Message=An account was successfully logged on.\n" +
-                         "Subject:\n" +
-                         "    Security ID:        NULL SID\n" +
-                         "    Account Name:       -\n" +
-                         "    Account Domain:     -\n" +
-                         "    Logon ID:       0x0\n" +
-                         "Logon Type:         3\n" +
-                         "New Logon:\n" +
-                         "    Security ID:        SOI\\iiwu\n" +
-                         "    Account Name:       iiwu\n" +
-                         "    Account Domain:     SOI\n" +
-                         "    Logon ID:       0xd22e9734\n" +
-                         "    Logon GUID:     {1498989B-4798-8546-4F20-18536E283594}\n" +
-                         "Process Information:\n" +
-                         "    Process ID:     0x0\n" +
-                         "    Process Name:       -\n" +
-                         "Network Information:\n" +
-                         "    Workstation Name:\n" +
-                         "    Source Network Address: 10.35.140.130\n" +
-                         "    Source Port:        the64090\n" +
-                         "Detailed Authentication Information:\n" +
-                         "    Logon Process:      Kerberos\n" +
-                         "    Authentication Package: Kerberos\n" +
-                         "    Transited Services: -\n" +
-                         "    Package Name (NTLM only):   -\n" +
-                         "    Key Length:     0\n" +
-                         "\n" +
-                         "This event is generated when a logon session is created. It is " +
-                         "generated on the computer that was accessed.\n" +
-                         "\n" +
-                         "The subject fields indicate the account on the local system which " +
-                         "requested the logon. This is most commonly a service such as the Server" +
-                         " service, or a local process such as Winlogon.exe or Services.exe.\n" +
-                         "\n" +
-                         "The logon type field indicates the kind of logon that occurred. The " +
-                         "most common types are 2 (interactive) and 3 (network).\n" +
-                         "\n" +
-                         "The New Logon fields indicate the account for whom the new logon was " +
-                         "created, i.e. the account that was logged on.\n" +
-                         "\n" +
-                         "The network fields indicate where a remote logon request originated. " +
-                         "Workstation name is not always available and may be left blank in some " +
-                         "cases.\n" +
-                         "\n" +
-                         "The authentication information fields provide detailed information " +
-                         "about this specific logon request.\n" +
-                         " - Logon GUID is a unique identifier that can be used to correlate this" +
-                         " event with a KDC event.\n" +
-                         " - Transited services indicate which intermediate services have " +
-                         "participated in this logon request.\n" +
-                         " - Package name indicates which sub-protocol was used among the NTLM " +
-                         "protocols.\n" +
-                         " - Key length indicates the length of the generated session key. This " +
-                         "will be 0 if no session key was requested.\n" +
-                         "\n";
+    final String Event =
+      "01/15/2015 03:20:28 AM\n" +
+      "LogName=Security\n" +
+      "SourceName=Microsoft Windows security auditing.\n" +
+      "EventCode=4624\n" +
+      "EventType=0\n" +
+      "Type=Information\n" +
+      "ComputerName=szusoidc1.soi.dir.acme080.com\n" +
+      "TaskCategory=Logon\n" +
+      "OpCode=Info\n" +
+      "RecordNumber=989284571\n" +
+      "CaseID=AD_4624_1_1\n" +
+      "Keywords=Audit Success\n" +
+      "Message=An account was successfully logged on.\n" +
+      "Subject:\n" +
+      "    Security ID:        NULL SID\n" +
+      "    Account Name:       -\n" +
+      "    Account Domain:     -\n" +
+      "    Logon ID:       0x0\n" +
+      "Logon Type:         3\n" +
+      "New Logon:\n" +
+      "    Security ID:        SOI\\iiwu\n" +
+      "    Account Name:       iiwu\n" +
+      "    Account Domain:     SOI\n" +
+      "    Logon ID:       0xd22e9734\n" +
+      "    Logon GUID:     {1498989B-4798-8546-4F20-18536E283594}\n" +
+      "Process Information:\n" +
+      "    Process ID:     0x0\n" +
+      "    Process Name:       -\n" +
+      "Network Information:\n" +
+      "    Workstation Name:\n" +
+      "    Source Network Address: 10.35.140.130\n" +
+      "    Source Port:        the64090\n" +
+      "Detailed Authentication Information:\n" +
+      "    Logon Process:      Kerberos\n" +
+      "    Authentication Package: Kerberos\n" +
+      "    Transited Services: -\n" +
+      "    Package Name (NTLM only):   -\n" +
+      "    Key Length:     0\n" +
+      "\n" +
+      "This event is generated when a logon session is created. It is " +
+      "generated on the computer that was accessed.\n" +
+      "\n" +
+      "The subject fields indicate the account on the local system which " +
+      "requested the logon. This is most commonly a service such as the Server" +
+      " service, or a local process such as Winlogon.exe or Services.exe.\n" +
+      "\n" +
+      "The logon type field indicates the kind of logon that occurred. The " +
+      "most common types are 2 (interactive) and 3 (network).\n" +
+      "\n" +
+      "The New Logon fields indicate the account for whom the new logon was " +
+      "created, i.e. the account that was logged on.\n" +
+      "\n" +
+      "The network fields indicate where a remote logon request originated. " +
+      "Workstation name is not always available and may be left blank in some " +
+      "cases.\n" +
+      "\n" +
+      "The authentication information fields provide detailed information " +
+      "about this specific logon request.\n" +
+      " - Logon GUID is a unique identifier that can be used to correlate this" +
+      " event with a KDC event.\n" +
+      " - Transited services indicate which intermediate services have " +
+      "participated in this logon request.\n" +
+      " - Package name indicates which sub-protocol was used among the NTLM " +
+      "protocols.\n" +
+      " - Key length indicates the length of the generated session key. This " +
+      "will be 0 if no session key was requested.\n" +
+      "\n";
 
-    final WinEventLogParser parser = new WinEventLogParser();
+    final WindowsMultilineParser parser = new WindowsMultilineParser();
 
     final Map<String, Object> event = parser.parse(Event);
 
@@ -128,7 +128,7 @@ public class WinEventLogParserTest
                          "It may be positively correlated with a logon event using the Logon ID " +
                          "value. Logon IDs are only unique " +
                          "between reboots on the same computer.";
-    final WinEventLogParser parser = new WinEventLogParser();
+    final WindowsMultilineParser parser = new WindowsMultilineParser();
 
     final Map<String, Object> event = parser.parse(Event);
 
@@ -153,7 +153,7 @@ public class WinEventLogParserTest
                          "Account Name:\t\tSESWIN2019DC2$\r\n\tAccount " +
                          "Domain:\t\tSESTEST\r\n\tLogon ID:";
 
-    final WinEventLogParser parser = new WinEventLogParser();
+    final WindowsMultilineParser parser = new WindowsMultilineParser();
 
     final Map<String, Object> event = parser.parse(Event);
 
@@ -202,7 +202,7 @@ public class WinEventLogParserTest
                          "        Connected User =\n" +
                          "        Shell ID = Microsoft.PowerShell\n" +
                          "User Data:\n";
-    final WinEventLogParser parser = new WinEventLogParser();
+    final WindowsMultilineParser parser = new WindowsMultilineParser();
 
     final Map<String, Object> event = parser.parse(Event);
 

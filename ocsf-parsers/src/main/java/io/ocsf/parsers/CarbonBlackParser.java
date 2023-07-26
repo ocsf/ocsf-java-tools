@@ -23,11 +23,11 @@ import io.ocsf.utils.parsers.Parser;
 import java.util.Map;
 
 /**
- * Carbon Black JSON event parser.
+ * VMWare Carbon Black event parser.
  */
 public class CarbonBlackParser implements Parser
 {
-  public static final String SourceType = "bit9:carbonblack:json";
+  public static final String SourceType = "vmware:carbon-black";
 
   @Override
   public Map<String, Object> parse(final String text) throws Exception

@@ -15,54 +15,61 @@
  *
  */
 
-package io.ocsf.parser.parsers;
+package io.ocsf.parsers;
 
-import io.ocsf.parsers.CiscoSyslogParser;
 import io.ocsf.utils.Json;
+import io.ocsf.utils.parsers.Syslog;
+import org.junit.Assert;
+import org.junit.Test;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
-public final class CiscoASAFileParser
+public class CiscoSyslogParserTest
 {
-  private CiscoASAFileParser() {}
 
-  public static void parse(final Stream<String> events) throws Exception
+  @Test
+  public void parse()
   {
     final CiscoSyslogParser parser = new CiscoSyslogParser();
 
-    events.map((Function<String, Map<String, Object>>) s -> {
+    Arrays.stream(CiscoSyslogData.Data).map((Function<String, Map<String, Object>>) s -> {
       try
       {
         return parser.parse(s);
       }
       catch (final Exception e)
       {
+        Assert.fail(e.getMessage());
         return Collections.emptyMap();
       }
     }).forEach(map -> {
-      final String data = Json.format(map);
-
-      System.out.println(data);
+      Assert.assertNotNull(map);
+      Assert.assertEquals(Json.format(map), 8, map.size());
     });
   }
 
-  public static void main(final String... files) throws Exception
+  @Test
+  public void parseMissingHost() throws Exception
   {
-    if (files.length > 0)
-    {
-      for (final String file : files)
-      {
-        parse(Files.readAllLines(Paths.get(file)).stream());
-      }
-    }
-    else
-    {
-      System.out.println("Usage: CiscoASAFileParser <filename>");
-    }
+    final String text =
+      "<165>Oct 06 15:02:30: %ASA-5-111008: User 'admin' executed the 'dir disk0:/dap.xml' " +
+      "command.";
+
+    final CiscoSyslogParser   parser = new CiscoSyslogParser();
+    final Map<String, Object> parsed = parser.parse(text);
+    Assert.assertNull(parsed);
+
   }
+
+  @Test
+  public void timeLength()
+  {
+    Arrays.stream(CiscoSyslogData.Data)
+          .map(s -> Syslog.timeLength(s, s.indexOf('>') + 1))
+          .forEach(n -> Assert.assertTrue(n > 0));
+  }
+
 }

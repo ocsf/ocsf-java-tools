@@ -24,8 +24,7 @@ import io.ocsf.utils.parsers.Syslog;
 import java.util.Map;
 
 /**
- * Infoblox DHCP syslog parser. It parses and extracts the syslog header fields and the message
- * text.
+ * Infoblox syslog parser. It parses and extracts the syslog header fields and the message text.
  * <p>
  * Sample events:
  * <pre>
@@ -34,24 +33,24 @@ import java.util.Map;
  *   &lt;30&gt;Sep 24 13:53:26 192.168.1.2 dhcpd[6453]: DHCPRELEASE of 192.168.1.120 from 00:50:56:13:60:56 (C8703420628) via eth1 (found) TransID 43e49f96 uid 01:00:50:56:13:60:56
  * </pre>
  */
-public class InfobloxDHCPParser implements Parser
+public class InfobloxSyslogParser implements Parser
 {
-  private static final String SourceType = "infoblox:dhcp";
+  private static final String SourceType = "infoblox:syslog";
 
   protected static final String Priority = "priority";
 
   private static final String Pattern =
-    "<#{priority: integer}>#{timestamp: string(syslog-time)} #{server_ip} dhcpd[#{pid}]: " +
+    "<#{priority: integer}>#{timestamp: string(syslog-time)} #{server_ip} #{product}[#{pid}]: " +
     "#{message}";
 
   private final Parser parser;
 
-  public InfobloxDHCPParser()
+  public InfobloxSyslogParser()
   {
     this(Pattern);
   }
 
-  public InfobloxDHCPParser(final String pattern)
+  public InfobloxSyslogParser(final String pattern)
   {
     this.parser = PatternParser.create(pattern);
   }

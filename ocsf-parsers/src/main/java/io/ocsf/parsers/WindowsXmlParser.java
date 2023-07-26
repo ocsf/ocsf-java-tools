@@ -27,9 +27,9 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class XmlWinEventLogParser implements Parser
+public class WindowsXmlParser implements Parser
 {
-  public static final String SourceType = "XmlWinEventLog";
+  public static final String SourceType = "microsoft:windows:xml";
 
   private static final String RenderingInfo = "RenderingInfo";
   private static final String EventData     = "EventData";
@@ -181,7 +181,8 @@ public class XmlWinEventLogParser implements Parser
         final String info = (String) Maps.getIn(event, EventData, ContextInfo);
         if (info != null)
         {
-          final WinMultiLineParser parser = new WinMultiLineParser(info);
+          final WindowsMultilineParser.MultiLineParser
+            parser = new WindowsMultilineParser.MultiLineParser(info);
           data.put(ContextInfo, parser.nested());
         }
       }

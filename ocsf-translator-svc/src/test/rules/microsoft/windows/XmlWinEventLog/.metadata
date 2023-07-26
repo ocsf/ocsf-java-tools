@@ -1,4 +1,4 @@
 {
   "desc": "Windows XML events translation rules",
-  "type": "XmlWinEventLog"
+  "type": "microsoft:windows:xml"
 }

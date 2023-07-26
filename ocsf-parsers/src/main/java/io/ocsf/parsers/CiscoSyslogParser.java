@@ -31,10 +31,18 @@ import java.util.Map;
  * <pre>
  *   &lt;Facility&gt;timestamp host: %Product-Level-Code: Message
  * </pre>
+ *
+ * <p>
+ * Sample events:
+ * <pre>
+ *   &lt;165&gt;Oct 06 2021 15:02:30 10.160.0.10 : %ASA-5-111010: User 'admin', running 'CLI' from IP 0.0.0.0, executed 'dir disk0:/dap.xml
+ *   &lt;111&gt;Mar 12 07:18:12 10.11.12.13 : %ASA-6-713228: Group = dummy_group, Username = dummy_user, IP = 10.0.0.1 Assigned private IP address 10.0.0.2 to remote user
+ *   &lt;111&gt;Mar 12 07:18:12 10.11.12.13 : %ASA-7-716014: Group my_group User joe_user View file readme.txt .
+ * </pre>
  */
 public class CiscoSyslogParser implements Parser
 {
-  private static final String SourceType = "cisco:asa";
+  private static final String SourceType = "cisco:syslog";
 
   protected static final String Priority = "priority";
 

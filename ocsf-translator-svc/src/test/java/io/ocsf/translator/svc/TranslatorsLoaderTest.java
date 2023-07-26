@@ -16,6 +16,7 @@
 
 package io.ocsf.translator.svc;
 
+import io.ocsf.parsers.WindowsXmlParser;
 import io.ocsf.utils.FuzzyHashMap;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,6 +32,6 @@ public class TranslatorsLoaderTest
     final FuzzyHashMap<TranslatorsManager> transformers = TranslatorsLoader.load("src/test/rules");
 
     Assert.assertEquals(1, transformers.size());
-    Assert.assertEquals(2, transformers.get("XmlWinEventLog").size());
+    Assert.assertEquals(2, transformers.get(WindowsXmlParser.SourceType).size());
   }
 }

@@ -17,9 +17,23 @@
 
 package io.ocsf.parsers;
 
-public class XmlWinEventSecurityLogParser extends XmlWinEventLogParser
+import io.ocsf.utils.parsers.Json5Parser;
+import io.ocsf.utils.parsers.Parser;
+
+import java.util.Map;
+
+/**
+ * Windows 365 event parser.
+ */
+public class Windows365Parser implements Parser
 {
-  public static final String SourceType = "XmlWinEventLog:Security";
+  public static final String SourceType = "microsoft:365";
+
+  @Override
+  public Map<String, Object> parse(final String text) throws Exception
+  {
+    return Json5Parser.to(text);
+  }
 
   @Override
   public String toString() {return SourceType;}

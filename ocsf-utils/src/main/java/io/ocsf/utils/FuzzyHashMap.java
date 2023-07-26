@@ -113,7 +113,7 @@ public class FuzzyHashMap<V> extends HashMap<String, V>
     // Perform fuzzy matching logic to find approximate key matches
     for (final String key : keySet())
     {
-      if (key.endsWith("*") && name.startsWith(key.substring(0, key.length() - 1)))
+      if (isApproximateMatch(key, name))
       {
         return super.get(key);
       }
@@ -130,12 +130,13 @@ public class FuzzyHashMap<V> extends HashMap<String, V>
    */
   private static boolean isApproximateMatch(final String key, final String name)
   {
-    // Case-insensitive comparison
-    if (key.equalsIgnoreCase(name))
-      return true;
+    final int keyLen = key.length() - 1;
+
+    if (name.length() < keyLen)
+      return false;
 
     // Wild card match
-    return (key.endsWith("*") && name.startsWith(key.substring(0, key.length() - 1)));
+    return (key.endsWith("*") && name.startsWith(key.substring(0, keyLen)));
   }
 
 

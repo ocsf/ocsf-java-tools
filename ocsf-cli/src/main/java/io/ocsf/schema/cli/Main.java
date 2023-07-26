@@ -24,6 +24,7 @@ import io.ocsf.schema.cli.CommandLineParser.Argument;
 import io.ocsf.translator.Translator;
 import io.ocsf.translator.TranslatorBuilder;
 import io.ocsf.utils.Files;
+import io.ocsf.utils.FuzzyHashMap;
 import io.ocsf.utils.Json;
 import io.ocsf.utils.parsers.Parser;
 import io.ocsf.utils.parsers.ParserException;
@@ -70,7 +71,7 @@ public final class Main
 
   private static final int OK = 0;
 
-  private static final Parsers parsers = new Parsers();
+  private static final FuzzyHashMap<Parser> parsers = Parsers.parsers();
 
   private static final class Item
   {
@@ -109,21 +110,6 @@ public final class Main
 
   private static final Item EOS = new Item();
 
-  static
-  {
-    parsers.register(new CarbonBlackParser());
-    parsers.register(new ProofpointEmailParser());
-    parsers.register(new Office365Parser());
-    parsers.register(new XmlWinEventLogParser());
-    parsers.register(new XmlWinEventSecurityLogParser());
-    parsers.register(new XmlWinSysmonEventLogParser());
-    parsers.register(new WinEventLogParser());
-    parsers.register(new WinEventSecurityLogParser());
-    parsers.register(new CiscoSyslogParser());
-    parsers.register(new InfobloxDHCPParser());
-    parsers.register(new BoxParser());
-  }
-
   private static final Consumer<Item> printer = item -> {
     if (!item.isPrinted())
     {
@@ -136,7 +122,7 @@ public final class Main
       }
       else
       {
-        final String[] parts = item.source.getName().split("\\.(?=[^\\.]+$)");
+        final String[] parts = item.source.getName().split("\\.(?=[^.]+$)");
         final Path path = Path.of(
           writeResultDir,
           String.format("%s-%s.json", item.task, parts[0]));
@@ -338,7 +324,7 @@ public final class Main
 
     if (arg.isSet())
     {
-      final Parser p = parsers.parser(arg.value());
+      final Parser p = parsers.get(arg.value());
 
       if (p != null)
         return Optional.of(p);

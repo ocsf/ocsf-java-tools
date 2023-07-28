@@ -1,22 +1,73 @@
-# Translation
+# Translations
 
-This document describes the available translation rules.
+** DRAFT **
 
-## Translation Rules
+This document describes the Data Translation Domain Specific Language syntax.
+
+## Translation File
+The translations are saved in JSON files with the following format:
+
+```json5
+{
+  "caption": "Translation Caption",
+  "description": "Translation description.",
+  "references": [
+    "https://schema.ocsf.io/base_event"
+  ],
+  
+  // Boolean predicate/guard 
+  "when": "event_code = 22",
+
+  // List of mapping rules
+  "rules": [
+    {
+      "<src-attribute>": {
+        "@operand": {
+          // a set of properties, see below for more details
+        }
+      }
+    }
+  ]
+}
+
+```
+
+Where:
+   - `caption` -- short description optional, useful for documentation
+   - `description` -- description of the translation rule,  optional, useful for documentation
+   - `references` -- list of reference to external sources, optional, useful for documentation
+
+   - `when` -- boolean predicate. If it evaluates as true, then the mappings defined in the rules array are executed in order. The `when` condition is optional. If it is omitted, then the mappings will be executed only is none of the other the mappings are used. Note, you can only have one translation file without the `when` clause.
+
+   - `rules` -- list of mapping rules, each rule is an object. The rule format is show below.
+
+The mapping rule format:
+```json5
+{
+   "<src-attribute>": {
+      "@operand": {
+         "name": "<dst-attribute>",
+         "type": "<type-name>",
+         "overwrite": [true, false],
+         "default": "<data>"
+      }
+   }
+}
+```
+
 
 ### Move
 
-Move an attribute from the source data to the translated data.
-
-Note, the translated attribute name can be the same or different from the source
-attribute name. The attribute is removed from the source data.
+Move an attribute from the source data to the translated data. The translated
+attribute name can be the same or different from the source attribute name. 
+The attribute is removed from the source data.
 
 #### Short Format
 
 ```json
 {
-   "<src-attribute-name>": {
-      "@move": "<dst-attribute-name>"
+   "<src-attribute>": {
+      "@move": "<dst-attribute>"
    }
 }
 ```
@@ -73,9 +124,9 @@ Output data:
 
 ```json5
 {
-   "<src-attribute-name>": {
+   "<src-attribute>": {
       "@move": {
-         "name": "<dst-attribute-name>",
+         "name": "<dst-attribute>",
          "type": "<type-name>",
          "overwrite": [true, false],
          "default": "<data>"
@@ -92,7 +143,7 @@ Use a comma-separated attributes to join data from multiple attributes.
 {
    "<src-attribute-name1>, <src-attribute-name2>, ...": {
       "@move": {
-         "name": "<dst-attribute-name>",
+         "name": "<dst-attribute>",
          "type": "<type-name>",
          "separator": "<joiner>",
          "overwrite": [true, false],
@@ -139,8 +190,8 @@ attribute name. The source data is not affected.
 
 ```json5
 {
-   "<src-attribute-name>": {
-      "@copy": "<dst-attribute-name>"
+   "<src-attribute>": {
+      "@copy": "<dst-attribute>"
    }
 }
 ```
@@ -149,9 +200,9 @@ attribute name. The source data is not affected.
 
 ```json5
 {
-   "<src-attribute-name>": {
+   "<src-attribute>": {
       "@copy": {
-         "name": "<dst-attribute-name>",
+         "name": "<dst-attribute>",
          "type": "<type-name>",
          "overwrite": [true, false],
          "default": "<data>"
@@ -168,7 +219,7 @@ Use a comma-separated attributes to join data from multiple attributes.
 {
    "<src-attribute-name1>, <src-attribute-name2>, ...": {
       "@copy": {
-         "name": "<dst-attribute-name>",
+         "name": "<dst-attribute>",
          "type": "<type-name>",
          "separator": "<joiner>",
          "overwrite": [true, false],
@@ -198,7 +249,7 @@ Remove an attribute from the source data.
 
 ```json5
 {
-   "<src-attribute-name>": {
+   "<src-attribute>": {
       "@remove": true
    }
 }
@@ -213,7 +264,7 @@ can be any valid JSON type. The source data is not affected.
 
 ```json5
 {
-   // use underscore to specify that there is no src-attribute-name  
+   // use underscore to specify that there is no src-attribute  
    "_": {
      // json data
    }
@@ -288,9 +339,9 @@ The attribute is removed from the source data.
 
 ```json5
 {
-   "<src-attribute-name>": {
+   "<src-attribute>": {
       "@enum": {
-         "name"  : "<dst-attribute-name>",
+         "name"  : "<dst-attribute>",
          "values": "<lookup-table>",
          "other" : "<type-name>",
          "overwrite": [true, false],
@@ -307,9 +358,9 @@ The source data is not affected.
 
 ```json5
 {
-   "<src-attribute-name>": {
+   "<src-attribute>": {
       "@lookup": {
-         "name"  : "<dst-attribute-name>",
+         "name"  : "<dst-attribute>",
          "values": "<lookup-table>",
          "other" : "<type-name>",
          "overwrite": [true, false],

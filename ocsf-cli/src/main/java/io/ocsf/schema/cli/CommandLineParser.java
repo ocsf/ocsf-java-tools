@@ -41,7 +41,7 @@ public class CommandLineParser
     private String value;
 
     /**
-     * Create a command line argument
+     * Create a command line argument.
      *
      * @param opt      - must be alpha-numeric
      * @param long_opt - can be null, all alpha-numeric
@@ -276,7 +276,7 @@ public class CommandLineParser
       }
 
       // pad description to uniform len. (+7 for the added ", -- <>", +3 for the actual spacing
-      final String pad = "%" + ((longestLongArg + 7 + 3) - thisLongLen) + "s%s%n";
+      final String pad = "%" + ((longestLongArg + 7 + 17) - thisLongLen) + "s%s%n";
       help.append(String.format(pad, " ", arg.desc));
     }
     return help.toString();

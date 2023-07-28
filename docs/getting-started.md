@@ -62,8 +62,14 @@ dependencies {
 
 ## Read the Documentation
 
-For more detailed information on writing translations and using the OCSF Schema
-Java Tools, refer to the [Translations documentation](translations.md).
+- **Translations Documentation**: For more detailed information on writing
+  translations and using the OCSF Schema Java Tools, refer to
+  the [Translations documentation](docs/translations.md).
+
+- **Translation Examples**: Explore translation examples in
+  the [examples directory](ocsf-cli/src/main/dist/examples) of the project.
+  These examples will help you understand how to effectively use the OCSF Schema
+  Java Tools for different scenarios.
 
 With these steps completed, you should have the OCSF Schema Java Tools set up in
 your local environment, and you can start exploring its functionalities and

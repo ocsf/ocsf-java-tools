@@ -24,35 +24,44 @@ public final class ParserFileTest
 {
   private ParserFileTest() {}
 
+  private static final String TEST_FILE_NAME = "ocsf-utils/src/test/data/parser-tests.txt";
+
   public static void main(final String... args) throws IOException
   {
     if (args.length > 0)
     {
-      for (final String name : args)
+      for (final String filename : args)
       {
-        System.out.println("Reading file: " + name);
+        System.out.println("Reading file: " + filename);
 
-        Files.readAllLines(Paths.get(name)).forEach(
-          line -> {
-            try
-            {
-              System.out.printf("'%s' ...", line);
-              BooleanExpression.parse(line);
-              System.out.println(" ok");
-            }
-            catch (final InvalidExpressionException e)
-            {
-              System.out.println(" ERROR: " + e.getMessage());
-            }
-          }
-        );
+        runTests(filename);
 
         System.out.println("All done");
       }
     }
     else
     {
-      System.err.println("Usage ParserTest <file>");
+      System.out.println("Using the default test file: " + TEST_FILE_NAME);
+      runTests(TEST_FILE_NAME);
     }
+  }
+
+  private static void runTests(final String filename) throws IOException
+  {
+    Files.readAllLines(Paths.get(filename)).forEach(
+      line -> {
+        try
+        {
+          System.out.printf("'%s' ...", line);
+          BooleanExpression.parse(line);
+          System.out.println(" ok");
+        }
+        catch (final InvalidExpressionException e)
+        {
+          System.out.println(" ERROR: " + e.getMessage());
+        }
+      }
+    );
+
   }
 }

@@ -16,9 +16,9 @@
 
 package io.ocsf.utils;
 
-public final class ParserTest
+public final class BooleanExpressionTest
 {
-  private ParserTest() {}
+  private BooleanExpressionTest() {}
 
   private static void test(final String exp)
   {
@@ -57,7 +57,7 @@ public final class ParserTest
       ".00\\\\1312290111142051606211&0\"");
     test("file.name match \".*\\\\?.*\"");
 
-    test("id in [ 1,2,3,4 ] and type_id = 9000 and id is_not null");
+    test("id in [ 1,2,3,4 ] and type_id = 9000 and id != null");
     test("id < 0");
 
     test("age = -0.05e-10");
@@ -72,7 +72,8 @@ public final class ParserTest
 
     test("host = 'hello.com'");
     test("host like \"hello.com\"");
-    test("host is_not null");
+    test("host contains 'hello'");
+    test("host != null");
     test("port in [10,22,32]");
     test("error in [\"0\",\"1\",\"2\"]");
     test("port >= 1024");
@@ -90,11 +91,10 @@ public final class ParserTest
 
     test("(a = \"b'c\")");
 
-    test("array contains 22");
-    test("array contains 22 and 'first name' != 'Joe'");
+    test("array exec 22");
+    test("array exec 22 and 'first name' != 'Joe'");
     test(
-      "((list contains 'Employee Id' = 20) or (list contains 'Employee Id' = 20)) and (list " +
-      "contains Company is_not null)");
+      "((list exec 'Employee Id' = 20) or (list exec 'Employee Id' = 20)) and (list exec Company != null)");
 
     test("'file size' = 22");
     test("'file.size' = 22");

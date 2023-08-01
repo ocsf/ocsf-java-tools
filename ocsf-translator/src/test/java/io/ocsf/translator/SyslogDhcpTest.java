@@ -51,7 +51,7 @@ public class SyslogDhcpTest
   private static final String Rule =
     "{" +
     "  \"desc\": \"Translates DHCP\"," +
-    "  \"when\": \"message like 'DHCPACK'\"," +
+    "  \"when\": \"message starts_with 'DHCPACK'\"," +
     "  \"parser\": {" +
     "    \"name\": \"message\"," +
     "    \"pattern\": \"DHCPACK on #{ip} to #{mac} (#{hostname})" +
@@ -76,7 +76,7 @@ public class SyslogDhcpTest
   private static final String RegexRule =
     "{" +
     "  \"desc\": \"Translates DHCP\"," +
-    "  \"when\": \"message like 'DHCPACK'\"," +
+    "  \"when\": \"message starts_with 'DHCPACK'\"," +
     "  \"parser\": {" +
     "    \"name\": \"message\"," +
     "    \"regex\": \"(?<evcls>DHCPACK)\\\\s+on\\\\s+" +
@@ -104,7 +104,7 @@ public class SyslogDhcpTest
   private static final String MultiStageParsingRule =
     "{" +
     "  \"desc\": \"Translates DHCP\"," +
-    "  \"when\": \"message like 'DHCPACK'\"," +
+    "  \"when\": \"message starts_with 'DHCPACK'\"," +
     "  \"parsers\": [{" +
     "    \"name\": \"message\"," +
     "    \"pattern\": \"DHCPACK on #{ip} to " +
@@ -137,7 +137,7 @@ public class SyslogDhcpTest
     "{" +
     "  \"desc\": \"Translates DHCPACK" +
     " event.\"," +
-    "  \"when\": \"message like 'DHCPACK'\"," +
+    "  \"when\": \"message starts_with 'DHCPACK'\"," +
     "  \"parsers\": [" +
     "    {" +
     "      \"name\": \"message\"," +

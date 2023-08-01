@@ -21,8 +21,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 /**
  * Expression evaluator.
@@ -56,8 +54,8 @@ public final class BooleanEvaluator
       case Token.NOT:
         return !evaluate(node.right, data);
 
-      case Token.CONTAINS:
-        return contains(node.right, data.get(node.left.op.name()));
+      case Token.EXEC:
+        return exec(node.right, data.get(node.left.op.name()));
     }
 
     return false;
@@ -84,16 +82,19 @@ public final class BooleanEvaluator
       if (field == null)
         return value.token == Token.NULL;
 
+      if (value.token == Token.STRING)
+        return ((Token.Value) value).like(field.toString());
+
       return value.token != Token.NULL &&
              Strings.search(field.toString(), value.value().toString()) > -1;
     },
-    // NotLike
+    // Contains
     (field, value) -> {
       if (field == null)
-        return value.token != Token.NULL;
+        return value.token == Token.NULL;
 
-      return value.token == Token.NULL ||
-             Strings.search(field.toString(), value.value().toString()) == -1;
+      return value.token != Token.NULL &&
+             Strings.search(field.toString(), value.value().toString()) > -1;
     },
     // GE
     (field, value) -> compare(field, value) >= 0,
@@ -110,42 +111,9 @@ public final class BooleanEvaluator
         return value.token == Token.NULL;
 
       if (value.token == Token.STRING)
-      {
-        try
-        {
-          final Pattern p =
-            Pattern.compile(value.value(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-          return p.matcher(field.toString()).find();
-        }
-        catch (final PatternSyntaxException ignore)
-        {
-          return false;
-        }
-      }
+        return ((Token.Value) value).matches(field.toString());
 
       return compare(field, value) == 0;
-    },
-    // NOT_MATCH
-    (field, value) ->
-    {
-      if (field == null)
-        return value.token != Token.NULL;
-
-      if (value.token == Token.STRING)
-      {
-        try
-        {
-          final Pattern p =
-            Pattern.compile(value.value(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-          return !p.matcher(field.toString()).find();
-        }
-        catch (final PatternSyntaxException ignore)
-        {
-          return true;
-        }
-      }
-
-      return compare(field, value) != 0;
     },
     // Starts With
     (field, value) -> {
@@ -223,6 +191,39 @@ public final class BooleanEvaluator
   };
 
   @SuppressWarnings("unchecked")
+  static boolean exec(final Tree node, final Object data)
+  {
+    if (node.op.isValue())
+    {
+      if (data instanceof Collection<?>)
+      {
+        for (final Object datum : ((Collection<Object>) data))
+          if (evaluate(Token.EQ, datum, node.op))
+            return true;
+      }
+      else if (data == null)
+      {
+        return node.op.token == Token.NULL;
+      }
+
+      return Strings.search(data.toString(), String.valueOf(node.op.value)) > -1;
+    }
+    else if (data instanceof Collection<?>)
+    {
+      for (final Object datum : ((Collection<Object>) data))
+        if (datum instanceof Map<?, ?> &&
+            evaluate(node, key -> Maps.getIn((Map<String, Object>) datum, key)))
+          return true;
+    }
+    else if (data instanceof Map<?, ?>)
+    {
+      return evaluate(node, key -> Maps.getIn((Map<String, Object>) data, key));
+    }
+
+    return false;
+  }
+
+  @SuppressWarnings("unchecked")
   static boolean contains(final Tree node, final Object data)
   {
     if (node.op.isValue())
@@ -233,6 +234,10 @@ public final class BooleanEvaluator
           if (evaluate(Token.EQ, datum, node.op))
             return true;
       }
+      else if (data == null)
+        return node.op.token == Token.NULL;
+
+      return Strings.search(data.toString(), String.valueOf(node.op.value)) > -1;
     }
     else if (data instanceof Collection<?>)
     {

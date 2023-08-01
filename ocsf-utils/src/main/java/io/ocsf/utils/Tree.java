@@ -119,7 +119,7 @@ public final class Tree
       sb.append(' ').append(n.op).append(' ');
       appendOpNode(sb, n.right);
     }
-    else if (n.op == Token.Contains)
+    else if (n.op == Token.Exec)
     {
       sb.append(n.left);
       sb.append(' ').append(n.op).append(' ');

@@ -30,16 +30,20 @@ import java.util.Set;
  *  &lt;factor&gt;     := &lt;term&gt; { &lt;AND&gt; &lt;factor&gt; }
  *  &lt;AND&gt;        := "and"
  *  &lt;OR&gt;         := ""or"
- *  &lt;term&gt;       :=  "!(" &lt;expression&gt; ")"
- *                  | "(" &lt;expression&gt; ")"
- *                  | &lt;field&gt; &lt;operator&gt; &lt;value&gt;
+ *  &lt;term&gt;       := "!(" &lt;expression&gt; ")" |
+ *                        "(" &lt;expression&gt; ")" |
+ *                        &lt;field&gt; &lt;operator&gt; &lt;value&gt;
  *  &lt;operator&gt;   := "=" | "!=" | "&lt;" | "&lt;=" | "&gt;" | "&gt;=" |
- *                        "in" | "not_in" |
- *                        "is" |"is_not" |
+ *                        "is" |
+ *                        "is_not" |
+ *                        "in" |
+ *                        "not_in" |
+ *                        "exec" |
  *                        "contains" |
- *                        "like" | "not_like" |
- *                        "match" | "not_match"
- *                        "starts_with" | "ends_with"
+ *                        "like" |
+ *                        "match" |
+ *                        "starts_with" |
+ *                        "ends_with"
  * </pre>
  * NOTE: This class is intended for use in a single thread.
  */
@@ -167,7 +171,8 @@ public final class BooleanExpression
     }
     else if (token.isField())
     {
-      final Token field = token;
+      // save the last token
+      final Token t = token;
 
       nextToken();
 
@@ -179,7 +184,7 @@ public final class BooleanExpression
 
         if (value.isValue())
         {
-          stack.push(new Tree(op, field, value));
+          stack.push(new Tree(op, t, value));
           nextToken();
         }
         else
@@ -187,9 +192,9 @@ public final class BooleanExpression
           throw new InvalidExpressionException(String.format(ERR_MSG, "value", value));
         }
       }
-      else if (op == Token.Contains)
+      else if (op == Token.Exec)
       {
-        // compile the 'contains' subexpression
+        // compile the 'exec' subexpression
         nextToken();
         expression();
 
@@ -199,16 +204,18 @@ public final class BooleanExpression
             throw new InvalidExpressionException(
               String.format(ERR_MSG, "expression or value", token));
 
-          stack.push(new Tree(op, field, token));
+          stack.push(new Tree(op, t, token));
           nextToken();
         }
         else
         {
-          stack.push(new Tree(op, field, stack.pop()));
+          stack.push(new Tree(op, t, stack.pop()));
         }
       }
       else
+      {
         throw new InvalidExpressionException(String.format(ERR_MSG, "operator", op));
+      }
     }
   }
 
@@ -272,7 +279,7 @@ public final class BooleanExpression
           if (token == Token.In || token == Token.NotIn)
             return new Token(Token.IPMASK, new Network(s));
 
-          return new Token(Token.STRING, s);
+          return Token.value(s);
         }
 
         case '`': // time value
@@ -297,7 +304,7 @@ public final class BooleanExpression
     return token == null
            || token == Token.And
            || token == Token.Or
-           || token == Token.Contains
+           || token == Token.Exec
            || token == Token.LBracket;
   }
 
@@ -408,7 +415,7 @@ public final class BooleanExpression
   }
 
 
-  /**
+  /*
    * Skip all white-spaces, returns the position of first non-white-space char or 'len' if end of
    * the buffer is reached.
    */
@@ -449,7 +456,7 @@ public final class BooleanExpression
     }
   }
 
-  /**
+  /*
    * Get the next 4 characters as string, containing a unicode number.
    *
    * @return A string of n characters.
@@ -466,7 +473,7 @@ public final class BooleanExpression
     throw syntaxError("Underflow error");
   }
 
-  /**
+  /*
    * Returns a symbol size, in number of chars, starting from the current position, or 0 if end of
    * the buffer is reached.
    */
@@ -494,7 +501,7 @@ public final class BooleanExpression
     return ch > 0 && ch < validChars.length && validChars[ch] != 0;
   }
 
-  /**
+  /*
    * Handle unquoted text. This could be the values true, false, or null
    */
   private Object symbol() throws InvalidExpressionException
@@ -538,7 +545,7 @@ public final class BooleanExpression
     }
   }
 
-  /**
+  /*
    * Handle unquoted text. This could be the values true, false, null, or field name
    */
   private Token token() throws InvalidExpressionException
@@ -582,23 +589,14 @@ public final class BooleanExpression
       case "not_in":
         return Token.NotIn;
 
-      case "is":
-        return Token.IsNull;
-
-      case "is_not":
-        return Token.IsNotNull;
-
       case "like":
         return Token.Like;
 
-      case "not_like":
-        return Token.NotLike;
+      case "contains":
+        return Token.Contains;
 
       case "match":
         return Token.Match;
-
-      case "not_match":
-        return Token.NotMatch;
 
       case "starts_with":
         return Token.StartsWith;
@@ -606,15 +604,21 @@ public final class BooleanExpression
       case "ends_with":
         return Token.EndsWith;
 
-      case "contains":
-        return Token.Contains;
+      case "exec":
+        return Token.Exec;
+
+      case "is":
+        return Token.IsNull;
+
+      case "is_not":
+        return Token.IsNotNull;
 
       default: // field name
         return Token.field(s);
     }
   }
 
-  /**
+  /*
    * Returns the characters up to the next close quote character. Backslash processing is done. The
    * formal JSON format does not allow strings in single quotes, but an implementation is allowed to
    * accept them.
@@ -676,7 +680,7 @@ public final class BooleanExpression
     throw new IllegalCharacterException(ch, pos);
   }
 
-  /**
+  /*
    * Make a InvalidExpressionException to signal a syntax error.
    *
    * @param message The error message.

@@ -18,6 +18,9 @@
 package io.ocsf.utils;
 
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 @SuppressWarnings("WeakerAccess")
 public class Token
@@ -33,24 +36,25 @@ public class Token
   public static final int NE          = 0x00;
   public static final int EQ          = 0x01;
   public static final int LIKE        = 0x02;
-  public static final int NOT_LIKE    = 0x03;
+  public static final int CONTAINS    = 0x03;
   public static final int GE          = 0x04;
   public static final int GT          = 0x05;
   public static final int LE          = 0x06;
   public static final int LT          = 0x07;
   public static final int MATCH       = 0x08;
-  public static final int NOT_MATCH   = 0x09;
-  public static final int STARTS_WITH = 0x0A;
-  public static final int ENDS_WITH   = 0x0B;
-  public static final int IN          = 0x0C;
-  public static final int NOT_IN      = 0x0D;
-  public static final int IS_NULL     = 0x0E;
-  public static final int IS_NOT_NULL = 0x0F;
+  public static final int STARTS_WITH = 0x09;
+  public static final int ENDS_WITH   = 0x0A;
+  public static final int IN          = 0x0B;
+  public static final int NOT_IN      = 0x0C;
+  public static final int IS_NULL     = 0x0D;
+  public static final int IS_NOT_NULL = 0x0E;
 
-  public static final int AND      = 0x10;
-  public static final int OR       = 0x11;
-  public static final int NOT      = 0x12;
-  public static final int CONTAINS = 0x13;
+  public static final int AND = 0x10;
+  public static final int OR  = 0x11;
+  public static final int NOT = 0x12;
+
+  // exec a subexpression
+  public static final int EXEC = 0x13;
 
   // type tokens
   public static final  int NUM    = 0x20;
@@ -80,7 +84,84 @@ public class Token
     public String name() {return name;}
   }
 
-  public static Token field(final String name) {return new Field(name);}
+  static final class Value extends Token
+  {
+    private Predicate<String> matcher;
+    private Predicate<String> finder;
+
+    private Value(final String value)
+    {
+      super(STRING, value);
+    }
+
+    boolean matches(final String data)
+    {
+      if (matcher == null)
+      {
+        try
+        {
+          matcher = new Predicate<String>()
+          {
+            final Pattern p =
+              Pattern.compile(value(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+
+            @Override
+            public boolean test(final String s)
+            {
+              return p.matcher(s).matches();
+            }
+          };
+        }
+        catch (final PatternSyntaxException ignore)
+        {
+          matcher = s -> false;
+        }
+      }
+
+      return matcher.test(data);
+    }
+
+    boolean like(final String data)
+    {
+      if (finder == null)
+      {
+        try
+        {
+          finder = new Predicate<String>()
+          {
+            final String exp = value();
+            final Pattern p =
+              Pattern.compile(
+                exp.replace("?", ".")
+                   .replace("*", ".*"),
+                Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+
+            @Override
+            public boolean test(final String s)
+            {
+              return p.matcher(s).matches();
+            }
+          };
+        }
+        catch (final PatternSyntaxException ignore)
+        {
+          finder = s -> false;
+        }
+      }
+
+      return finder.test(data);
+    }
+
+    @Override
+    public String toString()
+    {
+      return quote(value.toString());
+    }
+  }
+
+  public static Token field(final String name)  {return new Field(name);}
+
+  public static Token value(final String value) {return new Value(value);}
 
   public static final Token Null = new Token(Token.NULL, null);
 
@@ -91,31 +172,28 @@ public class Token
   public static final Token LBracket = new Token(Token.LBRACKET, "(");
   public static final Token RBracket = new Token(Token.RBRACKET, ")");
 
-  public static final Token Eq      = new Token(Token.EQ, "=");
-  public static final Token Ne      = new Token(Token.NE, "!=");
-  public static final Token Like    = new Token(Token.LIKE, "like");
-  public static final Token NotLike = new Token(Token.NOT_LIKE, "not_like");
+  public static final Token Eq       = new Token(Token.EQ, "=");
+  public static final Token Ne       = new Token(Token.NE, "!=");
+  public static final Token Like     = new Token(Token.LIKE, "like");
+  public static final Token Contains = new Token(Token.CONTAINS, "contains");
 
-  public static final Token EndsWith = new Token(Token.ENDS_WITH, "ends_with");
-
+  public static final Token EndsWith   = new Token(Token.ENDS_WITH, "ends_with");
   public static final Token StartsWith = new Token(Token.STARTS_WITH, "starts_with");
 
-  public static final Token Ge       = new Token(Token.GE, ">=");
-  public static final Token Gt       = new Token(Token.GT, ">");
-  public static final Token Le       = new Token(Token.LE, "<=");
-  public static final Token Lt       = new Token(Token.LT, "<");
-  public static final Token Match    = new Token(Token.MATCH, "match");
-  public static final Token NotMatch = new Token(Token.NOT_MATCH, "not_match");
-  public static final Token In       = new Token(Token.IN, "in");
-  public static final Token NotIn    = new Token(Token.NOT_IN, "not_in");
+  public static final Token Ge    = new Token(Token.GE, ">=");
+  public static final Token Gt    = new Token(Token.GT, ">");
+  public static final Token Le    = new Token(Token.LE, "<=");
+  public static final Token Lt    = new Token(Token.LT, "<");
+  public static final Token Match = new Token(Token.MATCH, "match");
+  public static final Token In    = new Token(Token.IN, "in");
+  public static final Token NotIn = new Token(Token.NOT_IN, "not_in");
 
-  public static final Token Contains = new Token(Token.CONTAINS, "contains");
+  public static final Token Exec = new Token(Token.EXEC, "exec");
 
   public static final Token IsNull    = new Token(Token.IS_NULL, "is");
   public static final Token IsNotNull = new Token(Token.IS_NOT_NULL, "is_not");
 
   public static final Token Eol = new Token(Token.EOL, "<eol>");
-
 
   public final int    token;
   public final Object value;
@@ -154,17 +232,13 @@ public class Token
   }
 
   @Override
-  public final String toString()
+  public String toString()
   {
-    switch (token)
+    if (token == SET)
     {
-      case STRING:
-        return quote(value.toString());
-      case SET:
-        return toString((Set<?>) value);
-      default:
-        return String.valueOf(value);
+      return toString((Set<?>) value);
     }
+    return String.valueOf(value);
   }
 
   public String name()

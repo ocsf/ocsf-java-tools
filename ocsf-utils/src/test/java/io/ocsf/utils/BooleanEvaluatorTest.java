@@ -532,6 +532,10 @@ public final class BooleanEvaluatorTest extends TestCase
     node = BooleanExpression.parse("data exec Company like 'Ac.*'");
     Assert.assertTrue(BooleanEvaluator.evaluate(node, map1));
     Assert.assertTrue(BooleanEvaluator.evaluate(node, map2));
+
+    node = BooleanExpression.parse("data.Company like 'Ac.*'");
+    Assert.assertTrue(BooleanEvaluator.evaluate(node, key -> Maps.getIn(map1, key)));
+    Assert.assertTrue(BooleanEvaluator.evaluate(node, key -> Maps.getIn(map2, key)));
   }
 
 
@@ -547,6 +551,14 @@ public final class BooleanEvaluatorTest extends TestCase
                 .p("Employee Id", 22)
                 .p("Employee Name", "Joe Doe")
           );
+
+    Assert.assertTrue(
+      BooleanEvaluator.evaluate(
+        BooleanExpression.parse("data contains 'Joe Doe'"), data));
+
+    Assert.assertTrue(
+      BooleanEvaluator.evaluate(
+        BooleanExpression.parse("'data.Employee Name' contains 'Joe Doe'"), key -> Maps.getIn(data, key)));
 
     Assert.assertTrue(
       BooleanEvaluator.evaluate(

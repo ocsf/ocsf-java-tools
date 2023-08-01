@@ -61,7 +61,7 @@ public final class BooleanEvaluator
     return false;
   }
 
-  public static boolean evaluate(final int op, final Object field, final Token value)
+  private static boolean evaluate(final int op, final Object field, final Token value)
   {
     return operations[op].evaluate(field, value);
   }
@@ -205,37 +205,6 @@ public final class BooleanEvaluator
       {
         return node.op.token == Token.NULL;
       }
-
-      return Strings.search(data.toString(), String.valueOf(node.op.value)) > -1;
-    }
-    else if (data instanceof Collection<?>)
-    {
-      for (final Object datum : ((Collection<Object>) data))
-        if (datum instanceof Map<?, ?> &&
-            evaluate(node, key -> Maps.getIn((Map<String, Object>) datum, key)))
-          return true;
-    }
-    else if (data instanceof Map<?, ?>)
-    {
-      return evaluate(node, key -> Maps.getIn((Map<String, Object>) data, key));
-    }
-
-    return false;
-  }
-
-  @SuppressWarnings("unchecked")
-  static boolean contains(final Tree node, final Object data)
-  {
-    if (node.op.isValue())
-    {
-      if (data instanceof Collection<?>)
-      {
-        for (final Object datum : ((Collection<Object>) data))
-          if (evaluate(Token.EQ, datum, node.op))
-            return true;
-      }
-      else if (data == null)
-        return node.op.token == Token.NULL;
 
       return Strings.search(data.toString(), String.valueOf(node.op.value)) > -1;
     }

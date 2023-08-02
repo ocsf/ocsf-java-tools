@@ -568,4 +568,43 @@ public final class BooleanEvaluatorTest extends TestCase
       BooleanEvaluator.evaluate(
         BooleanExpression.parse("(name contains 'doe')"), data));
   }
+
+  public void testNot()
+  {
+    final FMap<String, Object> data =
+      FMap.<String, Object>b()
+          .p("name", "Joe Doe")
+          .p(
+            "data",
+            FMap.b()
+                .p("Company", "Acme")
+                .p("Employee Id", 22)
+                .p("Employee Name", "Joe Doe")
+          );
+
+    Assert.assertTrue(
+      BooleanEvaluator.evaluate(
+        BooleanExpression.parse("not (data contains 'Jane Doe')"), data));
+
+    Assert.assertTrue(
+      BooleanEvaluator.evaluate(
+        BooleanExpression.parse("! (data contains 'Jane Doe')"), data));
+
+    Assert.assertFalse(
+      BooleanEvaluator.evaluate(
+        BooleanExpression.parse("not ('data.Employee Name' contains 'Joe Doe')"), key -> Maps.getIn(data, key)));
+
+    Assert.assertFalse(
+      BooleanEvaluator.evaluate(
+        BooleanExpression.parse("not ((nothing == null) and (name contains 'doe'))"), data));
+
+    Assert.assertTrue(
+      BooleanEvaluator.evaluate(
+        BooleanExpression.parse("name contains 'doe' and !(nothing != null)"), data));
+
+    Assert.assertTrue(
+      BooleanEvaluator.evaluate(
+        BooleanExpression.parse("name contains 'doe' and not (nothing != null)"), data));
+  }
+
 }

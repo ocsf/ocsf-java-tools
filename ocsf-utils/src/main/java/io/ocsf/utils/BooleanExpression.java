@@ -26,24 +26,20 @@ import java.util.Set;
  * The boolean expression grammar:
  *
  * <pre>
- *  &lt;expression&gt; := &lt;factor&gt; { &lt;OR&gt; &lt;expression&gt; }
- *  &lt;factor&gt;     := &lt;term&gt; { &lt;AND&gt; &lt;factor&gt; }
- *  &lt;AND&gt;        := "and"
- *  &lt;OR&gt;         := ""or"
- *  &lt;term&gt;       := "!(" &lt;expression&gt; ")" |
- *                        "(" &lt;expression&gt; ")" |
- *                        &lt;field&gt; &lt;operator&gt; &lt;value&gt;
- *  &lt;operator&gt;   := "=" | "!=" | "&lt;" | "&lt;=" | "&gt;" | "&gt;=" |
- *                        "is" |
- *                        "is_not" |
- *                        "in" |
- *                        "not_in" |
- *                        "exec" |
- *                        "contains" |
- *                        "like" |
- *                        "match" |
- *                        "starts_with" |
- *                        "ends_with"
+ *  &lt;expression&gt;  := &lt;factor&gt; { &lt;or&gt; &lt;expression&gt; }
+ *  &lt;factor&gt;      := &lt;term&gt; { &lt;and&gt; &lt;factor&gt; }
+ *  &lt;and&gt;         := "and"
+ *  &lt;or&gt;          := "or"
+ *  &lt;term&gt;        := "("&lt;expression&gt;")" | &lt;not&gt; "("&lt;expression&gt;")" |
+ *                   &lt;field&gt; &lt;operator&gt; &lt;value&gt;
+ *  &lt;not&gt;         := "not" | "!"
+ *  &lt;operator&gt;    := "=" | "==" | "!=" |
+ *                   "&lt;" | "&lt;=" | "&gt;" | "&gt;=" |
+ *                   "is" | "is_not" |
+ *                   "in" | "not_in" |
+ *                   "contains" | "like" | "match" |
+ *                   "starts_with" | "ends_with" |
+ *                   "exec"
  * </pre>
  * NOTE: This class is intended for use in a single thread.
  */
@@ -148,6 +144,7 @@ public final class BooleanExpression
     if (token == Token.Not)
     {
       nextToken();
+
       if (token == Token.LBracket)
       {
         term();
@@ -162,40 +159,50 @@ public final class BooleanExpression
     if (token == Token.LBracket)
     {
       nextToken();
+
       expression();
 
       if (token == Token.RBracket)
+      {
         nextToken();
-      else
-        throw new InvalidExpressionException(String.format(ERR_MSG, Token.RBracket, token));
+        return;
+      }
+      throw new InvalidExpressionException(String.format(ERR_MSG, Token.RBracket, token));
     }
-    else if (token.isField())
+
+    if (token.isField())
     {
       // save the last token
       final Token t = token;
 
       nextToken();
 
-      final Token op = token;
-      if (op.isRelOp())
+      if (token.isRelOp())
       {
+        // save the operand token
+        final Token op = token;
+
         nextToken();
+
         final Token value = token;
 
         if (value.isValue())
         {
           stack.push(new Tree(op, t, value));
           nextToken();
+          return;
         }
-        else
-        {
-          throw new InvalidExpressionException(String.format(ERR_MSG, "value", value));
-        }
+
+        throw new InvalidExpressionException(String.format(ERR_MSG, "value", value));
       }
-      else if (op == Token.Exec)
+
+      if (token == Token.Exec)
       {
-        // compile the 'exec' subexpression
+        // save the operand token
+        final Token op = token;
+
         nextToken();
+
         expression();
 
         if (stack.isEmpty())
@@ -211,11 +218,11 @@ public final class BooleanExpression
         {
           stack.push(new Tree(op, t, stack.pop()));
         }
+
+        return;
       }
-      else
-      {
-        throw new InvalidExpressionException(String.format(ERR_MSG, "operator", op));
-      }
+
+      throw new InvalidExpressionException(String.format(ERR_MSG, "operator", token));
     }
   }
 
@@ -576,6 +583,9 @@ public final class BooleanExpression
 
       case "null":
         return Token.Null;
+
+      case "not":
+        return Token.Not;
 
       case "or":
         return Token.Or;

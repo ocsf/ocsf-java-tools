@@ -52,6 +52,11 @@ instructions in the [Getting Started](docs/getting-started.md) guide.
 
 - **Translations**: For detailed information on how to write translations,
   please refer to the [Translations documentation](docs/event-translation-guide.md).
+  
+- **Translation Examples**: Explore translation examples in
+  the [examples directory](src/main/dist/examples) of the project.
+  These examples will help you understand how to effectively use the OCSF Schema
+  Java Tools for different scenarios.
 
 - **OCSF Schema**: Learn more about the OCSF Schema by visiting the schema
   repository on [GitHub](https://github.com/ocsf/ocsf-schema).

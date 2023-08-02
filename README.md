@@ -36,8 +36,7 @@ The OCSF Schema Java Tools project has the following dependencies:
    - **Minimum Java Version:** Java 11
    - **Purpose:** The `ocsf-cli` is a command-line tool that allows users to
      parse, translate, enrich, and validate the translated events. The event
-     validation uses the validation API (https://schema.ocsf.io/api/validate) of
-     the [OCSF Schema](https://schema.ocsf.io) server.
+     validation uses the OCSF schema validation API https://schema.ocsf.io/api/validate.
 
 ## Project Status
 
@@ -52,7 +51,7 @@ instructions in the [Getting Started](docs/getting-started.md) guide.
 ## Documentation
 
 - **Translations**: For detailed information on how to write translations,
-  please refer to the [Translations documentation](docs/translations.md).
+  please refer to the [Translations documentation](docs/event-translation-guide.md).
 
 - **OCSF Schema**: Learn more about the OCSF Schema by visiting the schema
   repository on [GitHub](https://github.com/ocsf/ocsf-schema).

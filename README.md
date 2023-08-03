@@ -54,7 +54,7 @@ instructions in the [Getting Started](docs/getting-started.md) guide.
   please refer to the [Translations documentation](docs/event-translation-guide.md).
   
 - **Translation Examples**: Explore translation examples in
-  the [examples directory](src/main/dist/examples) of the project.
+  the [examples directory](ocsf-cli/src/main/dist/examples) of the ocsf-cli project.
   These examples will help you understand how to effectively use the OCSF Schema
   Java Tools for different scenarios.
 

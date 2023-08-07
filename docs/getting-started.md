@@ -64,7 +64,7 @@ dependencies {
 
 - **Translations Documentation**: For more detailed information on writing
   translations and using the OCSF Schema Java Tools, refer to
-  the [Translations documentation](translations.md).
+  the [Translations documentation](event-translation-guide.md).
 
 - **Translation Examples**: Explore translation examples in
   the [examples directory](../ocsf-cli/src/main/dist/examples) of the project.

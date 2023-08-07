@@ -2,23 +2,23 @@
 
 ** DRAFT **
 
-Event translation is a multifaceted process encompassing two key tasks: data mapping and data transformation. Each of these tasks plays a crucial role in converting raw event data into structured events that adhere to the OCSF schema. 
+Event translation is the process of converting data from one format to another, so that it can be used by different applications or systems. Data mapping and data transformation are two key tasks involved in event translation. Each of these tasks plays a crucial role in converting raw event data into structured events that adhere to the OCSF schema.
 
-Data mapping focuses on the translation of source fields, which represent attributes in the original event data, to their corresponding destination fields, which follow the structure of the OCSF schema.
+ - Data mapping focuses on the translation of source fields, which represent attributes in the original event data, to their corresponding destination fields, which follow the structure of the OCSF schema.
 
-Data transformation involves the conversion of data from its original format to a new format required by the OCSF schema. The process can include other tasks like cleansing, restructuring, and normalization to create a cohesive and accurate representation of the original event data in the OCSF format.
+ - Data transformation involves the conversion of data from its original format to a new format required by the OCSF schema. The process can include other tasks like cleansing, restructuring, and normalization to create a cohesive and accurate representation of the original event data in the OCSF format.
 
 ## Summary
 
-This document serves as a comprehensive guide to establishing rules for both data mapping and data transformation. By using these rules, organizations can confidently translate raw event data into a structured format that adheres to the OCSF schema.
+This document serves as a guide to establishing rules for both data mapping and data transformation. By using these rules, organizations can translate raw event data into a structured format that adheres to the OCSF schema.
 
 For further information regarding the specifics of the OCSF schema and its requirements, refer to the OCSF Schema documentation: [https://schema.ocsf.io](https://schema.ocsf.io).
 
 ## Rule File Format
 
-The rule files contain a single JSON object with the following structure:
+A rule file contains a single JSON object with the following structure:
 
-```json5
+```json
 {
   "caption": "Rule Caption",
   "description": "Rule description.",
@@ -28,9 +28,18 @@ The rule files contain a single JSON object with the following structure:
   "when": "<expression>",
   "rules": [
     {
-      "<src-attribute>": {
+      // Short format of a translation rule
+      "<src-name>": {
+        "<operand>": "<dst-name>"
+      },
+      // Long format of a translation rule
+      "<src-name>": {
         "<operand>": {
-          // a set of properties, see below for more details
+         "name": "<dst-name>",
+         "when": "<expression>",
+         "type": "<type-name>",
+         "overwrite": [true, false],
+         "default": "<data>"
         }
       }
     }
@@ -55,13 +64,11 @@ The `<operand>` object properties vary based on the translation operation used (
 
 Multiple mapping rules within the `rules` array can define different translations for various source attributes.
 
-This JSON format provides a structured way to define translations, enabling clear and specific rules based on conditions specified in the `when` clause.
-
 ### Boolean Expressions
 
-Boolean expressions are employed in the `when` clause to define criteria determining when specific rules or translations should be applied. In this context, the `when` predicate typically specifies conditions that must be satisfied for a mapping rule to be triggered or executed.
+Boolean expressions are logical statements that evaluate to either `true` or `false`. They are used in the when clause to define criteria that determine when specific rules or translations should be applied.
 
-Boolean expressions combine **factors** and **terms** using specified **operators**.
+A Boolean expression combines **factors** and **terms** using **operators**.
 
 A **factor** consists of one or more **term** expressions separated by a boolean *operator*. Boolean operators include:
 
@@ -84,22 +91,43 @@ A **term** defines a boolean condition that evaluates to either `true` or `false
   * `>=`: Greater than or equal to comparison. Example: `port => 80`.
   * `in`: Checks if a value is present in a list of values. Example: `port in [80, 8000, 8080]`.
   * `not_in`: Checks if a value is not in a list of values. Example: `port not_in [80, 22]`.
-  * `contains`: Performs a substring matching. Example: `name contains "admin"`.
+  * `contains`: Performs a sub-string matching. Example: `name contains "admin"`.
   * `like`: Performs pattern matching using wildcards (`*` or `?`). Example: `name like "admin*"`.
   * `match`: Performs a regex pattern match. Example: `name regex "admin.*"`.
-  * `starts_with`: Checks if a string value starts with a given substring. Example: `name starts_with "admin"`.
-  * `ends_with`: Checks if a string value ends with a given substring. Example: `name ends_with "tor"`.
-  * `exec`: Executes a subexpression against array or object fields. Example: `user exec (name like "admin*" or name = "root")`.
+  * `starts_with`: Checks if a string value starts with a given sub-string. Example: `name starts_with "admin"`.
+  * `ends_with`: Checks if a string value ends with a given sub-string. Example: `name ends_with "tor"`.
+  * `exec`: Executes a sub-expression against embedded array or object. Example: `user exec (name like "admin*" or name = "root")`.
 
-## Mapping Rules
+Here are some examples of how to use boolean expressions in the when clause:
+```
+   # This rule will only be applied if the port is equal to 80
+   when port = 80
 
-The general format for mapping rules is:
+   # This rule will only be applied if the name contains "root" or starts with "admin"
+   when name contains "root" or name starts_with "admin"
 
-```json5
+   # This rule will only be applied if the user is not an administrator
+   when not user exec (role = "admin")
+
+      # Or, here is an alternative way to write the same rule:
+      when user.role != "admin"
+
+   # This rule will only be applied if the user.age is between 18 and 65
+   when user exec (age > 18 and age < 65)
+   
+      # Or, here is an alternative way to write the same rule:
+      when user.age > 18 and user.age < 65
+```
+
+## Translation Rules
+
+The general translation rule format is shown below, and the section below show details about each operation.
+
+```json
 {
-   "<src-attribute>": {
+   "<src-name>": {
       "<operand>": {
-         "name": "<dst-attribute>",
+         "name": "<dst-name>",
          "when": "<expression>",
          "type": "<type-name>",
          "overwrite": [true, false],
@@ -109,27 +137,28 @@ The general format for mapping rules is:
 }
 ```
 
+
 ### Move
 
-Move an attribute from the source data to the translated data. The translated
-attribute name can be the same or different from the source attribute name. 
-The attribute is removed from the source data.
+The `move` operation transfers an attribute value from the source data to the translated data. The translated attribute name can either remain the same or differ from the source attribute name. The original value is removed from the source data.
 
-#### Short Format
+#### Short format
+
+The short format for the `move` operation is:
 
 ```json
 {
-   "<src-attribute>": {
-      "@move": "<dst-attribute>"
+   "<src-name>": {
+      "@move": "<dst-name>"
    }
 }
 ```
 
-##### Example
+**Example**
 
-Rule:
+Consider the following two rules:
 
-```json5
+```json
 {
    "src_ip": {
       "@move": "src_endpoint.ip"
@@ -140,22 +169,22 @@ Rule:
 }
 ```
 
-Input data:
+Using the input data:
 
-```json5
+```json
 {
    "src_ip": "1.2.3.4",
    "dst_ip": "5.6.7.8",
    "user": {
       "name": "joe",
       "uid": 0
-   }    
+   }
 }
 ```
 
-Output data:
+The output data will be:
 
-```json5
+```json
 {
    "src_endpoint": {
       "ip": "1.2.3.4"
@@ -173,13 +202,18 @@ Output data:
 }
 ```
 
-#### Long Format
+In this example, the values of the `src_ip` and `user.name` attributes are moved to new locations within the translated data. Simultaneously, the original attributes that have not undergone translation are saved in the "unmapped" object. This methodology guarantees the preservation of all source data, even when certain data remains untranslated.
 
-```json5
+#### Long format
+
+The Long format for the `move` operation: (using a single attribute, which is the most common usage):
+
+```json
 {
-   "<src-attribute>": {
+   "<src-name>": {
       "@move": {
-         "name": "<dst-attribute>",
+         "name": "<dst-name>",
+         "when": "<expression>",
          "type": "<type-name>",
          "overwrite": [true, false],
          "default": "<data>"
@@ -188,15 +222,42 @@ Output data:
 }
 ```
 
-#### Long Format with Multiple attributes
+**Where**
 
-Use a comma-separated list of attributes to join data from multiple attributes.
+   - **name** : Translated attribute name (required).
+   - **when** : A Boolean guard that specifies the conditions under which the translation rule should be applied (optional).
+   - **type** : Type of the translated value (optional). See below for the available types.
+   - **overwrite** : A flag to indicate whether the translated attribute value should be overwritten if it already exists (optional, default: false).
+   - **default** : The default value to be used if the source attribute is missing (optional).
 
-```json5
+
+**Example**
+
+The example above can be rewritten using the long rule format as:
+
+```json
 {
-   "<src-attribute-name1>, <src-attribute-name2>, ...": {
+   "src_ip": {
       "@move": {
-         "name": "<dst-attribute>",
+         "name": "src_endpoint.ip"
+      }
+   },
+   "user.name": {
+      "@move": {
+         "name": "src_user.name"
+      }
+   }
+}
+```
+
+The Long format for the `move` operation using multiple attributes for concatenation. Use this format where you need to concatenate values from multiple source attributes into a single destination attribute:
+
+```json
+{
+   "<src-name-1>, <src-name-2>, ...": {
+      "@move": {
+         "name": "<dst-name>",
+         "when": "<expression>",
          "type": "<type-name>",
          "separator": "<joiner>",
          "overwrite": [true, false],
@@ -206,23 +267,24 @@ Use a comma-separated list of attributes to join data from multiple attributes.
 }
 ```
 
-##### Where
+**Where**
 
-   name        : Translated attribute name (required).
-   type        : Type of the translated value (optional). See below for available types.
-   separator   : Joiner used as a separator. Defaults to an empty string if not specified.
-   overwrite   : Flag to overwrite the translated attribute value if it already exists (optional, default: false).
-   default     : Default value if the source attribute is missing (optional).
+   - **name** : Translated attribute name (required).
+   - **when** : A Boolean guard that specifies the conditions under which the translation rule should be applied (optional).
+   - **type** : Type of the translated value (optional). See below for the available types.
+   - **separator**   : Joiner used as a separator (optional). Defaults to an empty string.
+   - **overwrite** : A flag to indicate whether the translated attribute value should be overwritten if it already exists (optional, default: false).
+   - **default** : The default value to be used if the source attribute is missing (optional).
 
-##### Example
+**Example**
 
-```json5
+```json
 {
    "path, name": {
       "@move": {
          "name": "process.file",
          "type": "file",
-         "separator": "\\"
+         "separator": "/"
       }
    }
 }
@@ -234,23 +296,24 @@ Copy an attribute value from the source data to the translated data.
 
 Note that the translated attribute name can be the same or different from the source attribute name. The source data remains unaffected.
 
-#### Short Format
+#### Short format
 
-```json5
+```json
 {
-   "<src-attribute>": {
-      "@copy": "<dst-attribute>"
+   "<src-name>": {
+      "@copy": "<dst-name>"
    }
 }
 ```
 
-#### Long Format
+#### Long format
 
-```json5
+```json
 {
-   "<src-attribute>": {
+   "<src-name>": {
       "@copy": {
-         "name": "<dst-attribute>",
+         "name": "<dst-name>",
+         "when": "<expression>",
          "type": "<type-name>",
          "overwrite": [true, false],
          "default": "<data>"
@@ -259,15 +322,16 @@ Note that the translated attribute name can be the same or different from the so
 }
 ```
 
-#### Long Format with Multiple attributes
+#### Long format with multiple attributes
 
 Use a comma-separated list of attributes to join data from multiple attributes.
 
-```json5
+```json
 {
-   "<src-attribute-name1>, <src-attribute-name2>, ...": {
+   "<src-name-name1>, <src-name-name2>, ...": {
       "@copy": {
-         "name": "<dst-attribute>",
+         "name": "<dst-name>",
+         "when": "<expression>",
          "type": "<type-name>",
          "separator": "<joiner>",
          "overwrite": [true, false],
@@ -277,46 +341,51 @@ Use a comma-separated list of attributes to join data from multiple attributes.
 }
 ```
 
-##### Where
-
-   name        : Translated attribute name (required).
-   type        : Type of the translated value (optional). See below for available types.
-   separator   : Joiner used as a separator. Defaults to an empty string if not specified.
-   overwrite   : Flag to overwrite the translated attribute value if it already exists (optional, default: false).
-   default     : Default value if the source attribute is missing (optional).
-
 ### Remove
 
 Remove an attribute from the source data.
 
-#### Short Format
+#### Short format
 
-```json5
+```json
 {
-   "<src-attribute>": {
+   "<src-name>": {
       "@remove": true
    }
 }
 ```
 
-#### Value
+#### Long format
+
+```json
+{
+   "<src-name>": {
+      "@copy": {
+         "name": "<dst-name>",
+         "when": "<expression>"
+      }
+   }
+}
+```
+
+### Value
 
 Set an attribute in the translated data to the specified value. The value type can be any valid JSON type. The source data remains unaffected.
 
 #### Format
 
-```json5
+```json
 {
-   // Use underscore to specify that there is no src-attribute  
+   // Use underscore to specify that there is no src-name  
    "_": {
      // JSON data
    }
 }
 ```
 
-##### Example
+**Example**
 
-```json5
+```json
 {
    "_": {
      "category_id": 1,
@@ -332,9 +401,9 @@ Set an attribute in the translated data to the specified value. The value type c
 }
 ```
 
-Input data:
+Given this input data:
 
-```json5
+```json
 {
    "src_ip": "1.2.3.4",
    "dst_ip": "5.6.7.8",
@@ -345,9 +414,9 @@ Input data:
 }
 ```
 
-Output data:
+The output data will be:
 
-```json5
+```json
 {
    "category_id": 1,
    "class_uid": 1001,
@@ -369,22 +438,18 @@ Output data:
 }
 ```
 
-##### Where
-
-   data        : Data to set the attribute value (required), valid JSON data.
-   overwrite   : Flag to overwrite the translated attribute if it already exists (optional, default: false).
-
 ### Enum/Lookup
 
 The `enum` translation rule creates enum values from raw data values. The attribute is removed from the source data.
 
 #### Format
 
-```json5
+```json
 {
-   "<src-attribute>": {
+   "<src-name>": {
       "@enum": {
-         "name"  : "<dst-attribute>",
+         "name"  : "<dst-name>",
+         "when": "<expression>",
          "values": "<lookup-table>",
          "other" : "<type-name>",
          "overwrite": [true, false],
@@ -398,11 +463,12 @@ The `lookup` translation rule creates enum values from raw data values. The sour
 
 #### Format
 
-```json5
+```json
 {
-   "<src-attribute>": {
+   "<src-name>": {
       "@lookup": {
-         "name"  : "<dst-attribute>",
+         "name"  : "<dst-name>",
+         "when": "<expression>",
          "values": "<lookup-table>",
          "other" : "<type-name>",
          "overwrite": [true, false],
@@ -412,17 +478,9 @@ The `lookup` translation rule creates enum values from raw data values. The sour
 }
 ```
 
-##### Where
+**Example**
 
-   name        : Translated attribute name (required).
-   values      : Lookup table to translate values to enums (required).
-   other       : Attribute to save untranslated values (optional).
-   overwrite   : Flag to overwrite the translated attribute value if it already exists (optional, default: false).
-   default     : Default value if the source attribute is missing (optional).
-
-##### Example
-
-```json5
+```json
   {
    "Opcode": {
      "@enum": {

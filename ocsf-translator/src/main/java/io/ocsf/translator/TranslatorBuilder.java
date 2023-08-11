@@ -46,7 +46,7 @@ public final class TranslatorBuilder
 {
   private static final Logger logger = LoggerFactory.getLogger(TranslatorBuilder.class);
 
-  public static final String RuleList = "rules";
+  public static final  String RuleList = "rules";
   private static final String RuleSet  = "ruleset";
 
   private static final String Include    = "@include";
@@ -158,7 +158,7 @@ public final class TranslatorBuilder
     final Path home, final JsonReader reader, final Map<String, Object> map) throws IOException
   {
     final Translator translator = createTranslator(
-      (String) map.get(Predicate), readParser(map), readRules(home, reader, map));
+      (String) map.get(Predicate), readParsers(home, reader, map), readRules(home, reader, map));
 
     final Collection<Map<String, Object>> ruleset = Maps.typecast(map.get(RuleSet));
     if (ruleset == null || ruleset.isEmpty())
@@ -171,7 +171,8 @@ public final class TranslatorBuilder
       for (final Map<String, Object> rule : ruleset)
       {
         list.add(createSubTranslator(
-          (String) rule.get(Predicate), readParser(rule), readRules(home, reader, rule)));
+          (String) rule.get(Predicate),
+          readParsers(home, reader, rule), readRules(home, reader, rule)));
       }
 
       return new Translator()
@@ -221,36 +222,87 @@ public final class TranslatorBuilder
     }
   }
 
-  private static DataTranslator readParser(final Map<String, Object> rule)
+  private static DataTranslator readParsers(
+    final Path home, final JsonReader reader, final Map<String, Object> rule) throws IOException
   {
     final Map<String, Object> parser = Maps.typecast(rule.get(Parser));
     if (parser != null)
     {
-      return createParser(parser);
+      return loadParser(home, reader, parser);
     }
 
     final List<Map<String, Object>> parsers = Maps.typecast(rule.get(Parsers));
     if (parsers != null)
     {
-      final MultiStageParser list = new MultiStageParser();
-
-      for (final Map<String, Object> p : parsers)
-      {
-        list.add(createParser(p));
-      }
-
-      return list;
+      return loadParsers(home, reader, parsers, new MultiStageParser());
     }
 
     return data -> data;
   }
 
-  private static DataTranslator createParser(final Map<String, Object> parserRule)
+  private static DataTranslator loadParsers(
+    final Path home,
+    final JsonReader reader,
+    final Collection<Map<String, Object>> parsers,
+    final MultiStageParser list) throws IOException
   {
-    final String srcKey = (String) parserRule.get(NameField);
-    final String dstKey = (String) parserRule.get(OutputField);
+    for (final Map<String, Object> p : parsers)
+    {
+      final String filename = Maps.get(p, Include);
 
-    return buildDataTranslator(parserRule, parser -> data -> {
+      if (filename != null)
+      {
+        final Object included = reader.read(home.resolve(filename));
+        if (included instanceof Map<?, ?>)
+        {
+          // includes a single parser
+          list.add(createParser(Maps.typecast(included)));
+        }
+        else if (included instanceof Collection<?>)
+        {
+          // includes a list of parsers
+          loadParsers(home, reader, Maps.typecast(included), list);
+        }
+      }
+      else
+      {
+        list.add(createParser(p));
+      }
+    }
+
+    return list;
+  }
+
+  private static DataTranslator loadParser(
+    final Path home, final JsonReader reader, final Map<String, Object> map) throws IOException
+  {
+    final String filename = Maps.get(map, Include);
+
+    if (filename != null)
+    {
+      final Object included = reader.read(home.resolve(filename));
+      if (included instanceof Map<?, ?>)
+      {
+        // includes a single parser
+        return createParser(Maps.typecast(included));
+      }
+
+      if (included instanceof Collection<?>)
+      {
+        // includes a list of parsers
+        return loadParsers(home, reader, Maps.typecast(included), new MultiStageParser());
+      }
+    }
+
+    return createParser(map);
+  }
+
+  private static DataTranslator createParser(final Map<String, Object> map)
+  {
+    final String srcKey = (String) map.get(NameField);
+    final String dstKey = (String) map.get(OutputField);
+
+    return buildDataTranslator(map, parser -> data -> {
       final String text = (String) Maps.getIn(data, srcKey);
       if (Strings.isNotEmpty(text))
       {

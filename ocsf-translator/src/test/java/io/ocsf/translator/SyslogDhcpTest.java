@@ -22,6 +22,7 @@ import io.ocsf.utils.parsers.Json5Parser;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.nio.file.Paths;
 import java.util.Map;
 
 public class SyslogDhcpTest
@@ -79,12 +80,7 @@ public class SyslogDhcpTest
     "  \"when\": \"message starts_with 'DHCPACK'\"," +
     "  \"parser\": {" +
     "    \"name\": \"message\"," +
-    "    \"regex\": \"(?<evcls>DHCPACK)\\\\s+on\\\\s+" +
-    "(?<ip>\\\\S+)\\\\s+to\\\\s+(?<mac>\\\\S+)(?:\\\\s+\\\\" +
-    "((?<host>.+?)\\\\))?\\\\s+via\\\\s+(?<interface>.*)" +
-    "\\\\s+relay\\\\s+(?<relay>\\\\S+)" +
-    "\\\\s+lease-duration\\\\s+(?<duration>\\\\d+).*?" +
-    "(?:uid\\\\s+(?<uid>.+))?\"," +
+    "    \"regex\": \"(?<evcls>DHCPACK)\\\\s+on\\\\s+(?<ip>\\\\S+)\\\\s+to\\\\s+(?<mac>\\\\S+)(?:\\\\s+\\\\((?<host>.+?)\\\\))?\\\\s+via\\\\s+(?<interface>.*)\\\\s+relay\\\\s+(?<relay>\\\\S+)\\\\s+lease-duration\\\\s+(?<duration>\\\\d+).*?(?:uid\\\\s+(?<uid>.+))?\"," +
     "    \"output\": \"event_data\"" +
     "  }," +
     "  \"rules\": [" +
@@ -99,6 +95,36 @@ public class SyslogDhcpTest
     "      }" +
     "    }" +
     "  ]" +
+    "}";
+
+  private static final String RegexRule2Parser = "DhcpAckRegex";
+
+  private static final String RegexRule2 =
+    "{" +
+    "  \"desc\": \"Translates Infoblox DHCP\"," +
+    "  \"when\": \"message starts_with 'DHCPACK'\"," +
+    "  \"parser\": {" +
+    "    \"@include\": \"" + RegexRule2Parser + "\"" +
+    "  }," +
+    "  \"rules\": [" +
+    "    {" +
+    "      \"event_data.ip\": {" +
+    "        \"@move\": \"ip\"" +
+    "      }" +
+    "    }," +
+    "    {" +
+    "      \"event_data.mac\": {" +
+    "        \"@move\": \"mac\"" +
+    "      }" +
+    "    }" +
+    "  ]" +
+    "}";
+
+  private static final String DhcpAckRegex =
+    "{" +
+    "  \"name\": \"message\"," +
+    "  \"regex\": \"(?<evcls>DHCPACK)\\\\s+on\\\\s+(?<ip>\\\\S+)\\\\s+to\\\\s+(?<mac>\\\\S+)(?:\\\\s+\\\\((?<host>.+?)\\\\))?\\\\s+via\\\\s+(?<interface>.*)\\\\s+relay\\\\s+(?<relay>\\\\S+)\\\\s+lease-duration\\\\s+(?<duration>\\\\d+).*?(?:uid\\\\s+(?<uid>.+))?\"," +
+    "  \"output\": \"event_data\"" +
     "}";
 
   private static final String MultiStageParsingRule =
@@ -266,6 +292,30 @@ public class SyslogDhcpTest
       final Map<String, Object> parsed = Json5Parser.to(Data);
       final Map<String, Object> translated = TranslatorBuilder
         .fromString(RegexRule)
+        .apply(parsed);
+
+      Assert.assertEquals(2, translated.size());
+      Assert.assertEquals("192.168.1.120", Maps.getIn(translated, "ip"));
+      Assert.assertEquals("00:50:56:13:60:56", Maps.getIn(translated, "mac"));
+    }
+    catch (final Exception e)
+    {
+      Assert.fail(e.getMessage());
+    }
+  }
+
+  @Test
+  public void regexParseInclude()
+  {
+    try
+    {
+      final Map<String, Object> parsed = Json5Parser.to(Data);
+
+      final Map<String, Object> translated = TranslatorBuilder
+        .build(Paths.get(""), path -> {
+          Assert.assertEquals(RegexRule2Parser, path.toString());
+          return Json5Parser.parse(DhcpAckRegex);
+        }, Json5Parser.to(RegexRule2))
         .apply(parsed);
 
       Assert.assertEquals(2, translated.size());

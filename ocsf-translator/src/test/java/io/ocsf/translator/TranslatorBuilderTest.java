@@ -530,7 +530,7 @@ public final class TranslatorBuilderTest extends TestCase
   public void testBadUrlText() throws IOException
   {
     final Map<String, Object> data =
-      Json5Parser.to("{'text': 'htts:/example.io/tmp/test.html?p1=hello&p2=world'}");
+      Json5Parser.to("{'text': 'https:/example.io/tmp/test.html?p1=hello&p2=world'}");
     final Map<String, Object> translated = TranslatorBuilder
       .fromString("{rules:[{text:{@move: {name: 'url', type: 'url'}}}]}")
       .apply(data);
@@ -540,7 +540,7 @@ public final class TranslatorBuilderTest extends TestCase
     Assert.assertNotNull(url);
 
     Assert.assertEquals(
-      "htts:/example.io/tmp/test.html?p1=hello&p2=world", url.get(Dictionary.Text));
+      "https:/example.io/tmp/test.html?p1=hello&p2=world", url.get(Dictionary.Text));
   }
 
   public void testEmptyUrlText() throws IOException

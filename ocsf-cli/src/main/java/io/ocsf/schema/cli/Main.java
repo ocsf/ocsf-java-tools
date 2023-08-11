@@ -638,7 +638,7 @@ public final class Main
       }
     });
 
-    if (matches.size() == 0)
+    if (matches.isEmpty())
     {
       // didn't find anything
       throw new FileNotFoundException(

@@ -72,15 +72,19 @@ public final class Utils
    * @return the parse number
    * @throws NumberFormatException if the string does not contain a number
    */
-  @SuppressWarnings("WrapperTypeMayBePrimitive")
   public static Number parseNumber(final String s)
   {
-    final Long N = Long.valueOf(s);
-    final int  n = N.intValue();
+    final long N = Long.parseLong(s);
+    final int  n = (int) N;
 
     // don't use ?: statement, it will break the code!
-    if (n == N) return n;
+    if (n == N)
+    {
+      // return Integer
+      return n;
+    }
 
+    // return Long
     return N;
   }
 

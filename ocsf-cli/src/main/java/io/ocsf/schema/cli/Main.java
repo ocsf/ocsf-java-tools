@@ -479,10 +479,10 @@ public final class Main
       {
         final Schema schema = new Schema(schemaFile, schemaEnums, observables);
 
-        return data -> Utils.addUuid(schema.enrich(translator.apply(data)));
+        return data -> Utils.addTypeUid(Utils.addUuid(schema.enrich(translator.apply(data))));
       }
 
-      return data -> Utils.addUuid(translator.apply(data));
+      return data -> Utils.addTypeUid(Utils.addUuid(translator.apply(data)));
     }
     catch (final ParserException e)
     {

@@ -1,0 +1,38 @@
+{
+  "category_uid": 0,
+  "class_uid": 0,
+  "activity_id": 99,
+  "type_uid": 99,
+  "severity_id": 1,
+  "time": 1693351720251,
+  "message": "User 'admin', running 'CLI' from IP 0.0.0.0, executed 'dir disk0:/dap.xml'",
+  "metadata": {
+    "event_code": "111010",
+    "original_time": "Oct 06 2021 15:02:30",
+    "product": {
+      "lang": "en",
+      "name": "ASA",
+      "vendor_name": "Cisco"
+    },
+    "profiles": [],
+    "uid": "8a56ae4b-dab3-4d6f-8dba-221ed7d8a481",
+    "version": "1.0.0-rc.3"
+  },
+  "actor": {
+    "user": {
+      "name": "admin"
+    }
+  },
+  "device": {
+    "ip": "10.160.0.10"
+  },
+  "unmapped": {
+    "event_data": {
+      "application": "CLI",
+      "cmd": "dir disk0:/dap.xml",
+      "ip_addr": "0.0.0.0"
+    },
+    "facility": 20,
+    "level": 5
+  }
+}

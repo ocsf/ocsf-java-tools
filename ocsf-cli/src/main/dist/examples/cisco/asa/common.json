@@ -1,0 +1,75 @@
+[
+  {
+    "_": {
+      "@value": {
+        "category_uid": 0,    // Uncategorized
+        "class_uid": 0,       // Base Event
+        "activity_id": 99,		// Other
+        "metadata": {
+          "product": {
+            "lang": "en",
+            "vendor_name": "Cisco"
+          },
+          "profiles": []      // No profiles
+        }
+      }
+    }
+  },
+  {
+    "product": {
+      "@move": {
+        "name": "metadata.product.name"
+      }
+    }
+  },
+  {
+    "code": {
+      "@move": {
+        "name": "metadata.event_code",
+        "type": "string"
+      }
+    }
+  },
+  {
+    "message": {
+      "@move": {
+        "name": "message"
+      }
+    }
+  },
+  {
+    "severity": {
+      "desc": "Normalize Cisco ASA event severity",
+      "@enum": {
+        "name": "severity_id",
+        "default": 99,
+        "other": "severity",
+        "overwrite": false,
+        "values": {
+          "6": 1,
+          "5": 1,
+          "4": 2,
+          "3": 3,
+          "2": 4,
+          "1": 5
+        }
+      }
+    }
+  },
+  {
+    "timestamp": {
+      "desc": "The time of the event",
+      "@copy": {
+        "name": "metadata.original_time"
+      }
+    }
+  },
+  {
+    "timestamp": {
+      "@move": {
+        "name": "time",
+        "type": "timestamp"
+      }
+    }
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "severity": 5,
+  "product": "ASA",
+  "code": 111010,
+  "level": 5,
+  "host": "10.160.0.10",
+  "message": "User 'admin', running 'CLI' from IP 0.0.0.0, executed 'dir disk0:/dap.xml'",
+  "facility": 20,
+  "timestamp": "Oct 06 2021 15:02:30"
+}

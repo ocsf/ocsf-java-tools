@@ -40,7 +40,9 @@ public final class URLObj
    * Parses a given URL string and extracts the URL components.
    *
    * @param urlStr URL string
-   * @return a URL object
+   * @return URL object
+   *
+   * @throws MalformedURLException if no protocol is specified, or an unknown protocol is found.
    */
   public static Map<String, Object> toUrl(final String urlStr) throws MalformedURLException
   {

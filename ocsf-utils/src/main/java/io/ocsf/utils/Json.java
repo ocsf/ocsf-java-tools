@@ -39,7 +39,7 @@ public final class Json
 {
   private Json() {}
 
-  // ISO 8601 data/time format used for <code>Date</code> fields
+  // ISO 8601 data/time format used for Date fields
   private static final String            ISO8601        = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
   private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(ISO8601);
 

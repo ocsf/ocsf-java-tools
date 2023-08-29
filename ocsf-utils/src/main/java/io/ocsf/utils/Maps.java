@@ -310,6 +310,7 @@ public final class Maps
      * @param key    the duplicate key
      * @param value1 the type of the first value (the value of key in map1)
      * @param value2 the type of the second value (the value of key in map2)
+     * @return a value to ve associated with the key
      */
     Object apply(final String key, final Object value1, final Object value2);
 

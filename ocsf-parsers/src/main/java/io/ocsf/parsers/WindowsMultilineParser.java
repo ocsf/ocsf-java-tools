@@ -44,7 +44,6 @@ import java.util.Map;
  *   &lt;separator&gt;  := ':' | '='
  *   &lt;eol&gt;        := '\n' | '\r\n'
  *  </pre>
- * <p>
  */
 public class WindowsMultilineParser implements Parser
 {

@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Schema utility function.
+ * Schema utility functions.
  */
 public final class Utils
 {
@@ -64,5 +64,25 @@ public final class Utils
   public static int typeUid(final int uid, final int id)
   {
     return uid * 100 + (id >= 0 ? id : Dictionary.OTHER_ID);
+  }
+
+  /**
+   * Adds the event {@code type_uid} using the values of {@code activity_id} and {@code class_uid}
+   * retrieved from the given event data.
+   *
+   * @param data the event data
+   * @return the updated event containing an event {@code type_uid}.
+   */
+  public static Map<String, Object> addTypeUid(final Map<String, Object> data)
+  {
+    final Integer classId =
+      (Integer) data.getOrDefault(Dictionary.CLASS_UID, Dictionary.UNKNOWN_ID);
+
+    final Integer activity =
+      (Integer) data.getOrDefault(Dictionary.ACTIVITY_ID, Dictionary.UNKNOWN_ID);
+
+    data.put(Dictionary.TYPE_UID, typeUid(classId, activity));
+
+    return data;
   }
 }

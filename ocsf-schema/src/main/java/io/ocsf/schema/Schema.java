@@ -318,15 +318,7 @@ public final class Schema
     final boolean siblings,
     final boolean observables)
   {
-    final int classId = (int) type.get(UID);
-
-    final Integer activity = (Integer) data.getOrDefault(
-      Dictionary.ACTIVITY_ID,
-      Dictionary.UNKNOWN_ID);
-
-    final int uid = Utils.typeUid(classId, activity);
-
-    data.put(Dictionary.TYPE_UID, uid);
+    Utils.addTypeUid(data);
 
     if (siblings)
     {
@@ -725,8 +717,9 @@ public final class Schema
       final FMap<String, Object> observable = FMap.<String, Object>b()
                                                   .p(NAME, name)
                                                   .p(
-                                                    TYPE, observableTypes.getOrDefault(typeId,
-                                                                                       Dictionary.OTHER))
+                                                    TYPE, observableTypes.getOrDefault(
+                                                      typeId,
+                                                      Dictionary.OTHER))
                                                   .p(TYPE_ID, typeId);
 
       observables.add(observable);

@@ -81,7 +81,7 @@ public class PatternParserTest
   @Test
   public void cisco() throws Exception
   {
-    final String text    =
+    final String text =
       "Feb 11 08:09:08 10.192.0.1 : %ASA-4-722051: Group <sslvpn> User <harry0houdini0> IP <192.0" +
       ".2.250> IPv4 Address <10.10.20.1> IPv6 address <::> assigned to session";
     final String pattern =
@@ -98,7 +98,7 @@ public class PatternParserTest
   @Test
   public void webGateway() throws Exception
   {
-    final String text    =
+    final String text =
       "[01/Jul/2014:17:17:01 -0700] \"sghadarg\" 10.34.246.186 192.0.2.34 1130 200 " +
       "TCP_MISS_RELOAD \"GET https://d29r7idq0wxsiz.cloudfront" +
       ".net/6d20156b-f214968326%2F5d877b17-ca06-3851-b4d7-727333d868d8" +
@@ -125,7 +125,7 @@ public class PatternParserTest
   @Test
   public void json() throws Exception
   {
-    final String text    =
+    final String text =
       "Feb 11 08:09:08 10.192.0.1: {\"customer_uid\": \"test_tenant\", \"Task\": \"12544\", " +
       "\"Correlation\": {\"ActivityID\": \"{C31DFEBE-8DAB-000B-BFFE-1DC3AB8DD601}\"}, " +
       "\"Keywords\": \"0x8020000000000000\", \"Channel\": \"Security\", \"Opcode\": \"0\", " +
@@ -155,7 +155,7 @@ public class PatternParserTest
   @Test
   public void cef() throws Exception
   {
-    final String text    =
+    final String text =
       "<27>Oct  1 12:47:58 192.168.1.2 threat-protect-log[5754]: CEF:0|Infoblox|NIOS Threat|8.4" +
       ".4-386831|120303001|blocklist:foo.foo.foo|7|src=192.168.1.3 spt=63290 dst=192.168.1.2 " +
       "dpt=53 act=\"DROP\" cat=\"BLOCKLIST UDP FQDN lookup\" nat=0 nfpt=0 nlpt=0 fqdn=foo.foo.foo" +
@@ -170,9 +170,21 @@ public class PatternParserTest
   }
 
   @Test
+  public void cefNetskop() throws Exception
+  {
+    final String text =
+      "2023-08-02T06:56:06+00:00 netskopece CEF: 0|Netskope|alliances|NULL|audit|NULL|High|auditLogEvent=Access Denied auditType=admin_audit_logs suser=null timestamp=1690957108";
+    final String pattern =
+      "#{log_time} netskopece #{data: cef}";
+
+    final Map<String, Object> data = PatternParser.create(pattern).parse(text);
+    Assert.assertEquals(2, data.size());
+  }
+
+  @Test
   public void panTraffic() throws Exception
   {
-    final String text    =
+    final String text =
       "Oct  5 14:57:17 EFF-N-NYIDC-PA-1.Acme048.ad.net  : 1,2015/10/05 14:57:16,0009C103532," +
       "TRAFFIC,start,1,2015/10/05 14:57:16,192.0.2.115,192.0.2.166,192.0.2.4,192.0.2.166,Preblock" +
       " apps - Skype,acme048-ad\\duquemak,,skype,vsys1,Acme048Net,Internet,ethernet1/2," +

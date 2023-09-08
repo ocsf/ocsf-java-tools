@@ -81,13 +81,13 @@ public final class CEFParser
       if (fields.length == 8)
       {
         final Map<String, Object> map = new HashMap<>();
-        map.put(VERSION, Integer.parseInt(fields[0]));
+        map.put(VERSION, parseInteger(fields[0]));
         map.put(DEVICE_VENDOR, fields[1]);
         map.put(DEVICE_PRODUCT, fields[2]);
         map.put(DEVICE_VERSION, fields[3]);
         map.put(SIGNATURE_ID, fields[4]);
         map.put(NAME, fields[5]);
-        map.put(SEVERITY, Integer.parseInt(fields[6]));
+        map.put(SEVERITY, parseInteger(fields[6]));
         map.put(EXTENSION, fields[7]);
 
         return map;
@@ -95,5 +95,17 @@ public final class CEFParser
     }
 
     throw new ParserException("Invalid CEF message: " + message);
+  }
+
+  private static Object parseInteger(final String s)
+  {
+    try
+    {
+      return Integer.parseInt(s.trim());
+    }
+    catch (final NumberFormatException ex)
+    {
+      return s;
+    }
   }
 }

@@ -34,6 +34,13 @@ public class CEFParserTest
   }
 
   @Test
+  public void parseNetskope()
+  {
+    parse(
+      "CEF: 0|Netskope|alliances|NULL|audit|NULL|High|auditLogEvent=Access Denied auditType=admin_audit_logs suser=null timestamp=1690957108");
+  }
+
+  @Test
   public void parseInfobloxThreatprotect()
   {
     parse(

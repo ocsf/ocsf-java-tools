@@ -20,8 +20,12 @@
       }
     },
     {
+      // using a conditional translation
       "event_data.username": {
-        "@move": "actor.user.name"
+        "@move": {
+          "when": "event_data.username != null",
+          "name": "actor.user.name"
+        }
       }
     }
   ]

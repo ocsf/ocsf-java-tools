@@ -29,11 +29,11 @@ A rule file contains a single JSON object with the following structure:
   "rules": [
     {
       // Short format of a translation rule
-      "<src-name>": {
+      "<src-name1>": {
         "<operand>": "<dst-name>"
       },
       // Long format of a translation rule
-      "<src-name>": {
+      "<src-name2>": {
         "<operand>": {
          "name": "<dst-name>",
          "when": "<expression>",
@@ -249,6 +249,28 @@ The example above can be rewritten using the long rule format as:
    }
 }
 ```
+
+**Example with a conditional translation**
+
+The example above can be rewritten using the long rule format as:
+
+```json
+{
+   "src_ip": {
+      "@move": {
+         "name": "src_endpoint.ip"
+      }
+   },
+   "user.name": {
+      "@move": {
+         "when": "user.name != null",
+         "name": "src_user.name"
+      }
+   }
+}
+```
+
+#### Long format using multiple attributes
 
 The Long format for the `move` operation using multiple attributes for concatenation. Use this format where you need to concatenate values from multiple source attributes into a single destination attribute:
 

@@ -602,4 +602,51 @@ public final class TranslatorBuilderTest extends TestCase
       Collections.singletonList(""), TranslatorBuilder.toArray("\n"));
 
   }
+
+  public void testCopyArrayValue2() throws IOException
+  {
+    final Map<String, Object> translated = TranslatorBuilder
+      .fromString("{rules: [{port: {@copy: {name: 'port', is_array: true}}}]}")
+      .apply(data);
+
+    Assert.assertEquals(1, translated.size());
+    Assert.assertTrue(translated.get("port") instanceof List<?>);
+    final List<?> list = (List<?>) translated.get("port");
+    Assert.assertEquals(1, list.size());
+    final Object value = list.get(0);
+    Assert.assertTrue(value instanceof Integer);
+  }
+
+  public void testCopyAndTypecastArrayValue() throws IOException
+  {
+    final Map<String, Object> translated = TranslatorBuilder
+      .fromString("{rules: [{port: {@copy: {name: 'port', is_array: true, type: 'string'}}}]}")
+      .apply(data);
+
+    Assert.assertEquals(1, translated.size());
+    Assert.assertTrue(translated.get("port") instanceof List<?>);
+    final List<?> list = (List<?>) translated.get("port");
+    Assert.assertEquals(1, list.size());
+    final Object value = list.get(0);
+    Assert.assertTrue(value instanceof String);
+  }
+
+  public void testCopyAndTypecastArrayValuesAsInt() throws IOException
+  {
+    final Map<String, Object> data =
+      Json5Parser.to("{name: 'foo', port:42, rule: 'test data', ports: '22 42 69'}");
+
+    final Map<String, Object> translated = TranslatorBuilder
+      .fromString("{rules: [{ports: {@copy: {name: 'ports', is_array: true, type: 'integer'}}}]}")
+      .apply(data);
+
+    Assert.assertEquals(1, translated.size());
+    Assert.assertTrue(translated.get("ports") instanceof List<?>);
+
+    final List<?> list = (List<?>) translated.get("ports");
+    Assert.assertEquals(3, list.size());
+    Assert.assertEquals(22, list.get(0));
+    Assert.assertEquals(42, list.get(1));
+    Assert.assertEquals(69, list.get(2));
+  }
 }

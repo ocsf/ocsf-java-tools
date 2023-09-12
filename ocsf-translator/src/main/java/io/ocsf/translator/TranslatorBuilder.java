@@ -809,7 +809,7 @@ public final class TranslatorBuilder
                 final List<Object> list = new ArrayList<>();
                 for (final Object o : toArray(value))
                 {
-                  final Object parsed = o != null ? typecast(value, type) : null;
+                  final Object parsed = o != null ? typecast(o, type) : null;
                   list.add(parsed);
                 }
 

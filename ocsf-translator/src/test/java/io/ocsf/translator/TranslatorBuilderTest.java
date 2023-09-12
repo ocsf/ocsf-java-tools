@@ -25,6 +25,8 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -557,5 +559,47 @@ public final class TranslatorBuilderTest extends TestCase
     Assert.assertEquals("", url.get(Dictionary.Text));
     Assert.assertEquals("", url.get(Dictionary.Scheme));
     Assert.assertEquals("", url.get(Dictionary.Hostname));
+  }
+
+  public void testToArray()
+  {
+    // single value
+    Assert.assertEquals(Collections.singletonList(null), TranslatorBuilder.toArray(null));
+
+    Assert.assertEquals(Collections.singletonList(1), TranslatorBuilder.toArray(1));
+
+    Assert.assertEquals(Collections.singletonList("a"), TranslatorBuilder.toArray("a"));
+
+    // array value - all should just pass through
+    Assert.assertEquals(Collections.EMPTY_LIST, TranslatorBuilder.toArray(Collections.EMPTY_LIST));
+
+    Assert.assertEquals(
+      Collections.singletonList(1), TranslatorBuilder.toArray(Collections.singletonList(1)));
+
+    Assert.assertEquals(
+      Collections.singletonList(null), TranslatorBuilder.toArray(Collections.singletonList(null)));
+
+    Assert.assertEquals(
+      Arrays.asList("a", "b"), TranslatorBuilder.toArray(Arrays.asList("a", "b")));
+
+    // Single string value, split into list
+    Assert.assertEquals(Arrays.asList("a", "b"), TranslatorBuilder.toArray("a b"));
+
+    Assert.assertEquals(Arrays.asList("a", "b"), TranslatorBuilder.toArray("a\tb"));
+    Assert.assertEquals(Arrays.asList("a", "b"), TranslatorBuilder.toArray("a\nb"));
+    Assert.assertEquals(Arrays.asList("a", "b"), TranslatorBuilder.toArray("a\n\tb"));
+    Assert.assertEquals(Arrays.asList("a", "b"), TranslatorBuilder.toArray("a\n\tb\n"));
+    Assert.assertEquals(Arrays.asList("a", "b"), TranslatorBuilder.toArray("a b "));
+    Assert.assertEquals(Arrays.asList("a", "b"), TranslatorBuilder.toArray(" a b"));
+
+    // Edge cases
+    Assert.assertEquals(
+      "Empty string results in list of one element with an empty string",
+      Collections.singletonList(""), TranslatorBuilder.toArray(""));
+
+    Assert.assertEquals(
+      "Split of only whitespace results in list of one element with an empty string",
+      Collections.singletonList(""), TranslatorBuilder.toArray("\n"));
+
   }
 }

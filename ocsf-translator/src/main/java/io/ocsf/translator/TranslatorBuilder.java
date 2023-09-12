@@ -804,13 +804,30 @@ public final class TranslatorBuilder
             // special handling of file hashes
             if (!FingerprintObj.put(translated, type, value, key))
             {
-              final Object parsed = toArray(typecast(value, type), is_array);
-              Maps.putIn(translated, key, parsed, overwrite);
+              if (is_array)
+              {
+                final List<Object> list = new ArrayList<>();
+                for (final Object o : toArray(value))
+                {
+                  final Object parsed = o != null ? typecast(value, type) : null;
+                  list.add(parsed);
+                }
+
+                Maps.putIn(translated, key, list, overwrite);
+              }
+              else
+              {
+                final Object parsed = typecast(value, type);
+                Maps.putIn(translated, key, parsed, overwrite);
+              }
             }
           }
           else
           {
-            Maps.putIn(translated, key, toArray(value, is_array), overwrite);
+            if (is_array)
+              Maps.putIn(translated, key, toArray(value), overwrite);
+            else
+              Maps.putIn(translated, key, value, overwrite);
           }
         }
         else if (defValue != null)
@@ -969,14 +986,21 @@ public final class TranslatorBuilder
     }
   }
 
-  static Object toArray(final Object value, final boolean is_array)
+  static List<Object> toArray(final Object value)
   {
-    if (is_array && !(value instanceof List<?>))
+    if (value instanceof String)
     {
-      return Collections.singletonList(value);
+      // Split the string and convert to list
+      final String[] split = ((String) value).trim().split("\\s+");
+      return Maps.typecast(Arrays.asList(split));
+    }
+    else if (value instanceof List<?>)
+    {
+      return Maps.typecast(value);
     }
 
-    return value;
+    // Everything else, including null, gets wrapped in a single-item list
+    return Collections.singletonList(value);
   }
 
   private static Object toDouble(final Object o)

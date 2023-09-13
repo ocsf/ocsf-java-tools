@@ -61,6 +61,7 @@ public final class TranslatorBuilder
   private static final String ValueType    = "type";
   private static final String Values       = "values";
   private static final String Separator    = "separator";
+  private static final String Splitter     = "splitter";
 
   private static final String Predicate    = "when";
   private static final String Parser       = "parser";
@@ -157,8 +158,11 @@ public final class TranslatorBuilder
   public static Translator build(
     final Path home, final JsonReader reader, final Map<String, Object> map) throws IOException
   {
-    final Translator translator = createTranslator(
-      (String) map.get(Predicate), readParsers(home, reader, map), readRules(home, reader, map));
+    final Translator translator =
+      createTranslator(
+        (String) map.get(Predicate),
+        readParsers(home, reader, map),
+        readRules(home, reader, map));
 
     final Collection<Map<String, Object>> ruleset = Maps.typecast(map.get(RuleSet));
     if (ruleset == null || ruleset.isEmpty())
@@ -170,9 +174,11 @@ public final class TranslatorBuilder
       final Collection<Translator> list = new ArrayList<>(ruleset.size());
       for (final Map<String, Object> rule : ruleset)
       {
-        list.add(createSubTranslator(
-          (String) rule.get(Predicate),
-          readParsers(home, reader, rule), readRules(home, reader, rule)));
+        list.add(
+          createSubTranslator(
+            (String) rule.get(Predicate),
+            readParsers(home, reader, rule),
+            readRules(home, reader, rule)));
       }
 
       return new Translator()
@@ -315,12 +321,18 @@ public final class TranslatorBuilder
             {
               final Map<String, Object> dstMap = Maps.typecast(Maps.getIn(data, dstKey));
               if (dstMap == null)
+              {
                 Maps.putIn(data, dstKey, parsed);
+              }
               else
+              {
                 dstMap.putAll(parsed);
+              }
             }
             else
+            {
               data.putAll(parsed);
+            }
           }
         }
         catch (final Exception ex)
@@ -398,8 +410,7 @@ public final class TranslatorBuilder
 
         @Override
         public Map<String, Object> apply(
-          final Map<String, Object> data, final Map<String,
-          Object> translated)
+          final Map<String, Object> data, final Map<String, Object> translated)
         {
           return TranslatorBuilder.apply(compiled, translator.parse(data), translated);
         }
@@ -419,8 +430,7 @@ public final class TranslatorBuilder
 
       @Override
       public Map<String, Object> apply(
-        final Map<String, Object> data,
-        final Map<String, Object> translated)
+        final Map<String, Object> data, final Map<String, Object> translated)
       {
         return p.test(data) ?
                TranslatorBuilder.apply(compiled, translator.parse(data), translated) :
@@ -438,11 +448,8 @@ public final class TranslatorBuilder
   }
 
   private static Collection<Map<String, Object>> readRules(
-    final Path home,
-    final JsonReader reader,
-    final Collection<Map<String, Object>> list,
-    final Collection<Map<String, Object>> rules)
-    throws IOException
+    final Path home, final JsonReader reader, final Collection<Map<String, Object>> list,
+    final Collection<Map<String, Object>> rules) throws IOException
   {
     for (final Map<String, Object> rule : list)
     {
@@ -474,11 +481,8 @@ public final class TranslatorBuilder
   }
 
   private static void includeRule(
-    final Path home,
-    final String filename,
-    final JsonReader reader,
-    final Collection<Map<String, Object>> rules)
-    throws IOException
+    final Path home, final String filename, final JsonReader reader,
+    final Collection<Map<String, Object>> rules) throws IOException
   {
     final Object included = reader.read(home.resolve(filename));
     if (included instanceof Map<?, ?>)
@@ -499,15 +503,14 @@ public final class TranslatorBuilder
   }
 
   static Map<String, Object> apply(
-    final List<Tuple<String, Rule>> rules, final Map<String,
-    Object> data)
+    final List<Tuple<String, Rule>> rules, final Map<String, Object> data)
   {
     return apply(rules, data, new HashMap<>());
   }
 
   static Map<String, Object> apply(
-    final List<Tuple<String, Rule>> rules, final Map<String, Object> data, final Map<String,
-    Object> translated)
+    final List<Tuple<String, Rule>> rules, final Map<String, Object> data,
+    final Map<String, Object> translated)
   {
     rules.forEach(rule -> rule.value.apply(data, translated));
     Maps.cleanup(data);
@@ -540,12 +543,10 @@ public final class TranslatorBuilder
       final String name = r.getKey().intern();
       final Object obj  = r.getValue();
 
-      if (obj instanceof Map<?, ?>)
-        return newRule(name, Maps.typecast(obj));
+      if (obj instanceof Map<?, ?>) return newRule(name, Maps.typecast(obj));
 
       // handle embedded objects
-      if (obj instanceof Collection<?>)
-        return embedded(name, Maps.typecast(obj));
+      if (obj instanceof Collection<?>) return embedded(name, Maps.typecast(obj));
     }
 
     throw new IllegalArgumentException("Illegal rule");
@@ -559,8 +560,7 @@ public final class TranslatorBuilder
     {
       final Object value = map.get("@value");
 
-      if (value instanceof Map<?, ?>)
-        return merge(name, Maps.typecast(value));
+      if (value instanceof Map<?, ?>) return merge(name, Maps.typecast(value));
 
       return merge(name, map);
     }
@@ -599,8 +599,7 @@ public final class TranslatorBuilder
   }
 
   private static Tuple<String, Rule> embedded(
-    final String name, final Collection<Map<String,
-    Object>> ruleData)
+    final String name, final Collection<Map<String, Object>> ruleData)
   {
     final List<Tuple<String, Rule>> rules = compile(ruleData);
 
@@ -649,8 +648,7 @@ public final class TranslatorBuilder
     }
 
     return new Tuple<>(name, (data, translated) -> {
-      if (predicate == null || predicate.test(data))
-        Maps.putIn(translated, name, value, overwrite);
+      if (predicate == null || predicate.test(data)) Maps.putIn(translated, name, value, overwrite);
     });
   }
 
@@ -678,7 +676,9 @@ public final class TranslatorBuilder
 
     return new Tuple<>(name, (data, translated) -> {
       if (predicate == null || predicate.test(data))
+      {
         Maps.putIn(translated, dest, Maps.getIn(translated, name), overwrite);
+      }
     });
   }
 
@@ -698,8 +698,7 @@ public final class TranslatorBuilder
     }
 
     return new Tuple<>(name, (data, translated) -> {
-      if (predicate == null || predicate.test(data))
-        Maps.removeIn(data, name);
+      if (predicate == null || predicate.test(data)) Maps.removeIn(data, name);
     });
   }
 
@@ -719,6 +718,7 @@ public final class TranslatorBuilder
     final String  key;
     final String  type;
     final String  separator;
+    final String  splitter;
     final Object  defValue;
     final boolean overwrite;
     final boolean is_array;
@@ -732,6 +732,7 @@ public final class TranslatorBuilder
       key       = Maps.get(map, NameField, name).intern();
       type      = Maps.get(map, ValueType);
       separator = (String) map.get(Separator);
+      splitter  = (String) map.getOrDefault(Splitter, Strings.LineSplitter);
 
       defValue  = map.get(DefaultValue);
       overwrite = Maps.get(map, Overwrite, Boolean.FALSE);
@@ -745,6 +746,7 @@ public final class TranslatorBuilder
       key       = ((String) ruleData).intern();
       type      = null;
       separator = null;
+      splitter  = Strings.LineSplitter;
       defValue  = null;
       overwrite = false;
       is_array  = false;
@@ -778,7 +780,6 @@ public final class TranslatorBuilder
             {
               if (separator != null && sb.length() > 0)
                 sb.append(separator);
-
               sb.append(v);
             }
           }
@@ -792,8 +793,7 @@ public final class TranslatorBuilder
       src = source;
     }
 
-    return new Tuple<>(name, (data, translated) ->
-    {
+    return new Tuple<>(name, (data, translated) -> {
       if (predicate == null || predicate.test(data))
       {
         final Object value = src.get(data, name);
@@ -807,7 +807,7 @@ public final class TranslatorBuilder
               if (is_array)
               {
                 final List<Object> list = new ArrayList<>();
-                for (final Object o : toArray(value))
+                for (final Object o : Strings.toArray(value, splitter))
                 {
                   final Object parsed = o != null ? typecast(o, type) : null;
                   list.add(parsed);
@@ -825,9 +825,13 @@ public final class TranslatorBuilder
           else
           {
             if (is_array)
-              Maps.putIn(translated, key, toArray(value), overwrite);
+            {
+              Maps.putIn(translated, key, Strings.toArray(value, splitter), overwrite);
+            }
             else
+            {
               Maps.putIn(translated, key, value, overwrite);
+            }
           }
         }
         else if (defValue != null)
@@ -853,8 +857,7 @@ public final class TranslatorBuilder
 
     final Map<String, Object> values = Maps.downcase(Maps.get(rule, Values));
 
-    return new Tuple<>(name, (data, translated) ->
-    {
+    return new Tuple<>(name, (data, translated) -> {
       if (predicate == null || predicate.test(data))
       {
         final Object value = source.get(data, name);
@@ -986,23 +989,6 @@ public final class TranslatorBuilder
     }
   }
 
-  static List<Object> toArray(final Object value)
-  {
-    if (value instanceof String)
-    {
-      // Split the string and convert to list
-      final String[] split = ((String) value).trim().split("\\s+");
-      return Maps.typecast(Arrays.asList(split));
-    }
-    else if (value instanceof List<?>)
-    {
-      return Maps.typecast(value);
-    }
-
-    // Everything else, including null, gets wrapped in a single-item list
-    return Collections.singletonList(value);
-  }
-
   private static Object toDouble(final Object o)
   {
     if (o instanceof Number) return ((Number) o).doubleValue();
@@ -1043,8 +1029,7 @@ public final class TranslatorBuilder
     {
       final String n = ((String) o).trim();
 
-      if (!n.isEmpty())
-        return Long.decode(n);
+      if (!n.isEmpty()) return Long.decode(n);
     }
     catch (final NumberFormatException ignore)
     {
@@ -1066,8 +1051,7 @@ public final class TranslatorBuilder
     {
       final String n = ((String) o).trim();
 
-      if (!n.isEmpty())
-        return Integer.decode(n);
+      if (!n.isEmpty()) return Integer.decode(n);
     }
     catch (final NumberFormatException ignore)
     {

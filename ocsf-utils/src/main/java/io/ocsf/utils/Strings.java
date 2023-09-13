@@ -20,12 +20,18 @@ package io.ocsf.utils;
 import java.text.CollationElementIterator;
 import java.text.Collator;
 import java.text.RuleBasedCollator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Language-sensitive text searching utility class.
  */
 public final class Strings
 {
+  public static final String LineSplitter       = "\\R+";
+  public static final String WhiteSpaceSplitter = "\\s+";
+
   public static final String EMPTY = "";
 
   private static final int mask = 0xFFFF0000; // Collator.PRIMARY
@@ -71,6 +77,37 @@ public final class Strings
     return search(text, Strings.getCollationElementIterator(sub));
   }
 
+  public static List<Object> toArray(final Object value)
+  {
+    return toArray(value, LineSplitter);
+  }
+
+  public static List<Object> toArray(final Object value, final String splitter)
+  {
+    if (value instanceof String)
+    {
+      // Split the string and convert to list
+      final String[]     split = ((String) value).split(splitter);
+      final List<Object> list  = new ArrayList<>(split.length);
+      for (final String s : split)
+      {
+        final String s1 = s.trim();
+        if (!s1.isEmpty())
+        {
+          list.add(s1);
+        }
+      }
+      return list;
+    }
+    else if (value instanceof List<?>)
+    {
+      return Maps.typecast(value);
+    }
+
+    // Everything else, including null, gets wrapped in a single-item list
+    return Collections.singletonList(value);
+  }
+
   private static int search(final String text, final CollationElementIterator patIter)
   {
     final CollationElementIterator it = collator.getCollationElementIterator(text);
@@ -96,7 +133,7 @@ public final class Strings
   {
     do
     {
-      final int i = pattern.next() & Strings.mask;
+      final int i      = pattern.next() & Strings.mask;
       final int target = text.next() & Strings.mask;
 
       if (i == Strings.mask)

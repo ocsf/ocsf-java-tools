@@ -84,7 +84,7 @@ public class ObservablesTest
       Observables.getObservables(Data.ProcessActivity);
 
     Assert.assertTrue(observables.isPresent());
-    Assert.assertTrue(observables.get().size() > 0);
+    Assert.assertFalse(observables.get().isEmpty());
   }
 
   @Test
@@ -107,7 +107,7 @@ public class ObservablesTest
       Observables.observables(Data.ProcessActivity);
 
     Assert.assertTrue(observables.isPresent());
-    Assert.assertTrue(observables.get().size() > 0);
+    Assert.assertFalse(observables.get().isEmpty());
   }
 
   @Test

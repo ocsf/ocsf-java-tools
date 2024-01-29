@@ -8,7 +8,6 @@ import java.util.Collections;
 
 public class StringsTest extends TestCase
 {
-
   // Test the default line splitter
   public void testToArray()
   {
@@ -91,5 +90,26 @@ public class StringsTest extends TestCase
     Assert.assertEquals(
       "Split of only whitespace results in an empty list",
       Collections.emptyList(), Strings.toArray("\n", Strings.WhiteSpaceSplitter));
+  }
+
+  public void testIsPathLooped()
+  {
+    Assert.assertFalse(Strings.isPathLooped(null));
+    Assert.assertFalse(Strings.isPathLooped(""));
+    Assert.assertFalse(Strings.isPathLooped("foo"));
+    Assert.assertFalse(Strings.isPathLooped("foo.bar"));
+    Assert.assertTrue(Strings.isPathLooped("foo.foo"));
+    Assert.assertTrue(Strings.isPathLooped("foo.bar.foo"));
+
+    // Edge cases that shouldn't happen, but should still work
+    Assert.assertFalse(Strings.isPathLooped("."));
+    Assert.assertFalse(Strings.isPathLooped(".."));
+    Assert.assertFalse(Strings.isPathLooped("foo."));
+    Assert.assertFalse(Strings.isPathLooped("foo.."));
+    Assert.assertFalse(Strings.isPathLooped(".foo"));
+    Assert.assertFalse(Strings.isPathLooped("..foo"));
+    Assert.assertFalse(Strings.isPathLooped(".foo."));
+    Assert.assertFalse(Strings.isPathLooped(".foo.bar."));
+    Assert.assertTrue(Strings.isPathLooped(".foo.bar.foo"));
   }
 }

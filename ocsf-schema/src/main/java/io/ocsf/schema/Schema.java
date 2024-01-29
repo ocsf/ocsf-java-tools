@@ -18,7 +18,9 @@ package io.ocsf.schema;
 
 
 import io.ocsf.utils.FMap;
+import io.ocsf.utils.Json;
 import io.ocsf.utils.Maps;
+import io.ocsf.utils.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,19 +115,20 @@ public final class Schema
    * <p>
    * Note: This class caches the entire schema in memory, thus use a single instance per JVM.
    *
-   * @param path        the schema JSON file
-   * @param siblings    if true, then enhance the event data by adding the enumerated text values.
-   * @param observables if true, then enhance the event data by adding the observables associated
-   *                    with the event.
+   * @param path the schema JSON file
+   * @param addEnumSiblings if true, enhance the event data by adding the enumerated text values.
+   * @param addObservables if true, enhance the event data by adding the observables associated
+   * with the event.
    */
-  public Schema(final Path path, final boolean siblings, final boolean observables)
+  public Schema(final Path path, final boolean addEnumSiblings, final boolean addObservables)
   {
-    this.addEnumSiblings = siblings;
-    this.addObservables  = observables;
+    this.addEnumSiblings = addEnumSiblings;
+    this.addObservables  = addObservables;
 
     if (path != null)
     {
-      logger.info("Using schema file: {}, addEnumSiblings: {}", path, addEnumSiblings);
+      logger.info("Using schema file: {}, addEnumSiblings: {}, addObservables: {}",
+          path, this.addEnumSiblings, this.addObservables);
 
       if (Files.isRegularFile(path))
       {
@@ -301,8 +304,7 @@ public final class Schema
 
       if (type != null)
       {
-        if (logger.isDebugEnabled())
-          logger.debug("Enriching event class: {}", classId);
+        logger.debug("Enriching event class: {}", classId);
 
         return type;
       }
@@ -489,8 +491,7 @@ public final class Schema
       final Map<String, Object> object = objects.get(obj);
       if (object != null)
       {
-        if (logger.isTraceEnabled())
-          logger.trace("Embedded object, name: {}, type: {}", name, obj);
+        logger.trace("Embedded object, name: {}, type: {}", name, obj);
 
         return enrich(name, value, object, new HashMap<>(value.size()));
       }
@@ -522,8 +523,7 @@ public final class Schema
         {
           final ArrayList<Map<String, Object>> array = new ArrayList<>(list.size());
 
-          if (logger.isTraceEnabled())
-            logger.trace("Embedded array, name: {}, type: {}", name, obj);
+          logger.trace("Embedded array, name: {}, type: {}", name, obj);
 
           list.forEach(i -> {
             final Map<String, Object> o = (Map<String, Object>) i;
@@ -558,8 +558,7 @@ public final class Schema
       final Map<String, Object> object = objects.get(obj);
       if (object != null)
       {
-        if (logger.isTraceEnabled())
-          logger.trace("Embedded object, name: {}, type: {}", name, obj);
+        logger.trace("Embedded object, name: {}, type: {}", name, obj);
 
         updateObservables(observables, (Integer) object.get(OBSERVABLE), name);
 
@@ -594,8 +593,7 @@ public final class Schema
         {
           final ArrayList<Map<String, Object>> array = new ArrayList<>(list.size());
 
-          if (logger.isTraceEnabled())
-            logger.trace("Embedded array, name: {}, type: {}", name, obj);
+          logger.trace("Embedded array, name: {}, type: {}", name, obj);
 
           list.forEach(i -> {
             final Map<String, Object> o = (Map<String, Object>) i;
@@ -694,10 +692,13 @@ public final class Schema
   {
     if (object != null)
     {
-      if (logger.isTraceEnabled())
-        logger.trace("Embedded object, name: {}, type: {}", name, object);
+      logger.trace("Embedded object, name: {}, type: {}", name, object);
 
-      if (!name.endsWith("parent_process.parent_process"))
+      if (Strings.isPathLooped(name))
+      {
+        logger.trace("Looped object path {}, object name: {}", name, object.get("name"));
+      }
+      else
       {
         updateObservables(observables, (Integer) object.get(Schema.OBSERVABLE), name);
         observables(name, object, observables);

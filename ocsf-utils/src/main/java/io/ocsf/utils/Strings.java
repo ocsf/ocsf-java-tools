@@ -145,4 +145,30 @@ public final class Strings
     while (true);
   }
 
+  /**
+   * Tests if the last element of a dotted path exists earlier in the path, indicating a loop.
+   * @param path a dotted path of names, as used with JSON paths.
+   * @return true if there is a loop
+   */
+  public static boolean isPathLooped(final String path)
+  {
+    if (path == null || path.isEmpty())
+    {
+      return false;
+    }
+    final String[] elements = path.split("\\.");
+    if (elements.length <= 1)
+    {
+      return false;
+    }
+    final String last = elements[elements.length - 1];
+    for (int i = elements.length - 2; i >= 0; --i)
+    {
+      if (last.equals(elements[i]))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
 }

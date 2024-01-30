@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Splunk Inc.
+ * Copyright 2024 Splunk Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package io.ocsf.schema;
 
 
 import io.ocsf.utils.FMap;
-import io.ocsf.utils.Json;
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.Strings;
 import org.slf4j.Logger;
@@ -91,7 +90,8 @@ public final class Schema
   private final Map<Integer, String> observableTypes;
 
   // All event observables: class_id -> observables (name -> observable)
-  private final Map<Integer, List<Map<String, Object>>> observables;
+  private final Object lazyLoadGuardClassToObservablesMap = new Object();
+  private Map<Integer, List<Map<String, Object>>> _classToObservablesMap;
 
   private final boolean addEnumSiblings;
   private final boolean addObservables;
@@ -136,12 +136,12 @@ public final class Schema
         {
           final Map<String, Map<String, Object>> schema = readJson(path);
 
-          this.objects         = objects(schema);
-          this.classes         = classes(schema);
-          this.types           = types(schema);
+          this.objects = objects(schema);
+          this.classes = classes(schema);
+          this.types = types(schema);
           this.observableTypes = observableTypes(objects.get(OBSERVABLE));
-          this.observables     = observables(classes);
-          this.schemaLoaded    = true;
+          // Lazy load this.classToObservablesMap; it takes roughly half the schema load time
+          this.schemaLoaded = true;
           return;
         }
         catch (final IOException e)
@@ -159,12 +159,12 @@ public final class Schema
       logger.info("No schema file");
     }
 
-    this.objects         = Collections.emptyMap();
-    this.classes         = Collections.emptyMap();
-    this.types           = Collections.emptyMap();
+    this.objects = Collections.emptyMap();
+    this.classes = Collections.emptyMap();
+    this.types = Collections.emptyMap();
     this.observableTypes = Collections.emptyMap();
-    this.observables     = Collections.emptyMap();
-    this.schemaLoaded    = false;
+    this._classToObservablesMap = Collections.emptyMap(); // always empty in this case
+    this.schemaLoaded = false;
   }
 
   /**
@@ -181,21 +181,21 @@ public final class Schema
   /**
    * Enriches the event data using the loaded schema.
    *
-   * @param data        the original event
-   * @param siblings    if true, then enhance the event data by adding the enumerated text values.
-   * @param observables if true, then enhance the event data by adding the observables associated
-   *                    with the event.
+   * @param data the original event
+   * @param addEnumSiblings if true, enhance the event data by adding the enumerated text values.
+   * @param addObservables if true, enhance the event data by adding the observables associated
+   * with the event.
    * @return enriched event data
    */
   public Map<String, Object> enrich(
-    final Map<String, Object> data, final boolean siblings, final boolean observables)
+    final Map<String, Object> data, final boolean addEnumSiblings, final boolean addObservables)
   {
     if (schemaLoaded)
     {
       final Map<String, Object> type = eventClassType(data);
 
       // If the class_id does not exist, then return the data as-is
-      return type != null ? enrich(data, type, siblings, observables) : data;
+      return type != null ? enrich(data, type, addEnumSiblings, addObservables) : data;
     }
 
     return data;
@@ -212,6 +212,19 @@ public final class Schema
     return Optional.ofNullable(classes.get(classId));
   }
 
+  private Map<Integer, List<Map<String, Object>>> classToObservablesMap()
+  {
+    synchronized (lazyLoadGuardClassToObservablesMap)
+    {
+      if (_classToObservablesMap == null)
+      {
+        logger.info("Lazily creating class to observables map");
+        _classToObservablesMap = observables(classes);
+      }
+      return _classToObservablesMap;
+    }
+  }
+
   /**
    * Returns the observables associated with the given class ID.
    *
@@ -220,7 +233,7 @@ public final class Schema
    */
   public Optional<List<Map<String, Object>>> getObservables(final int classId)
   {
-    return Optional.ofNullable(observables.get(classId));
+    return Optional.ofNullable(classToObservablesMap().get(classId));
   }
 
   /**
@@ -234,7 +247,7 @@ public final class Schema
     final int classId,
     final int typeId)
   {
-    return Observables.filter(observables.get(classId), typeId);
+    return Observables.filter(classToObservablesMap().get(classId), typeId);
   }
 
   /**
@@ -317,19 +330,19 @@ public final class Schema
   private Map<String, Object> enrich(
     final Map<String, Object> data,
     final Map<String, Object> type,
-    final boolean siblings,
-    final boolean observables)
+    final boolean addEnumSiblings,
+    final boolean addObservables)
   {
     Utils.addTypeUid(data);
 
-    if (siblings)
+    if (addEnumSiblings)
     {
       final List<Map<String, Object>> list     = new ArrayList<>();
       final Map<String, Object>       enriched = new HashMap<>(data.size());
 
       enrich(null, data, type, enriched, list);
 
-      if (observables)
+      if (addObservables)
       {
         if (!list.isEmpty())
           enriched.put(Dictionary.OBSERVABLES, list);

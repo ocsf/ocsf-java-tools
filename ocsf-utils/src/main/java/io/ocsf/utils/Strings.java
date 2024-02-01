@@ -170,4 +170,20 @@ public final class Strings
     }
     return false;
   }
+
+  public static String quote(final String s) {
+    if (s == null)
+    {
+      return "null";
+    }
+    return '"' + s.replace("\\", "\\\\").replace("\"", "\\\"") + '"';
+  }
+
+  public static String quote(final Object o) {
+    if (o == null)
+    {
+      return "null";
+    }
+    return quote(o.toString());
+  }
 }

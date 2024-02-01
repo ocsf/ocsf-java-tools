@@ -112,4 +112,21 @@ public class StringsTest extends TestCase
     Assert.assertFalse(Strings.isPathLooped(".foo.bar."));
     Assert.assertTrue(Strings.isPathLooped(".foo.bar.foo"));
   }
+
+  public void testQuote() {
+    Assert.assertEquals("null", Strings.quote(null));
+    Assert.assertEquals("\"Hello world!\"", Strings.quote("Hello world!"));
+    Assert.assertEquals("\"Say \\\"Hi!\\\", OK?\"", Strings.quote("Say \"Hi!\", OK?"));
+    Assert.assertEquals("\"Hello\\\\world!\"", Strings.quote("Hello\\world!"));
+    Assert.assertEquals("\"Say \\\"Hi!\\\",\\\\OK?\"", Strings.quote("Say \"Hi!\",\\OK?"));
+    Assert.assertEquals("\"Hello world!\n\"", Strings.quote("Hello world!\n"));
+
+    final Integer i = 42;
+    Assert.assertEquals("\"42\"", Strings.quote(i));
+
+    final Object o = null;
+    Assert.assertEquals("null", Strings.quote(o));
+
+    Assert.assertEquals("\"foo\"", Strings.quote((Object)"foo"));
+  }
 }

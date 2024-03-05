@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2023 Splunk Inc.
  *
@@ -71,12 +70,22 @@ public final class TranslatorBuilder
   private static final String OutputField  = "output";
 
   /**
+   * Translator non-conditional interface.
+   */
+  @FunctionalInterface
+  interface NonConditional extends Translator
+  {
+    default boolean isDefault() {return true;}
+  }
+
+  /**
    * Translator conditional interface.
    */
   @FunctionalInterface
   interface Conditional extends Translator
   {
-    default boolean isDefault() {return true;}
+    // No need to override isDefault() since Translator#isDefault returns false
+    // default boolean isDefault() {return false;}
   }
 
   /**
@@ -369,12 +378,18 @@ public final class TranslatorBuilder
     final String cond, final DataTranslator translator, final Collection<Map<String, Object>> rules)
   {
     // no rules, no translations
-    if (rules == null) return translator::parse;
+    if (rules == null)
+    {
+      return (NonConditional) translator::parse;
+    }
 
     final List<Tuple<String, Rule>> compiled = compile(rules);
 
     // if no conditions, then translate everything
-    if (Strings.isEmpty(cond)) return data -> apply(compiled, translator.parse(data));
+    if (Strings.isEmpty(cond))
+    {
+      return (NonConditional) data -> apply(compiled, translator.parse(data));
+    }
 
     return new Conditional()
     {
@@ -400,7 +415,7 @@ public final class TranslatorBuilder
     // if no conditions, then translate everything
     if (Strings.isEmpty(cond))
     {
-      return new Translator()
+      return new NonConditional()
       {
         @Override
         public Map<String, Object> apply(final Map<String, Object> data)

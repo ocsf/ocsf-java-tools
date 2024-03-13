@@ -18,8 +18,6 @@ package io.ocsf.schema;
 
 import io.ocsf.utils.Maps;
 import io.ocsf.utils.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static io.ocsf.utils.Files.readJson;
 
@@ -52,7 +52,7 @@ import static io.ocsf.utils.Files.readJson;
  */
 public final class Schema
 {
-  private static final Logger logger = LoggerFactory.getLogger(Schema.class);
+  private static final Logger logger = LogManager.getLogger(Schema.class);
 
   // Schema metadata/attribute property names
   private static final String TYPES   = "types";
@@ -195,19 +195,36 @@ public final class Schema
   {
     if (schemaLoaded)
     {
-      final Map<String, Object> type = eventClassType(data);
+      final Map<String, Object> classType = eventClassType(data);
 
       // Only enrich known event classes
-      if (type != null)
+      if (classType != null)
       {
         Utils.addTypeUid(data);
 
         if (addEnumSiblings || addObservables)
         {
-          final List<Map<String, Object>> observables = addObservables ? new ArrayList<>() : null;
+          // Class-specific attribute path observables definitions are in the optional
+          // "observables" attributes of each class. It is a map of attribute paths to
+          // observable type_id values.
+          final Map<String, Integer> pathObservables;
+          // The accumulating list of observables
+          final List<Map<String, Object>> observables;
+          if (addObservables)
+          {
+            pathObservables = Maps.get(classType, Dictionary.OBSERVABLES);
+            observables = new ArrayList<>();
+          }
+          else
+          {
+            pathObservables = null;
+            observables = null;
+          }
           final Map<String, Object> enriched = new HashMap<>(data.size());
 
-          enrich(null, data, type, addEnumSiblings, addObservables, enriched, observables);
+          enrich(
+              null, pathObservables, data, classType,
+              addEnumSiblings, addObservables, enriched, observables);
 
           if (addObservables && !observables.isEmpty())
           {
@@ -296,13 +313,16 @@ public final class Schema
     final Object classId = data.get(Dictionary.CLASS_UID);
     if (classId instanceof Integer)
     {
-      final Map<String, Object> type = classes.get(((Integer) classId));
+      final Map<String, Object> classType = classes.get(((Integer) classId));
 
-      if (type != null)
+      if (classType != null)
       {
-        logger.debug("Enriching event class ID: {}", classId);
-
-        return type;
+        if (logger.isDebugEnabled())
+        {
+          logger.debug("Enriching event of class ID {}: {}",
+              classId, Strings.quote(classType.get(CAPTION)));
+        }
+        return classType;
       }
     }
 
@@ -310,9 +330,27 @@ public final class Schema
     return null;
   }
 
+  /**
+   * Enrich a class or object, which is passed in via the type parameter. This is a recursive
+   * function using the enriched and observables parameters as accumulators.
+   *
+   * @param parentAttributePath null or the dotted attribute path from the caller
+   * @param pathObservables     null or the class-specific attribute path observables map
+   * @param data                the class event or object instance to enrich
+   * @param type                the class or object type information
+   * @param addEnumSiblings     when true, enum sibling text is added to the event
+   * @param addObservables      when true, observables are added to the event
+   * @param enriched            accumulator for the enriched event or object with enum siblings
+   *                            added if addEnumSiblings is true
+   * @param observables         accumulator holding observables generated if the addObservables flag
+   *                            is set; the caller is responsible for adding this to the event
+   * @return enriched event or object for this level used for recursive calls to put into
+   * enriched parameter
+   */
   @SuppressWarnings("unchecked")
   private Map<String, Object> enrich(
-      final String parent,
+      final String parentAttributePath,
+      final Map<String, Integer> pathObservables,
       final Map<String, Object> data,
       final Map<String, Object> type,
       final boolean addEnumSiblings,
@@ -322,10 +360,11 @@ public final class Schema
   {
     final Map<String, Object> attributes = (Map<String, Object>) type.get(ATTRIBUTES);
 
-    data.forEach((name, value) -> {
-      final String path = parent != null ? parent + "." + name : name;
+    data.forEach((attributeName, value) -> {
+      final String attributePath
+          = parentAttributePath != null ? parentAttributePath + "." + attributeName : attributeName;
 
-      final Map<String, Object> attribute = (Map<String, Object>) attributes.get(name);
+      final Map<String, Object> attribute = (Map<String, Object>) attributes.get(attributeName);
       // Only enrich when this is a known attribute AND it isn't the json_t type.
       // The json_t type mean any type, and traversing in to it when it is an array or object
       // would confuse the enrichment logic since it would not have a known OCSF attribute type.
@@ -337,63 +376,42 @@ public final class Schema
         {
           if (addEnumSiblings)
           {
-            updateEnum(enriched, enumeration, enumSibling(name, attribute), value);
+            updateEnum(enriched, enumeration, enumSibling(attributeName, attribute), value);
           }
         }
         else if (value instanceof Map<?, ?>)
         {
           value = enrichEmbeddedObject(
-              path, (String) attribute.get(OBJECT_TYPE), (Map<String, Object>) value,
-              addEnumSiblings, addObservables, observables);
+              attributePath, pathObservables, (String) attribute.get(OBJECT_TYPE),
+              (Map<String, Object>) value, addEnumSiblings, addObservables, observables);
         }
         else if (value instanceof List<?>)
         {
           if (Boolean.TRUE.equals(attribute.get(IS_ARRAY)))
           {
             value = enrichEmbeddedArray(
-                path, (String) attribute.get(OBJECT_TYPE), (List<Object>) value,
-                addEnumSiblings, addObservables, observables);
+                attributePath, attribute, attributePath, pathObservables,
+                (List<Object>) value, addEnumSiblings, addObservables, observables);
           }
           else
           {
             if (logger.isDebugEnabled())
             {
               logger.debug("SCHEMA: Attribute {} is not an array in the schema",
-                  Strings.quote(name));
+                  Strings.quote(attributeName));
             }
           }
         }
         else if (addObservables)
         {
-          final String attrType = (String) attribute.get(TYPE);
-          if (attrType != null)
-          {
-            final Map<String, Object> typeObj = types.get(attrType);
-            if (typeObj != null)
-            {
-              addNewObservable(observables, (Integer) typeObj.get(OBSERVABLE), path, value);
-            }
-            else
-            {
-              if (logger.isDebugEnabled())
-              {
-                logger.debug("SCHEMA: Attribute {} in class {} has an invalid type: {}",
-                    Strings.quote(name), Strings.quote(type.get(CAPTION)), attrType);
-              }
-            }
-          }
-          else
-          {
-            if (logger.isDebugEnabled())
-            {
-              logger.debug("SCHEMA: Attribute {} in class {} does not have type",
-                  Strings.quote(name), Strings.quote(type.get(CAPTION)));
-            }
-          }
+          // Generate observable for primitive type
+          final Integer observableTypeID
+              = getObservableTypeID(attributeName, attribute, attributePath, pathObservables);
+          addNewObservable(observables, observableTypeID, attributePath, value, addEnumSiblings);
         }
       }
 
-      enriched.put(name, value);
+      enriched.put(attributeName, value);
     });
 
     return enriched;
@@ -425,30 +443,33 @@ public final class Schema
   }
 
   private Object enrichEmbeddedObject(
-      final String name,
-      final String obj,
+      final String attributePath,
+      final Map<String, Integer> pathObservables,
+      final String objectType,
       final Map<String, Object> value,
       final boolean addEnumSiblings,
       final boolean addObservables,
       final List<Map<String, Object>> observables)
   {
-    if (obj != null)
+    if (objectType != null)
     {
-      final Map<String, Object> object = objects.get(obj);
+      final Map<String, Object> object = objects.get(objectType);
       if (object != null)
       {
         if (logger.isTraceEnabled())
         {
-          logger.trace("Embedded object, name: {}, type: {}", Strings.quote(name), obj);
+          logger.trace("Embedded object - attribute path: {}, object type: {}",
+              Strings.quote(attributePath), Strings.quote(objectType));
         }
 
         if (addObservables)
         {
-          addNewObservable(observables, (Integer) object.get(OBSERVABLE), name);
+          addNewObservable(
+              observables, (Integer) object.get(OBSERVABLE), attributePath, addEnumSiblings);
         }
 
         return enrich(
-            name, value, object, addEnumSiblings, addObservables,
+            attributePath, pathObservables, value, object, addEnumSiblings, addObservables,
             new HashMap<>(value.size()), observables);
       }
       else
@@ -456,7 +477,7 @@ public final class Schema
         if (logger.isDebugEnabled())
         {
           logger.debug("SCHEMA: Attribute {} has invalid object type: {}",
-              Strings.quote(name), obj);
+              Strings.quote(attributePath), Strings.quote(objectType));
         }
       }
     }
@@ -464,7 +485,8 @@ public final class Schema
     {
       if (logger.isDebugEnabled())
       {
-        logger.debug("SCHEMA: Attribute {} is not an object in the schema", Strings.quote(name));
+        logger.debug("SCHEMA: Attribute {} is not an object in the schema",
+            Strings.quote(attributePath));
       }
     }
 
@@ -473,8 +495,10 @@ public final class Schema
 
   @SuppressWarnings("unchecked")
   private Object enrichEmbeddedArray(
-      final String name,
-      final String obj,
+      final String attributeName,
+      final Map<String, Object> attribute,
+      final String attributePath,
+      final Map<String, Integer> pathObservables,
       final List<Object> list,
       final boolean addEnumSiblings,
       final boolean addObservables,
@@ -482,23 +506,25 @@ public final class Schema
   {
     if (!list.isEmpty() && list.get(0) instanceof Map<?, ?>)
     {
-      if (obj != null)
+      final String objectType = (String) attribute.get(OBJECT_TYPE);
+      if (objectType != null)
       {
-        final Map<String, Object> object = objects.get(obj);
+        final Map<String, Object> object = objects.get(objectType);
         if (object != null)
         {
           final ArrayList<Map<String, Object>> array = new ArrayList<>(list.size());
 
           if (logger.isTraceEnabled())
           {
-            logger.trace("Embedded array, name: {}, type: {}", Strings.quote(name), obj);
+            logger.trace("Embedded array - attribute path: {}, object type: {}",
+                Strings.quote(attributePath), Strings.quote(objectType));
           }
 
           list.forEach(i -> {
             final Map<String, Object> o = (Map<String, Object>) i;
 
             array.add(enrich(
-                name, o, object, addEnumSiblings, addObservables,
+                attributeName, pathObservables, o, object, addEnumSiblings, addObservables,
                 new HashMap<>(o.size()), observables));
           });
 
@@ -509,7 +535,7 @@ public final class Schema
           if (logger.isDebugEnabled())
           {
             logger.debug("SCHEMA: Attribute {} has invalid object type: {}",
-                Strings.quote(name), obj);
+                Strings.quote(attributeName), Strings.quote(objectType));
           }
         }
       }
@@ -517,7 +543,21 @@ public final class Schema
       {
         if (logger.isDebugEnabled())
         {
-          logger.debug("SCHEMA: Array {} type is not an object in the schema", Strings.quote(name));
+          logger.debug("SCHEMA: Array {} type is not an object in the schema",
+              Strings.quote(attributeName));
+        }
+      }
+    }
+    else
+    {
+      // Generate observables for primitive types in array
+      if (addObservables) {
+        final Integer observableTypeID
+            = getObservableTypeID(attributeName, attribute, attributePath, pathObservables);
+        if (observableTypeID != null) {
+          list.forEach(
+              value -> addNewObservable(
+                  observables, observableTypeID, attributePath, value, addEnumSiblings));
         }
       }
     }
@@ -525,29 +565,129 @@ public final class Schema
     return list;
   }
 
+  private Integer getObservableTypeID(
+      final String attributeName,
+      final Map<String, Object> attribute,
+      final String attributePath,
+      final Map<String, Integer> pathObservables
+  )
+  {
+    // First, look for observable type_id by attribute type
+    final Object attributeTypeName = attribute.get(TYPE);
+    if (attributeTypeName instanceof String)
+    {
+      final Map<String, Object> attributeType = types.get(attributeTypeName);
+      if (attributeType != null)
+      {
+        final Object observableTypeID = attributeType.get(OBSERVABLE);
+        if (observableTypeID instanceof Integer)
+        {
+          if (logger.isTraceEnabled())
+          {
+            logger.trace("getObservableTypeID - observable by attribute type {} for {}"
+                    + " on attribute path {}: {}",
+                Strings.quote(attributeTypeName), Strings.quote(attributeName),
+                Strings.quote(attributePath), observableTypeID);
+          }
+          return (Integer) observableTypeID;
+        }
+        else if (observableTypeID != null)
+        {
+          logger.debug("SCHEMA: Attribute type has invalid \"observable\": {}", attributeType);
+        }
+      }
+      else if (logger.isDebugEnabled())
+      {
+        logger.debug("SCHEMA: Attribute {} has an invalid type: {}",
+            Strings.quote(attributeName), attributeTypeName);
+      }
+    }
+    else if (logger.isDebugEnabled())
+    {
+      logger.debug("SCHEMA: Attribute {} does not have type", Strings.quote(attributeName));
+    }
+
+    // Second, look for observable type_id by attribute
+    final Object typeIDByAttribute = attribute.get(OBSERVABLE);
+    if (typeIDByAttribute instanceof Integer)
+    {
+      if (logger.isTraceEnabled())
+      {
+        logger.trace("getObservableTypeID - observable by for {} on attribute path {}: {}",
+            Strings.quote(attributeName), Strings.quote(attributePath), typeIDByAttribute);
+      }
+      return (Integer) typeIDByAttribute;
+    }
+    else if (typeIDByAttribute != null && logger.isDebugEnabled())
+    {
+      logger.debug("SCHEMA: Attribute {} has an invalid \"observable\": {}",
+          Strings.quote(attributeName), typeIDByAttribute);
+    }
+
+    // Third, look for observable by class-path attribute path
+    if (pathObservables != null) {
+      final Integer typeIDByPath = pathObservables.get(attributePath);
+      if (typeIDByPath != null) {
+        if (logger.isTraceEnabled()) {
+          logger.trace(
+              "getObservableTypeID - class-specific observable for {} on attribute path {}: {}",
+              Strings.quote(attributeName), Strings.quote(attributePath), typeIDByPath);
+        }
+        return typeIDByPath;
+      }
+    }
+
+    return null;
+  }
+
   private void addNewObservable(
-      final List<Map<String, Object>> observables, final Integer typeId, final String name)
+      final List<Map<String, Object>> observables,
+      final Integer typeId,
+      final String attributePath,
+      final boolean addEnumSiblings)
   {
     if (typeId != null)
     {
-      observables.add(Map.of(
-          NAME, name,
-          TYPE, observableTypes.getOrDefault(typeId, Dictionary.OTHER),
-          TYPE_ID, typeId));
+      if (addEnumSiblings)
+      {
+        observables.add(Map.of(
+            NAME, attributePath,
+            TYPE, observableTypes.getOrDefault(typeId, Dictionary.OTHER),
+            TYPE_ID, typeId));
+      }
+      else
+      {
+        observables.add(Map.of(
+            NAME, attributePath,
+            TYPE_ID, typeId));
+      }
     }
   }
 
   private void addNewObservable(
       final List<Map<String, Object>> observables,
-      final Integer typeId, final String name, final Object value)
+      final Integer typeId,
+      final String attributePath,
+      final Object value,
+      final boolean addEnumSiblings)
   {
-    if (typeId != null)
+    if (typeId != null && value != null)
     {
-      observables.add(Map.of(
-          NAME, name,
-          TYPE, observableTypes.getOrDefault(typeId, Dictionary.OTHER),
-          TYPE_ID, typeId,
-          VALUE, value));
+      if (addEnumSiblings)
+      {
+        observables.add(Map.of(
+            NAME, attributePath,
+            TYPE, observableTypes.getOrDefault(typeId, Dictionary.OTHER),
+            TYPE_ID, typeId,
+            VALUE, value.toString()));
+      }
+      else
+      {
+        observables.add(Map.of(
+            NAME, attributePath,
+            TYPE_ID, typeId,
+            VALUE, value.toString()));
+      }
     }
   }
 
@@ -611,7 +751,9 @@ public final class Schema
             final Map<String, Object> typeObj = types.get(attrType);
             if (typeObj != null)
             {
-              addNewObservable(classToObservables, (Integer) typeObj.get(Schema.OBSERVABLE), path);
+              addNewObservable(
+                  classToObservables, (Integer) typeObj.get(Schema.OBSERVABLE), path,
+                  defaultAddEnumSiblings);
             }
             else
             {
@@ -651,7 +793,9 @@ public final class Schema
       }
       else
       {
-        addNewObservable(classToObservables, (Integer) object.get(Schema.OBSERVABLE), name);
+        addNewObservable(
+            classToObservables, (Integer) object.get(Schema.OBSERVABLE), name,
+            defaultAddEnumSiblings);
         buildClassToObservablesMap(name, object, classToObservables);
       }
     }

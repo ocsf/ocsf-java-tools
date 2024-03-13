@@ -27,8 +27,8 @@ import io.ocsf.translator.event.event.Sink;
 import io.ocsf.translator.event.event.Source;
 import io.ocsf.translator.event.event.Transformer;
 import io.ocsf.utils.parsers.Parser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +49,7 @@ import java.util.Map;
  */
 public class EventDemuxer extends Transformer
 {
-  private static final Logger logger = LoggerFactory.getLogger(EventDemuxer.class);
+  private static final Logger logger = LogManager.getLogger(EventDemuxer.class);
 
   private final FuzzyHashMap<Parser>             parsers;
   private final FuzzyHashMap<TranslatorsManager> normalizers;
@@ -119,7 +119,7 @@ public class EventDemuxer extends Transformer
     }
     catch (final InterruptedException ex)
     {
-      logger.info("{}: the shutdown sequence has been interrupted", this);
+      logger.info("{}: the shutdown sequence has been interrupted", this, ex);
 
       // restore the interrupted flag
       Thread.currentThread().interrupt();

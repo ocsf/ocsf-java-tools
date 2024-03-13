@@ -8,8 +8,7 @@ group = project['artifactGroup'] + '.cli'
 version = project['artifactVersion']
 
 dependencies {
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.8'
-    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.4.8'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.23.1'
 
     implementation project(':ocsf-utils')
     implementation project(':ocsf-schema')

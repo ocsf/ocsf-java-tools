@@ -19,8 +19,8 @@ package io.ocsf.translator.svc;
 
 import io.ocsf.utils.FuzzyHashMap;
 import io.ocsf.utils.Maps;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public final class TranslatorsLoader
 {
-  private static final Logger logger = LoggerFactory.getLogger(TranslatorsLoader.class);
+  private static final Logger logger = LogManager.getLogger(TranslatorsLoader.class);
 
   private static final String RULE_TYPE_FILE = ".metadata";
 

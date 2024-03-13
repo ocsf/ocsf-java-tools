@@ -28,8 +28,6 @@ import io.ocsf.utils.FuzzyHashMap;
 import io.ocsf.utils.Json;
 import io.ocsf.utils.parsers.Parser;
 import io.ocsf.utils.parsers.ParserException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,13 +43,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * OCSF event translator command line tool.
  */
 public final class Main
 {
-  private static final Logger logger = LoggerFactory.getLogger(Main.class);
+  private static final Logger logger = LogManager.getLogger(Main.class);
 
   private Main() {}
 

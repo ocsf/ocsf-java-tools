@@ -21,14 +21,14 @@ import io.ocsf.translator.event.event.Event;
 import io.ocsf.translator.event.event.Sink;
 import io.ocsf.translator.event.event.Source;
 import io.ocsf.translator.event.event.Transformer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
 public class EventNormalizer extends Transformer
 {
-  private static final Logger logger = LoggerFactory.getLogger(EventNormalizer.class);
+  private static final Logger logger = LogManager.getLogger(EventNormalizer.class);
 
   private final TranslatorsManager translators;
 
@@ -52,7 +52,7 @@ public class EventNormalizer extends Transformer
     }
     catch (final Exception e)
     {
-      logger.warn("{} unable to normalize event: {}", this, data);
+      logger.warn("{} unable to normalize event: {}", this, data, e);
     }
 
     return null;

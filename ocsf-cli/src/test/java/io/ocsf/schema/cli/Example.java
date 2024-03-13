@@ -7,8 +7,6 @@ import io.ocsf.translator.TranslatorBuilder;
 import io.ocsf.utils.FuzzyHashMap;
 import io.ocsf.utils.Json;
 import io.ocsf.utils.parsers.Parser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -18,10 +16,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class Example
 {
-  private static final Logger logger = LoggerFactory.getLogger(Example.class);
+  private static final Logger logger = LogManager.getLogger(Example.class);
   private static final Path RULE_FILE_NAME = Path.of("rule.json");
   private static final FuzzyHashMap<Parser> parsers = Parsers.parsers();
 

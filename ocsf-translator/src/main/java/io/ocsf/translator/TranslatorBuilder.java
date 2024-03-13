@@ -26,8 +26,6 @@ import io.ocsf.utils.parsers.Json5Parser;
 import io.ocsf.utils.parsers.ParserException;
 import io.ocsf.utils.parsers.PatternParser;
 import io.ocsf.utils.parsers.RegexParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InvalidObjectException;
@@ -37,13 +35,15 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Translator uses a set of rules to map a Map[String, Object] to another Map[String, Object].
  */
 public final class TranslatorBuilder
 {
-  private static final Logger logger = LoggerFactory.getLogger(TranslatorBuilder.class);
+  private static final Logger logger = LogManager.getLogger(TranslatorBuilder.class);
 
   public static final  String RuleList = "rules";
   private static final String RuleSet  = "ruleset";
@@ -346,7 +346,7 @@ public final class TranslatorBuilder
         }
         catch (final Exception ex)
         {
-          logger.warn(String.format("unable to parse %s: %s ", srcKey, text), ex);
+          logger.warn("Unable to parse {}: {}", Strings.quote(srcKey), Strings.quote(text), ex);
         }
       }
 
@@ -980,13 +980,13 @@ public final class TranslatorBuilder
             }
             catch (final NumberFormatException ex)
             {
-              logger.warn("Invalid file type_id: " + parts[1]);
+              logger.warn("Invalid file type_id: {}",  parts[1]);
             }
           }
         }
       }
 
-      logger.warn("Invalid type: " + type);
+      logger.warn("Invalid type: {}", type);
       return o; // ignore the type cast
     }
   }
@@ -999,7 +999,7 @@ public final class TranslatorBuilder
     }
     catch (final MalformedURLException e)
     {
-      logger.warn("Invalid URL string: {}. Error: {}", o, e.getMessage());
+      logger.warn("Invalid URL string: {}", Strings.quote(o), e);
       return FMap.<String, Object>b().p(Dictionary.Text, o.toString());
     }
   }
@@ -1016,7 +1016,7 @@ public final class TranslatorBuilder
     {
     }
 
-    logger.info("Invalid double value: " + o);
+    logger.info("Invalid double value: {}", o);
     return 0.0d;
   }
 
@@ -1032,7 +1032,7 @@ public final class TranslatorBuilder
     {
     }
 
-    logger.info("Invalid float value: " + o);
+    logger.info("Invalid float value: {}", o);
     return 0.0f;
   }
 
@@ -1048,11 +1048,11 @@ public final class TranslatorBuilder
     }
     catch (final NumberFormatException ignore)
     {
-      logger.info("Invalid long value: " + o);
+      logger.info("Invalid long value: {}", o);
     }
     else
     {
-      logger.info("Not a long value: " + o);
+      logger.info("Not a long value: {}", o);
     }
 
     return 0L;
@@ -1070,11 +1070,11 @@ public final class TranslatorBuilder
     }
     catch (final NumberFormatException ignore)
     {
-      logger.info("Invalid integer value: " + o);
+      logger.info("Invalid integer value: {}", o);
     }
     else
     {
-      logger.info("Not an integer value: " + o);
+      logger.info("Not an integer value: {}", o);
     }
 
     return 0;
@@ -1098,7 +1098,7 @@ public final class TranslatorBuilder
       return value;
     }
 
-    logger.info("Invalid date/time value: " + value);
+    logger.info("Invalid date/time value: {}", value);
     return System.currentTimeMillis();
 
   }
@@ -1121,7 +1121,7 @@ public final class TranslatorBuilder
       return Times.toIso8601String((Long) value);
     }
 
-    logger.info("Invalid date/time value: " + value);
+    logger.info("Invalid date/time value: {}", value);
     return Times.currentIso8601Time();
   }
 

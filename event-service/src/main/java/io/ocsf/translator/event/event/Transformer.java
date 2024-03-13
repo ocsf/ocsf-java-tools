@@ -17,12 +17,12 @@
 
 package io.ocsf.translator.event.event;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class Transformer implements Runnable
 {
-  private static final Logger logger = LoggerFactory.getLogger(Transformer.class);
+  private static final Logger logger = LogManager.getLogger(Transformer.class);
 
   private final String        name;
   private final Source<Event> source;

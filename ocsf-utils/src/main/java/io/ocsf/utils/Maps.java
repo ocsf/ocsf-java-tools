@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Splunk Inc.
+ * Copyright 2024 Splunk Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,27 @@
 
 package io.ocsf.utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Utility class with Map function helpers.
  */
-public final class Maps
-{
+public final class Maps {
   public static final Locale LOCALE = Locale.ROOT;
 
-  private static final int NameSeparator = '.';
-
-  private static final String NameSplitRegex = "\\.";
+  private static final int NAME_SEPARATOR = '.';
+  private static final String NAME_SPLIT_REGEX = "\\.";
 
   @SuppressWarnings("unchecked")
-  public static <T> T typecast(final Object obj) {return (T) obj;}
+  public static <T> T typecast(final Object obj) {
+    return (T) obj;
+  }
 
   /**
    * Represents a key-based supplier of data.
@@ -38,19 +44,16 @@ public final class Maps
    * @param <T> the type of the data returned by this supplier
    */
   @FunctionalInterface
-  public interface Supplier<T>
-  {
+  public interface Supplier<T> {
     T get(final String name);
   }
 
   @FunctionalInterface
-  public interface DataSource
-  {
+  public interface DataSource {
     Object get(final Map<String, Object> map, final String name);
   }
 
-  public static boolean isEmpty(final Map<?, ?> map)
-  {
+  public static boolean isEmpty(final Map<?, ?> map) {
     return map == null || map.isEmpty();
   }
 
@@ -61,27 +64,23 @@ public final class Maps
    * @param <V>  the type of mapped values
    * @param data the map to clean up
    */
-  public static <K, V> void cleanup(final Map<K, V> data)
-  {
+  public static <K, V> void cleanup(final Map<K, V> data) {
     final Iterator<Map.Entry<K, V>> it = data.entrySet().iterator();
-    while (it.hasNext())
-    {
+    while (it.hasNext()) {
       final Map.Entry<K, V> entry = it.next();
-      final Object          value = entry.getValue();
-
-      if (value instanceof Map<?, ?>)
-      {
+      final Object value = entry.getValue();
+      if (value instanceof Map<?, ?>) {
         final Map<?, ?> map = typecast(value);
-        if (map.isEmpty())
+        if (map.isEmpty()) {
           it.remove();
-        else
+        } else {
           cleanup(map);
-      }
-      else if (value instanceof Collection<?>)
-      {
+        }
+      } else if (value instanceof Collection<?>) {
         final Collection<?> c = typecast(value);
-        if (c.isEmpty())
+        if (c.isEmpty()) {
           it.remove();
+        }
       }
     }
   }
@@ -92,77 +91,73 @@ public final class Maps
    * @param data the map to clean up
    * @return a new map with lowercase keys
    */
-  public static Map<String, Object> downcase(final Map<String, Object> data)
-  {
+  public static Map<String, Object> downcase(final Map<String, Object> data) {
     return downcase(data, new HashMap<>(data.size()));
   }
 
   private static Map<String, Object> downcase(
-    final Map<String, Object> data, final Map<String, Object> acc)
-  {
-    for (final Map.Entry<String, Object> entry : data.entrySet())
-    {
-      final String key   = entry.getKey().toLowerCase(LOCALE);
+      final Map<String, Object> data, final Map<String, Object> acc
+  ) {
+    for (final Map.Entry<String, Object> entry : data.entrySet()) {
+      final String key = entry.getKey().toLowerCase(LOCALE);
       final Object value = entry.getValue();
-
-      if (value instanceof Map<?, ?>)
-      {
+      if (value instanceof Map<?, ?>) {
         final Map<String, Object> m = typecast(value);
         acc.put(key, downcase(m, new HashMap<>(m.size())));
-      }
-      else if (value instanceof Collection<?>)
-      {
-        final Collection<Object> c    = typecast(value);
+      } else if (value instanceof Collection<?>) {
+        final Collection<Object> c = typecast(value);
         final Collection<Object> list = new ArrayList<>(c.size());
-        for (final Object obj : c)
-        {
-          if (obj instanceof Map<?, ?>)
-          {
+        for (final Object obj : c) {
+          if (obj instanceof Map<?, ?>) {
             final Map<String, Object> m = typecast(obj);
             list.add(downcase(m, new HashMap<>(m.size())));
-          }
-          else
-          {
+          } else {
             list.add(obj);
           }
         }
         acc.put(key, list);
-      }
-      else
-      {
+      } else {
         acc.put(key, value);
       }
     }
-
     return acc;
   }
 
   public static void move(
-    final Map<String, Object> src, final String srcName, final Map<String, Object> dst,
-    final String dstName)
-  {
+      final Map<String, Object> src,
+      final String srcName,
+      final Map<String, Object> dst,
+      final String dstName
+  ) {
     put(dst, dstName, src.remove(srcName));
   }
 
   public static void moveIn(
-    final Map<String, Object> src, final String srcName, final Map<String, Object> dst,
-    final String dstName)
-  {
+      final Map<String, Object> src,
+      final String srcName,
+      final Map<String, Object> dst,
+      final String dstName
+  ) {
     putIn(dst, dstName, removeIn(src, srcName));
   }
 
-  public static void put(final Map<String, Object> map, final String name, final Object value)
-  {
-    if (value != null) map.put(name, value);
+  public static void put(final Map<String, Object> map, final String name, final Object value) {
+    if (value != null) {
+      map.put(name, value);
+    }
   }
 
   public static void put(
-    final Map<String, Object> map, final String name, final Object value, final Object defaultValue)
-  {
-    if (value != null)
+      final Map<String, Object> map,
+      final String name,
+      final Object value,
+      final Object defaultValue
+  ) {
+    if (value != null) {
       map.put(name, value);
-    else
+    } else {
       map.put(name, defaultValue);
+    }
   }
 
   /**
@@ -179,66 +174,63 @@ public final class Maps
    * <code>key</code>, if the implementation supports <code>null</code> values.)
    */
   public static Object putIn(
-    final Map<String, Object> map, final String[] path, final Object value)
-  {
+      final Map<String, Object> map, final String[] path, final Object value
+  ) {
     return value != null ? updateIn(map, path, value) : null;
   }
 
   public static Object putIn(
-    final Map<String, Object> map, final String[] path, final Object value, final boolean overwrite)
-  {
-    if (value != null)
+      final Map<String, Object> map,
+      final String[] path,
+      final Object value,
+      final boolean overwrite
+  ) {
+    if (value != null) {
       return overwrite ? updateIn(map, path, value) : putInIfAbsent(map, path, value);
-
+    }
     return null;
   }
 
   public static void putIn(
-    final Map<String, Object> map, final String path, final Object value)
-  {
-    if (value != null)
-    {
-      if (path.indexOf(NameSeparator) > 0)
-        updateIn(map, path.split(NameSplitRegex), value);
-      else
+      final Map<String, Object> map, final String path, final Object value
+  ) {
+    if (value != null) {
+      if (path.indexOf(NAME_SEPARATOR) > 0) {
+        updateIn(map, path.split(NAME_SPLIT_REGEX), value);
+      } else {
         map.put(path, value);
+      }
     }
   }
 
   public static void putIn(
-    final Map<String, Object> map, final String path, final Object value, final boolean overwrite)
-  {
-    if (value != null)
-    {
-      if (path.indexOf(NameSeparator) > 0)
-      {
-        final String[] keys = path.split(NameSplitRegex);
-
-        if (overwrite)
+      final Map<String, Object> map, final String path, final Object value, final boolean overwrite
+  ) {
+    if (value != null) {
+      if (path.indexOf(NAME_SEPARATOR) > 0) {
+        final String[] keys = path.split(NAME_SPLIT_REGEX);
+        if (overwrite) {
           updateIn(map, keys, value);
-        else
+        } else {
           putInIfAbsent(map, keys, value);
-      }
-      else if (overwrite)
+        }
+      } else if (overwrite) {
         map.put(path, value);
-      else
+      } else {
         map.putIfAbsent(path, value);
+      }
     }
   }
 
-  public static <T> T get(final Map<String, Object> data, final String name)
-  {
+  public static <T> T get(final Map<String, Object> data, final String name) {
     return data != null ? typecast(data.get(name)) : null;
   }
 
-  public static <T> T get(final Map<String, Object> data, final String name, final T defaultValue)
-  {
-    if (data != null)
-    {
+  public static <T> T get(final Map<String, Object> data, final String name, final T defaultValue) {
+    if (data != null) {
       final Object o = data.get(name);
       return o != null ? typecast(o) : defaultValue;
     }
-
     return defaultValue;
   }
 
@@ -252,8 +244,7 @@ public final class Maps
    * @return the value to which the specified path is mapped, or {@code null} if this map contains
    * no mapping for the path
    */
-  public static Object getIn(final Map<String, Object> map, final String... path)
-  {
+  public static Object getIn(final Map<String, Object> map, final String... path) {
     return getNested(map, path);
   }
 
@@ -267,13 +258,12 @@ public final class Maps
    * @return the value to which the specified path is mapped, or {@code null} if this map contains
    * no mapping for the path
    */
-  public static Object getIn(final Map<String, Object> map, final String path)
-  {
+  public static Object getIn(final Map<String, Object> map, final String path) {
     // handle keys with dots
     final Object value = map.get(path);
-    if (value == null && path.indexOf(NameSeparator) > 0)
-      return getNested(map, path.split(NameSplitRegex));
-
+    if (value == null && path.indexOf(NAME_SEPARATOR) > 0) {
+      return getNested(map, path.split(NAME_SPLIT_REGEX));
+    }
     return value;
   }
 
@@ -286,13 +276,12 @@ public final class Maps
    * @return the previous value associated with <code>path</code>, or {@code null} if this map
    * contains no mapping for the path
    */
-  public static Object removeIn(final Map<String, Object> map, final String path)
-  {
+  public static Object removeIn(final Map<String, Object> map, final String path) {
     // handle keys with dots
     final Object value = map.remove(path);
-    if (value == null && path.indexOf(NameSeparator) > 0)
-      return remove(map, path.split(NameSplitRegex));
-
+    if (value == null && path.indexOf(NAME_SEPARATOR) > 0) {
+      return remove(map, path.split(NAME_SPLIT_REGEX));
+    }
     return value;
   }
 
@@ -302,8 +291,7 @@ public final class Maps
    * @see #deep_merge(Map, Map, Resolver)
    */
   @FunctionalInterface
-  public interface Resolver
-  {
+  public interface Resolver {
     /**
      * This function will be called to resolve the conflicts when merging two maps.
      *
@@ -314,7 +302,7 @@ public final class Maps
      */
     Object apply(final String key, final Object value1, final Object value2);
 
-    default boolean overwrite() {return false;}
+    default boolean overwrite() { return false; }
   }
 
   /**
@@ -329,8 +317,8 @@ public final class Maps
    * @return the merged map
    */
   public static Map<String, Object> merge(
-    final Map<String, Object> map1, final Map<String, Object> map2, final boolean overwrite)
-  {
+      final Map<String, Object> map1, final Map<String, Object> map2, final boolean overwrite
+  ) {
     return merge(map1, map2, resolver(overwrite));
   }
 
@@ -348,190 +336,157 @@ public final class Maps
    * @return the merged map
    */
   public static Map<String, Object> merge(
-    final Map<String, Object> map1, final Map<String, Object> map2, final Resolver resolver)
-  {
+      final Map<String, Object> map1, final Map<String, Object> map2, final Resolver resolver
+  ) {
     Objects.requireNonNull(resolver);
-
-    if (map1 == null) return map2;
-    if (map2 == null) return map1;
-
+    if (map1 == null) {
+      return map2;
+    }
+    if (map2 == null) {
+      return map1;
+    }
     return deep_merge(map1, map2, resolver);
   }
 
   private static Map<String, Object> deep_merge(
-    final Map<String, Object> map1, final Map<String, Object> map2, final Resolver resolver)
-  {
-    for (final Map.Entry<String, Object> entry : map2.entrySet())
-    {
-      final String key    = entry.getKey();
+      final Map<String, Object> map1, final Map<String, Object> map2, final Resolver resolver
+  ) {
+    for (final Map.Entry<String, Object> entry : map2.entrySet()) {
+      final String key = entry.getKey();
       final Object value2 = entry.getValue();
-
-      if (value2 != null)
+      if (value2 != null) {
         map1.merge(key, value2, (v1, v2) -> resolver.apply(key, v1, v2));
-      else if (resolver.overwrite())
+      } else if (resolver.overwrite()) {
         map1.remove(key);
+      }
     }
-
     return map1;
   }
 
   /*
    * The default resolver does not overwrite the existing values.
    */
-  private static final class DefaultResolver implements Resolver
-  {
+  private static final class DefaultResolver implements Resolver {
     @Override
-    public Object apply(final String key, final Object value1, final Object value2)
-    {
-      if (value1 instanceof Map<?, ?> && value2 instanceof Map<?, ?>)
-      {
+    public Object apply(final String key, final Object value1, final Object value2) {
+      if (value1 instanceof Map<?, ?> && value2 instanceof Map<?, ?>) {
         final Map<String, Object> map1 = typecast(value1);
-
-        if (map1.isEmpty())
+        if (map1.isEmpty()) {
           return value2;
-
+        }
         final Map<String, Object> map2 = typecast(value2);
-        if (map2.isEmpty())
+        if (map2.isEmpty()) {
           return value1;
-
+        }
         return deep_merge(map1, map2, this);
       }
-
       return value1 != null ? value1 : value2;
     }
-
   }
 
-  private static final class OverwrtingResolver implements Resolver
-  {
+  private static final class OverwrtingResolver implements Resolver {
     @Override
-    public Object apply(final String key, final Object value1, final Object value2)
-    {
-      if (value1 instanceof Map<?, ?> && value2 instanceof Map<?, ?>)
-      {
+    public Object apply(final String key, final Object value1, final Object value2) {
+      if (value1 instanceof Map<?, ?> && value2 instanceof Map<?, ?>) {
         final Map<String, Object> map1 = typecast(value1);
-
-        if (map1.isEmpty())
+        if (map1.isEmpty()) {
           return value2;
-
+        }
         final Map<String, Object> map2 = typecast(value2);
-        if (map2.isEmpty())
+        if (map2.isEmpty()) {
           return value1;
-
+        }
         return deep_merge(map1, map2, this);
       }
-
       return value2;
     }
 
     @Override
-    public boolean overwrite() {return true;}
+    public boolean overwrite() { return true; }
   }
 
-  private static Resolver resolver(final boolean overwrite)
-  {
+  private static Resolver resolver(final boolean overwrite) {
     return overwrite ? new OverwrtingResolver() : new DefaultResolver();
   }
 
-  private static Object getNested(Map<String, Object> map, final String[] path)
-  {
+  private static Object getNested(Map<String, Object> map, final String[] path) {
     final int last = path.length - 1;
-    if (last < 0)
+    if (last < 0) {
       return null;
-
-    if (last == 0)
+    }
+    if (last == 0) {
       return map.get(path[0]);
-
-    for (int depth = 0; depth < last; ++depth)
-    {
+    }
+    for (int depth = 0; depth < last; ++depth) {
       final Object next = map.get(path[depth]);
-      if (next instanceof Map<?, ?>)
+      if (next instanceof Map<?, ?>) {
         map = typecast(next);
-      else
+      } else {
         return null; // not found or not a map
+      }
     }
     return map.get(path[last]);
   }
 
-  private static Object remove(Map<String, Object> map, final String[] keys)
-  {
+  private static Object remove(Map<String, Object> map, final String[] keys) {
     final int last = keys.length - 1;
-    if (last < 0)
+    if (last < 0) {
       return null;
-
-    if (last == 0)
-      return map.remove(keys[0]);
-
-    for (int depth = 0; depth < last; ++depth)
-    {
-      final Object next = map.get(keys[depth]);
-      if (next instanceof Map<?, ?>)
-        map = typecast(next);
-      else
-        return null; // not found or not a map
     }
-
+    if (last == 0) {
+      return map.remove(keys[0]);
+    }
+    for (int depth = 0; depth < last; ++depth) {
+      final Object next = map.get(keys[depth]);
+      if (next instanceof Map<?, ?>) {
+        map = typecast(next);
+      } else {
+        return null; // not found or not a map
+      }
+    }
     return map.remove(keys[last]);
   }
 
   private static Object putInIfAbsent(
-    Map<String, Object> map, final String[] keys, final Object value)
-  {
+      Map<String, Object> map, final String[] keys, final Object value
+  ) {
     final int last = keys.length - 1;
-
-    for (int depth = 0; depth < last; ++depth)
-    {
+    for (int depth = 0; depth < last; ++depth) {
       final Object next = map.get(keys[depth]);
-      if (next instanceof Map<?, ?>)
-      {
+      if (next instanceof Map<?, ?>) {
         map = typecast(next);
-      }
-      else if (next == null)
-      {
-        do
-        {
+      } else if (next == null) {
+        do {
           final Map<String, Object> map2 = new HashMap<>();
           map.put(keys[depth], map2);
           map = map2;
-        }
-        while (++depth < last);
+        } while (++depth < last);
         break; // the for loop
-      }
-      else
-      {
+      } else {
         return null; // don't overwrite
       }
     }
     return map.putIfAbsent(keys[last], value);
   }
 
-  private static Object updateIn(Map<String, Object> map, final String[] keys, final Object value)
-  {
+  private static Object updateIn(Map<String, Object> map, final String[] keys, final Object value) {
     final int last = keys.length - 1;
-    for (int depth = 0; depth < last; ++depth)
-    {
+    for (int depth = 0; depth < last; ++depth) {
       final Object next = map.get(keys[depth]);
-      if (next instanceof Map<?, ?>)
-      {
+      if (next instanceof Map<?, ?>) {
         map = typecast(next);
-      }
-      else
-      {
-        do
-        {
+      } else {
+        do {
           final Map<String, Object> map2 = new HashMap<>();
           map.put(keys[depth], map2);
           map = map2;
-        }
-        while (++depth < last);
+        } while (++depth < last);
 
         break; // the for loop
       }
     }
-
     return map.put(keys[last], value);
   }
 
   private Maps() {}
-
 }

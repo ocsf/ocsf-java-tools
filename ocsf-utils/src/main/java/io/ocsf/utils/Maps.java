@@ -244,7 +244,7 @@ public final class Maps {
    * @return the value to which the specified path is mapped, or {@code null} if this map contains
    * no mapping for the path
    */
-  public static Object getIn(final Map<String, Object> map, final String... path) {
+  public static Object getIn(final Map<String, ?> map, final String... path) {
     return getNested(map, path);
   }
 
@@ -409,7 +409,7 @@ public final class Maps {
     return overwrite ? new OverwrtingResolver() : new DefaultResolver();
   }
 
-  private static Object getNested(Map<String, Object> map, final String[] path) {
+  private static Object getNested(Map<String, ?> map, final String[] path) {
     final int last = path.length - 1;
     if (last < 0) {
       return null;

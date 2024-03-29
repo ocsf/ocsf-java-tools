@@ -56,6 +56,7 @@ public final class Schema {
   private static final String TYPES = "types";
   private static final String OBJECTS = "objects";
   private static final String CLASSES = "classes";
+  private static final String DICTIONARY_ATTRIBUTES = "dictionary_attributes";
 
   static final String ATTRIBUTES = "attributes";
 
@@ -73,14 +74,17 @@ public final class Schema {
   static final String OBJECT_TYPE = "object_type";
   static final String OBSERVABLE = "observable";
 
-  // All event classes: class_id -> class
+  // All event classes: class_id -> class definition
   private final Map<Integer, Map<String, Object>> classes;
 
-  // All objects: object_type -> object
+  // All objects: object_type -> object definition
   private final Map<String, Map<String, Object>> objects;
 
-  // All types: name -> types
+  // All types: type name -> type definition
   private final Map<String, Map<String, Object>> types;
+
+  // All dictionary attributes: attribute name -> attribute definition
+  private final Map<String, Map<String, Object>> dictionaryAttributes;
 
   // Observable type_id -> String
   private final Map<Integer, String> observableTypes;
@@ -137,6 +141,7 @@ public final class Schema {
           this.objects = objects(schema);
           this.classes = classes(schema);
           this.types = types(schema);
+          this.dictionaryAttributes = dictionaryAttributes(schema);
           this.observableTypes = observableTypes(objects.get(OBSERVABLE));
           // Lazy load this._classToObservablesMap; it takes roughly half the schema load time
           this.schemaLoaded = true;
@@ -154,6 +159,7 @@ public final class Schema {
     this.objects = Collections.emptyMap();
     this.classes = Collections.emptyMap();
     this.types = Collections.emptyMap();
+    this.dictionaryAttributes = Collections.emptyMap();
     this.observableTypes = Collections.emptyMap();
     this._classToObservablesMap = Collections.emptyMap(); // always empty in this case
     this.schemaLoaded = false;
@@ -269,6 +275,18 @@ public final class Schema {
     });
 
     return classes;
+  }
+
+  private static Map<String, Map<String, Object>> dictionaryAttributes(
+      final Map<String, Map<String, Object>> schema
+  ) {
+    // This was added later, so may not be present on schemas generated from older OCSF Servers.
+    // So this checks for null before returning, and otherwise returns an empty map.
+    final Object raw = schema.get(DICTIONARY_ATTRIBUTES);
+    if (raw != null) {
+      return Maps.typecast(raw);
+    }
+    return Collections.emptyMap();
   }
 
   private static Map<Integer, String> observableTypes(final Map<String, Object> observable) {
@@ -554,12 +572,29 @@ public final class Schema {
       logger.debug("SCHEMA: Attribute {} does not have type", Strings.quote(attributeName));
     }
 
-    // Second, look for observable type_id by attribute
+    // Second, look for observable type_id by dictionary attribute
+    final Object typeIDByDictionaryAttribute
+        = Maps.getIn(dictionaryAttributes, attributeName, OBSERVABLE);
+    if (typeIDByDictionaryAttribute instanceof Integer) {
+      if (logger.isTraceEnabled()) {
+        logger.trace("getObservableTypeID - observable by dictionary attribute {}: {}",
+            Strings.quote(attributeName), typeIDByDictionaryAttribute
+        );
+      }
+      return (Integer) typeIDByDictionaryAttribute;
+    } else if (typeIDByDictionaryAttribute != null && logger.isDebugEnabled()) {
+      logger.debug(
+          "SCHEMA: Dictionary attribute {} has an invalid \"observable\": {}",
+          Strings.quote(attributeName), typeIDByDictionaryAttribute
+      );
+    }
+
+    // Third, look for observable type_id by type-specific attribute (class / object specific)
     final Object typeIDByAttribute = attribute.get(OBSERVABLE);
     if (typeIDByAttribute instanceof Integer) {
       if (logger.isTraceEnabled()) {
         logger.trace(
-            "getObservableTypeID - observable by for {} on attribute path {}: {}",
+            "getObservableTypeID - observable for {} on attribute path {}: {}",
             Strings.quote(attributeName), Strings.quote(attributePath), typeIDByAttribute
         );
       }

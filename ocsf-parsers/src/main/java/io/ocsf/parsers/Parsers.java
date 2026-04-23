@@ -29,6 +29,7 @@ public final class Parsers
 
   static
   {
+    parsers.put(new BarracudaSyslogParser());
     parsers.put(new CarbonBlackParser());
     parsers.put(new ProofpointEmailParser());
     parsers.put(new Windows365Parser());

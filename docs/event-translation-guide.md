@@ -164,7 +164,7 @@ Consider the following two rules:
       "@move": "src_endpoint.ip"
    },
    "user.name": {
-      "@move": "src_user.name"
+      "@move": "user.name"
    }    
 }
 ```
@@ -189,7 +189,7 @@ The output data will be:
    "src_endpoint": {
       "ip": "1.2.3.4"
    },
-   "src_user": {
+   "user": {
       "name": "joe"
    },
    // untranslated data
@@ -244,7 +244,7 @@ The example above can be rewritten using the long rule format as:
    },
    "user.name": {
       "@move": {
-         "name": "src_user.name"
+         "name": "user.name"
       }
    }
 }
@@ -264,7 +264,7 @@ The example above can be rewritten using the long rule format as:
    "user.name": {
       "@move": {
          "when": "user.name != null",
-         "name": "src_user.name"
+         "name": "user.name"
       }
    }
 }
